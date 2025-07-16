@@ -188,4 +188,57 @@ This significantly degraded model performance and introduced semantic noise. As 
 
 ➡️ For full implementation details, see the notebook: [`3_SentenceExtraction.ipynb`](Notebooks/3_SentenceExtraction.ipynb)
 
+### 🧠 Phase 4 – ESG Sentence Classification Using Transformer Models
+
+This notebook performs sentence-level classification across all extracted company reports to assign ESG labels — **Environmental**, **Social**, **Governance**, or **None** — to each sentence.
+
+We follow the methodology from [Tobias Schimanski's tutorial on Medium](https://medium.com/@schimanski.tobi/analyzing-esg-with-ai-and-nlp-tutorial-1-report-analysis-towards-esg-risks-and-opportunities-8daa2695f6c5), which is based on his academic paper:
+
+> *“Bridging the gap in ESG measurement: Using NLP to quantify environmental, social, and governance communication”*  
+> *Tobias Schimanski et al., 2023*
+
+We use the **ESGBERT transformer models**, available from HuggingFace ([ESGBERT models repository](https://huggingface.co/ESGBERT)), which are fine-tuned BERT-based classifiers trained specifically to detect ESG content. Three separate models are loaded:
+- `EnvironmentalBERT` for environmental content,
+- `SocialBERT` for social-related content,
+- `GovernanceBERT` for governance themes.
+
+Each sentence is passed through all three models. Each model returns:
+- a **label** (either the target class or `"none"`),
+- and a **confidence score** between `0` and `1`.
+
+#### 🔍 How the classification works
+
+For each sentence:
+- If the model predicts a relevant ESG category (e.g. `"environmental"`, `"social"`...), it returns a confidence score for that label.
+- If no category surpasses a **confidence threshold of 0.5**, the sentence is assigned the label `"none"`.
+- A **majority label** (or more precisely, the label with the highest score above 0.5) is then computed across the three categories.
+
+Example result:
+
+| company                   | year | document_type       | sentence                                                                                                                                                       | label_env   | score_env | label_soc | score_soc | label_gov | score_gov |
+|---------------------------|------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
+| Compagnie Financière Richemont | 2022 | Sustainability Report | Chaired by dunhill’s CEO, the newly appointed Sustainability Committee ensures the implementation of Richemont’s strategy across the business... | environmental | 0.989977  | social    | 0.996938  | none      | 0.774423  |
+
+This approach ensures that **each sentence is independently evaluated** for its ESG relevance, allowing nuanced and overlapping classifications.
+
+#### 🧱 Batching for Large-Scale Classification
+
+With **over 200,000 sentences** to classify, we split the dataset into **batches of 10,000** sentences for processing. This prevents memory overflow and allows intermediate saving of results. The batch loop:
+1. Loads a slice of the data.
+2. Applies the three ESG classifiers.
+3. Saves the result to a dedicated folder in Google Drive.
+
+After all batches are processed, they are concatenated into a single file and a final label column is assigned based on dominant confidence scores.
+
+#### ⚙️ Running on GPU to Save Time (and Money)
+
+Running transformer models is computationally intensive. Fortunately, Google Colab occasionally offers **free GPU access**. I was able to access a GPU for this classification step, which brought the total runtime down to just over **1 hour**.
+
+Without GPU, this task would likely take several **hours or even days**, depending on hardware. However, after using the GPU for one full classification session, it became unavailable for the rest of the day — highlighting the **budgetary and infrastructural constraints** of this kind of academic project.
+
+#### 🧵 Full Code Available
+
+The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in  
+📓 [`4_Classification_ESG.ipynb`](Notebooks/4_Classification_ESG.ipynb)
+
 
