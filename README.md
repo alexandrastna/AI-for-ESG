@@ -139,5 +139,5 @@ This file is saved in Drive and serves as the input for the next phase of the pr
 **[Phase 2 – PDF Text Extraction and Preprocessing](#phase-2--text-extraction--pre-processing-🧪)**
 
 > 💡 The full source code for this metadata cleaning and merge process is available in the notebook:  
-> [`1_Dataset_Construction.ipynb`](./Notebooks/1_Dataset_Construction.ipynb)
+> [`1_Thesis.ipynb`](./Notebooks/1_Thesis.ipynb)
 
