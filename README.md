@@ -74,3 +74,71 @@ The table below summarizes the coverage status for the top 10 SMI companies (202
 This manual collection phase lays the foundation for all subsequent analysis. The next step involves organizing these files into a structured dataframe with standardized metadata.
 
 👉 Proceed to [Phase 1 – Dataset Construction](#phase-1--dataset-construction-🧱)
+
+
+## Phase 1 – Dataset Construction 🧱
+
+> 📁 **Note on data availability**  
+Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are **not included in this repository**.  
+However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
+For convenience and reproducibility, **copies of all documents are stored in a private Google Drive folder** and are accessed programmatically (see paths in the code).
+
+In this first notebook, I construct the core dataset used for analysis by combining two sources:
+
+1. A manually downloaded collection of PDF documents (annual reports, sustainability reports, transcripts, etc.) stored on Google Drive.
+2. An Excel file containing structured metadata for the top 10 SMI companies.
+
+### 🗂️ File Parsing and Metadata Extraction
+
+I programmatically traverse each company's folder in Drive and extract metadata for every `.pdf` file:
+- **Company** (from folder structure)
+- **Year** (from file name or path)
+- **Document Type** (inferred from filename keywords)
+- **Document Title**
+- **File Path**
+
+A preview of the resulting dataset:
+
+| Company                    | Year | Document Type     | Document Title                     | Path                                                                                      |
+|----------------------------|------|-------------------|------------------------------------|-------------------------------------------------------------------------------------------|
+| Zurich Insurance Group AG  | 2023 | Annual Report     | Zurich_Annual_Report_2023.pdf      | /content/drive/MyDrive/Thèse Master/Data/Zurich Insurance Group AG/Zurich_Annual_Report_2023.pdf |
+| Zurich Insurance Group AG  | 2023 | Half-Year Report  | Zurich_Half_Year_Report_2023.pdf   | /content/drive/MyDrive/Thèse Master/Data/Zurich Insurance Group AG/Zurich_Half_Year_Report_2023.pdf |
+| Zurich Insurance Group AG  | 2022 | Annual Report     | Zurich_Annual_Report_2022.pdf      | /content/drive/MyDrive/Thèse Master/Data/Zurich Insurance Group AG/Zurich_Annual_Report_2022.pdf |
+
+This structured DataFrame is used to match each document with financial and ESG metadata (tickers, industry classification) in the next step.
+
+---
+
+### 📄 Complementary Metadata Table
+
+Each document is also described in a second table that includes external metadata, such as tickers, industry classification, and download information.
+
+| Company     | Year | Ticker SMI | Ticker Seeking Alpha (US) | Ranking per Cap | SASB Industry     | Document Type     | Document Title       | Source        | Source URL                                                        | Format | Scrapable via Google | Saved Local |
+|-------------|------|-------------|----------------------------|------------------|--------------------|--------------------|------------------------|----------------|-------------------------------------------------------------------|--------|-----------------------|-------------|
+| Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Annual Report      | Annual Review         | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
+| Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Half-Year Report   | Half-Year Report      | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
+
+---
+
+### 🔗 Metadata Merge
+
+The extracted document data is then merged with the Excel file, matching each `(Company, Year)` pair. The Excel file includes:
+- Company tickers (SMI and Seeking Alpha)
+- SASB industry classification
+
+Before merging, I:
+- Standardized company names
+- Converted years to strings
+- Normalized accents (e.g. `é` → `e`) to avoid mismatches
+
+```python
+df_merged = pd.merge(df_pdf, df_companies_subset, on=["Company", "Year"], how="left")
+
+
+The cleaned and fully merged dataset is saved as a CSV file in my Drive:
+
+
+df_merged.to_csv(output_path, index=False)
+📄 Output file: df_merged_clean.csv
+This file serves as the input for Phase 2, which focuses on text extraction and pre-processing from the original PDF documents.
+
