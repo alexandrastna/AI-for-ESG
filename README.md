@@ -142,3 +142,4 @@ df_merged.to_csv(output_path, index=False)
 📄 Output file: df_merged_clean.csv
 This file serves as the input for Phase 2, which focuses on text extraction and pre-processing from the original PDF documents.
 
+
