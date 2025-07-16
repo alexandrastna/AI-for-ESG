@@ -164,3 +164,28 @@ This overview ensures the corpus is both **comprehensive and well-documented** b
 
 👉 For details and full visualizations, see the notebook [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
 
+### 🧠 Phase 3 – Sentence Extraction (NLP-ready)
+
+This step is the most **crucial foundation** for the NLP classification phase. It involves extracting clean, meaningful, and self-contained sentences more than 200 corporate documents (Annual Reports, ESG Reports, etc.).
+
+To achieve this, I built a sentence extraction pipeline using:
+
+- [**PyMuPDF**](https://pymupdf.readthedocs.io/en/latest/): a fast and lightweight PDF parser that allows page-by-page access and precise text extraction from complex layouts.
+- [**spaCy**](https://spacy.io/): a powerful industrial-strength NLP library that handles sentence segmentation, tokenization, and linguistic filtering.
+
+Each document is parsed **page by page**, applying a series of custom cleaning operations:
+
+- **Removal of repeated headers and footers** (e.g. company name, year, page numbers)
+- **Exclusion of index pages** (detected using pattern frequency heuristics)
+- **Sentence segmentation** with spaCy
+- **Filtering out** short, noisy, numeric-only, or symbol-heavy text chunks
+
+The resulting sentences were then saved to CSV for further processing.
+
+Due to the complexity of the documents and the amount of layout noise, **this step took over 30 minutes to run** and had to be repeated **entirely from scratch**. Initially, I proceeded with the pipeline, assuming the extraction quality was sufficient. However, at the NLP classification stage, I noticed that the results were poor — many "sentences" were in fact titles, footers, page numbers, or table of contents entries that had been incorrectly parsed as meaningful content.
+
+This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
+
+➡️ For full implementation details, see the notebook: [`3_SentenceExtraction.ipynb`](Notebooks/3_SentenceExtraction.ipynb)
+
+
