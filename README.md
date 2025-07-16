@@ -141,3 +141,26 @@ This file is saved in Drive and serves as the input for the next phase of the pr
 > 💡 The full source code for this metadata cleaning and merge process is available in the notebook:  
 > [`1_Thesis.ipynb`](./Notebooks/1_Thesis.ipynb)
 
+## Phase 2 – Dataset Exploration 🔍
+
+In this phase, I perform an exploratory analysis of the merged dataset created in [Phase 1](#phase-1--dataset-construction-🧱). The goal is to verify data completeness, detect missing entries, and understand the distribution of document types.
+
+### 🧮 Key Analyses
+
+- **Total number of documents** per company and year  
+- **Distribution of document types** (e.g. Annual Report, Sustainability Report, etc.)  
+- **Pivot table** to visualize which types are available for each company-year combination  
+- **Gap detection** to identify missing reports or transcripts  
+
+A sample of the pivot table below shows how many documents of each type were collected for ABB Ltd between 2021 and 2023:
+
+| Company | Year | Annual Report | Earnings Call Transcript | Governance Report | Half-Year Report | Integrated Report | Sustainability Report |
+|---------|------|----------------|----------------------------|--------------------|-------------------|--------------------|------------------------|
+| ABB Ltd | 2021 | 1              | 4                          | 0                  | 0                 | 0                  | 1                      |
+| ABB Ltd | 2022 | 0              | 4                          | 1                  | 0                 | 1                  | 1                      |
+| ABB Ltd | 2023 | 0              | 4                          | 1                  | 0                 | 1                  | 1                      |
+
+This overview ensures the corpus is both **comprehensive and well-documented** before proceeding to the text extraction phase.
+
+👉 For details and full visualizations, see the notebook [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
+
