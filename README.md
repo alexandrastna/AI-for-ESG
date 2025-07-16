@@ -122,24 +122,22 @@ Each document is also described in a second table that includes external metadat
 
 ### 🔗 Metadata Merge
 
-The extracted document data is then merged with the Excel file, matching each `(Company, Year)` pair. The Excel file includes:
+The extracted document data is then merged with the Excel file, matching each `(Company, Year)` pair.  
+The Excel metadata includes:
 - Company tickers (SMI and Seeking Alpha)
 - SASB industry classification
 
-Before merging, I:
-- Standardized company names
-- Converted years to strings
-- Normalized accents (e.g. `é` → `e`) to avoid mismatches
+Before merging, I performed several standardization steps to ensure consistency and avoid mismatches:
+- Standardized company names (e.g. `Nestle` vs `Nestlé`)
+- Converted year values to strings
+- Normalized accents (e.g. `é` → `e`)
 
-```python
-df_merged = pd.merge(df_pdf, df_companies_subset, on=["Company", "Year"], how="left")
+After merging, I removed perfect duplicates based on core metadata fields to ensure a clean dataset.
 
+📄 **Output file**: `df_merged_clean.csv`  
+This file is saved in Drive and serves as the input for the next phase of the project:  
+**[Phase 2 – PDF Text Extraction and Preprocessing](#phase-2--text-extraction--pre-processing-🧪)**
 
-The cleaned and fully merged dataset is saved as a CSV file in my Drive:
-
-
-df_merged.to_csv(output_path, index=False)
-📄 Output file: df_merged_clean.csv
-This file serves as the input for Phase 2, which focuses on text extraction and pre-processing from the original PDF documents.
-
+> 💡 The full source code for this metadata cleaning and merge process is available in the notebook:  
+> [`1_Dataset_Construction.ipynb`](./Notebooks/1_Dataset_Construction.ipynb)
 
