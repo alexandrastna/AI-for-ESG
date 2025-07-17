@@ -286,7 +286,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 
 📊 **Total number of sentences per document type**:
 
-![Total Number of Sentences per Document Type](./figures/Total%20Number%20of%20Sentences%20per%20Document%20Type.png)
+![Total Number of Sentences per Document Type](Images/Total%Number%of%Sentences%per%Document%Type.png)
 
 > 🧾 **Annual Reports** clearly dominate in terms of extracted sentence volume, followed by **Earnings Call Transcripts**. This reflects the length and density of these documents. **Sustainability Reports** are significantly shorter in comparison. Governance-specific and Half-Year reports contribute marginally to the overall corpus.
 >
@@ -296,7 +296,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 
 📊 **Total number of extracted sentences by company (including non-ESG)**:
 
-![Total Number of Classified Sentences per Company](./figures/Total%20Number%20of%20Classified%20Sentences%20per%20Company.png)
+![Total Number of Classified Sentences per Company](Images/Total%Number%of%Classified%Sentences%per%Company.png)
 
 > This chart displays the total number of extracted and processed sentences per company, regardless of ESG classification. It includes all sentences, even those not assigned to any ESG category (i.e. labelled as "none").
 >
@@ -310,7 +310,7 @@ This chart presents the **proportion of ESG-classified sentences (score > 0.9)**
 
 📊 **Proportion of ESG sentences per company**:
 
-![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](./figures/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(score%20%3E%200.9).png)
+![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](Images/Proportion%of%ESG-Classified%Sentences%over%Total%by%Company%(score > 0.9).png)
 
 > 🧮 This metric controls for differences in report length or number of documents. Holcim and ABB stand out with the highest shares of high-confidence ESG content, suggesting a relatively strong ESG signal density across their documents.
 >
@@ -330,7 +330,7 @@ To avoid **double-counting** sentences in multiple pillars, we introduce a domin
 
 In this chart, each sentence is assigned a **dominant label** — the ESG category (Environmental, Social, or Governance) with the **highest classification score** (or not ESG), regardless of whether the score exceeds a threshold. This allows us to analyze how ESG topics are distributed across companies when we force a single label per sentence.
 
-![Dominant Label Distribution by Company (no score threshold)](./figures/Dominant%20Label%20Distribution%20by%20Company%20(no%20score%20threshold).png)
+![Dominant Label Distribution by Company (no score threshold)](Images/Dominant%Label%Distribution%by%Company%(no score threshold).png)
 
 >
 > 📌 The results vary significantly across companies:
@@ -345,7 +345,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 
 📊 **ESG label proportions by company **:
 
-![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](./figures/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on%20Dominant%20Label).png)
+![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%of%ESG-Classified%Sentences%over%Total%by%Company%(based on Dominant Label).png)
 
 This chart shows the proportion of ESG-classified sentences over the total, but **based exclusively on each sentence's *dominant* label** — in other words, each sentence is counted **once**, according to its strongest ESG dimension (Environmental, Social, or Governance).
 
