@@ -76,7 +76,7 @@ The table below summarizes the coverage status for the top 10 SMI companies (202
 
 For the missing transcripts, I thoroughly searched across all available sources, including Investor Relations websites, Seeking Alpha, and other financial platforms. I also contacted someone with **Bloomberg Terminal access** (which has extensive coverage), but even there, the transcripts were unavailable. My working hypothesis is that **these earnings calls simply did not take place** — in **Switzerland**, unlike the **United States**, listed companies are **not legally required to hold four earnings calls per year**. Quarterly disclosures are common, but not mandatory or standardized.
 
-➡️ *Source: SIX Swiss Exchange – [Periodic Reporting Requirements]([https://www.ser-ag.com/en/resources/regulations/directives/listing-rules.html](https://www.ser-ag.com/en/topics/regular-reporting.html))*
+➡️ *Source: SIX Swiss Exchange – [Periodic Reporting Requirements](https://www.ser-ag.com/en/topics/regular-reporting.html#:~:text=Compliance%20with%20the%20regular%20reporting,for%20issuers%20of%20other%20securities.)*
 
 This manual collection phase lays the foundation for all subsequent analysis. The next step involves organizing these files into a structured dataframe with standardized metadata.
 
