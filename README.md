@@ -248,4 +248,125 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in  
 📓 [`4_Classification_ESG.ipynb`](Notebooks/4_Classification_ESG.ipynb)
 
+## 🧪 Phase 5 – ESG Classification Analysis
+
+This  step analyzes the ESG sentence-level classifications obtained from the previous stage (`Thesis 4`). The goal is to produce insightful descriptive statistics and visualizations by company, year, and document type.
+
+### 🗂️ Dataset Structure
+
+Each row in the dataset corresponds to a sentence extracted from a document (report or earnings call), along with its ESG classification labels and associated confidence scores (between 0 and 1) for Environmental, Social, and Governance pillars.
+
+Key columns include:
+- `company`, `year`, `doc_type`
+- `sentence`: raw sentence text
+- `label_env`, `score_env`
+- `label_soc`, `score_soc`
+- `label_gov`, `score_gov`
+
+---
+
+### 🧮 Global Classification Breakdown
+
+Each sentence is assigned to a **classification type** based on whether one or more pillars have a confidence score > 0.9. The breakdown is as follows:
+- `E`, `S`, or `G`: when exactly one pillar is confidently dominant
+- `multi (2)` or `multi (3)`: when two or all three labels are simultaneously strong
+- `none`: when no score exceeds the 0.9 threshold
+
+📊 **Distribution of classification types** (with score > 0.9):
+
+![Distribution of Sentences by ESG Classification Type](./figures/Distribution%20of%20Sentences%20by%20ESG%20Classification%20Type.png)
+
+> 🔍 Most sentences do not exceed the 0.9 threshold for any label and are therefore classified as `none`, so not ESG related. Among valid ESG sentences, Environmental classifications appear most frequently, followed by Social and Governance. Multi-label sentences are present.
+
+---
+
+### 📄 Sentence Volume by Document Type
+
+The dataset contains sentences from various types of documents (Annual Reports, ESG Reports, Earnings Calls...).
+
+📊 **Total number of sentences per document type**:
+
+![Total Number of Sentences per Document Type](./figures/Total%20Number%20of%20Sentences%20per%20Document%20Type.png)
+
+> 🧾 **Annual Reports** clearly dominate in terms of extracted sentence volume, followed by **Earnings Call Transcripts**. This reflects the length and density of these documents. **Sustainability Reports** are significantly shorter in comparison. Governance-specific and Half-Year reports contribute marginally to the overall corpus.
+>
+> However, this distribution is **not uniform across companies**. Some firms, such as Nestlé or UBS, publish multiple earnings call transcripts per year—sometimes including additional materials like fireside chats or analyst sessions—while others provide fewer or none. This heterogeneity impacts the total number of sentences extracted per document type and should be considered when comparing across firms.---
+
+### 🏢 Sentence Counts by Company
+
+📊 **Total number of extracted sentences by company (including non-ESG)**:
+
+![Total Number of Classified Sentences per Company](./figures/Total%20Number%20of%20Classified%20Sentences%20per%20Company.png)
+
+> This chart displays the total number of extracted and processed sentences per company, regardless of ESG classification. It includes all sentences, even those not assigned to any ESG category (i.e. labelled as "none").
+>
+> UBS, Nestlé, and Swiss Re show the highest overall sentence counts. These differences may reflect disparities in the number, length, and structure of reports published by each firm. For example, some companies release multiple types of documents (annual, sustainability, earnings calls) per year, while others offer fewer disclosures or shorter materials.
+
+---
+
+## 📈 ESG Sentence Share
+
+This chart presents the **proportion of ESG-classified sentences (score > 0.9)** over the **total number of sentences** for each company. It helps compare the relative prominence of ESG content in corporate disclosures, regardless of total document volume.
+
+📊 **Proportion of ESG sentences per company**:
+
+![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](./figures/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(score%20%3E%200.9).png)
+
+> 🧮 This metric controls for differences in report length or number of documents. Holcim and ABB stand out with the highest shares of high-confidence ESG content, suggesting a relatively strong ESG signal density across their documents.
+>
+> 🧪 Conversely, Novartis and Roche have large corpora but a smaller relative share of ESG-classified sentences. This could reflect either less ESG-oriented language or greater content volume outside ESG topics (e.g., scientific or operational reporting).
+>
+> ⚠️ Important: this figure captures **the presence of ESG-related communication**, not its sentiment or tone. A company may discuss ESG issues in a critical, defensive, or neutral way — high proportions do not necessarily mean strong ESG performance or commitment.
+>
+> 🔍 Lastly, the use of a 0.9 threshold ensures high precision in classification, but may exclude more nuanced or indirect ESG references that fall below this confidence level.
+
+##  Dominant Label Overview (No Threshold)
+
+Each sentence may receive multiple ESG labels (e.g., both Social and Governance) if it meets high confidence scores in more than one category. This makes sense conceptually, as some statements touch on cross-cutting themes — such as workplace ethics or climate governance — but it poses challenges when we later want to calculate pillar-specific ESG scores.
+
+To avoid **double-counting** sentences in multiple pillars, we introduce a dominant label: the ESG class with the **highest individual confidence score** per sentence. This allows for clean aggregation and comparison across companies.
+
+📊 **Dominant ESG label distribution by company** :
+
+In this chart, each sentence is assigned a **dominant label** — the ESG category (Environmental, Social, or Governance) with the **highest classification score** (or not ESG), regardless of whether the score exceeds a threshold. This allows us to analyze how ESG topics are distributed across companies when we force a single label per sentence.
+
+![Dominant Label Distribution by Company (no score threshold)](./figures/Dominant%20Label%20Distribution%20by%20Company%20(no%20score%20threshold).png)
+
+>
+> 📌 The results vary significantly across companies:
+> - **Holcim** and **Swiss Re** display a strong emphasis on Environmental topics.
+> - **Nestlé**, **Richemont**, and **Roche** place greater focus on Social issues.
+> - The remaining companies present a more balanced distribution across ESG pillars, although Governance consistently appears slightly less prominent.
+
+> 🔍 Notably, many sentences still fall under the 'none' category (i.e., no ESG score exceeded any pillar-specific model), but this doesn’t mean the sentence was irrelevant — it simply wasn’t confidently ESG-tagged by the classifier.
+
+
+##  📈 ESG Sentence Share
+
+📊 **ESG label proportions by company **:
+
+![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](./figures/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on%20Dominant%20Label).png)
+
+This chart shows the proportion of ESG-classified sentences over the total, but **based exclusively on each sentence's *dominant* label** — in other words, each sentence is counted **once**, according to its strongest ESG dimension (Environmental, Social, or Governance).
+
+#### 🧭 Key Takeaways:
+- **Holcim**, **ABB**, and **Swiss Re** remain the companies with the highest ESG communication ratios.
+- However, several **ranking shifts** appear compared to the previous chart, which accounted for **multi-label classification** (where one sentence could contribute to multiple ESG categories):
+  - **UBS Group AG** drops from **4th to 7th**,  
+  - **Nestlé SA** falls from **5th to 8th**,  
+  - **Lonza Group AG** rises from **7th to 5th**.
+
+These changes highlight an important methodological point:  
+➡️ **Using multi-label classification inflates ESG coverage** by counting the same sentence multiple times — once per label.  
+➡️ In contrast, assigning only the dominant ESG label ensures **non-redundant, clearer attribution**, offering a more conservative and arguably more accurate estimate of ESG focus.
+
+This distinction is crucial for fair comparisons across companies and for avoiding overestimation of ESG communication intensity.
+
+---
+### 📌 Conclusion
+
+This section provided a comparative overview of ESG communication across major Swiss companies, based on the number and proportion of ESG-classified sentences. By switching from a multi-label view to a dominant-label approach, we observed meaningful changes in company rankings — underlining the importance of methodological consistency when interpreting ESG discourse.
+
+📁 **For further analyses, full code, and dynamic breakdowns**, please refer to the notebook `Thesis_5_.ipynb`.
+
 
