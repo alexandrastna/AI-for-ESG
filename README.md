@@ -31,15 +31,18 @@ Although web scraping was initially considered, it quickly proved unreliable and
 
 ✅ **Conclusion**: Manual collection ensured better reliability, completeness, and clarity.
 
-### 🔊 Earnings Calls and Transcripts
+### 🔊 Investor Communications and Earnings Call Transcripts
 
-To complement the reports, I manually downloaded **earnings call transcripts and conference discussions** (fireside chats, Q&A sessions) for each selected company. These documents offer valuable insight due to their more conversational and analyst-driven format.
+To complement the reports, I manually downloaded a diverse set of **transcripts from investor relations materials**, including **earnings calls**, **fireside chats**, and **Q&A sessions**. These materials are typically less polished and less controlled than formal sustainability or annual reports, making them particularly useful for more **objective ESG analysis**.
 
-- Sources: **Seeking Alpha** (using a 28-day free account)
-- Presentations were **excluded**: they tend to be scripted and marketing-oriented
-- Focus was placed on interactive formats (Q&A, analyst calls)
+Unlike sustainability reports — which are often heavily curated for branding and compliance — investor communications respond directly to questions from analysts and stakeholders. This interactive nature makes them **less susceptible to greenwashing or corporate spin**, providing a more transparent view of a company’s priorities and risk management.
 
-Due to **legal and technical restrictions**, scraping from Seeking Alpha was not feasible (explicitly forbidden in the platform’s Terms of Use, and actively blocked).
+- Primary source: each company’s **Investor Relations** webpage (when available)
+- Secondary source: **Seeking Alpha** (via a 28-day trial account) to supplement missing transcripts
+- **Presentations were excluded**: they tend to be scripted and overly promotional
+- Focus was placed on unscripted, **conversational formats** such as Q&A exchanges and analyst briefings
+
+Due to **legal and technical limitations**, transcripts were collected manually. Automated scraping was not feasible: Seeking Alpha explicitly prohibits it in their [Terms of Use](https://seekingalpha.com/page/terms-of-use), and they implement active anti-scraping protections.
 
 ### 🗂️ File Organization & Metadata
 
