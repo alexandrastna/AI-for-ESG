@@ -193,7 +193,7 @@ Due to the complexity of the documents and the amount of layout noise, **this st
 
 This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
 
-➡️ For full implementation details, see the notebook: [`3_SentenceExtraction.ipynb`](Notebooks/3_SentenceExtraction.ipynb)
+➡️ For full implementation details, see the notebook: [`3_Thesis.ipynb`](Notebooks/3_Thesis.ipynb)
 
 ### 🧠 Phase 4 – ESG Sentence Classification Using Transformer Models
 
@@ -246,7 +246,7 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 #### 🧵 Full Code Available
 
 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in  
-📓 [`4_Classification_ESG.ipynb`](Notebooks/4_Classification_ESG.ipynb)
+📓 [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
 
 ## 🧪 Phase 5 – ESG Classification Analysis
 
@@ -270,13 +270,13 @@ Key columns include:
 Each sentence is assigned to a **classification type** based on whether one or more pillars have a confidence score > 0.9. The breakdown is as follows:
 - `E`, `S`, or `G`: when exactly one pillar is confidently dominant
 - `multi (2)` or `multi (3)`: when two or all three labels are simultaneously strong
-- `none`: when no score exceeds the 0.9 threshold
+- `none`: when the classification is "none", or when no score exceeds the 0.9 threshold
 
 📊 **Distribution of classification types** (with score > 0.9):
 
 ![Distribution of Sentences by ESG Classification Type](Images/Distribution%20of%20Sentences%20by%20ESG%20Classification%20Type.png)
 
-> 🔍 Most sentences do not exceed the 0.9 threshold for any label and are therefore classified as `none`, so not ESG related. Among valid ESG sentences, Environmental classifications appear most frequently, followed by Social and Governance. Multi-label sentences are present.
+> 🔍 Most sentences are classified as `none`, so not ESG related. Among valid ESG sentences, Environmental classifications appear most frequently, followed by Social and Governance. Multi-label sentences are present.
 
 ---
 
@@ -286,7 +286,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 
 📊 **Total number of sentences per document type**:
 
-![Total Number of Sentences per Document Type](Images/Total%Number%of%Sentences%per%Document%Type.png)
+![Total Number of Sentences per Document Type](Images/Total%20Number%20of%20Sentences%20per%20Document%20Type.png)
 
 > 🧾 **Annual Reports** clearly dominate in terms of extracted sentence volume, followed by **Earnings Call Transcripts**. This reflects the length and density of these documents. **Sustainability Reports** are significantly shorter in comparison. Governance-specific and Half-Year reports contribute marginally to the overall corpus.
 >
@@ -296,7 +296,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 
 📊 **Total number of extracted sentences by company (including non-ESG)**:
 
-![Total Number of Classified Sentences per Company](Images/Total%Number%of%Classified%Sentences%per%Company.png)
+![Total Number of Classified Sentences per Company](Images/Total%20Number%20of%20Classified%20Sentences%20per%20Company.png)
 
 > This chart displays the total number of extracted and processed sentences per company, regardless of ESG classification. It includes all sentences, even those not assigned to any ESG category (i.e. labelled as "none").
 >
@@ -310,7 +310,7 @@ This chart presents the **proportion of ESG-classified sentences (score > 0.9)**
 
 📊 **Proportion of ESG sentences per company**:
 
-![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](Images/Proportion%of%ESG-Classified%Sentences%over%Total%by%Company%(score > 0.9).png)
+![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](Images/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(score > 0.9).png)
 
 > 🧮 This metric controls for differences in report length or number of documents. Holcim and ABB stand out with the highest shares of high-confidence ESG content, suggesting a relatively strong ESG signal density across their documents.
 >
@@ -330,7 +330,7 @@ To avoid **double-counting** sentences in multiple pillars, we introduce a domin
 
 In this chart, each sentence is assigned a **dominant label** — the ESG category (Environmental, Social, or Governance) with the **highest classification score** (or not ESG), regardless of whether the score exceeds a threshold. This allows us to analyze how ESG topics are distributed across companies when we force a single label per sentence.
 
-![Dominant Label Distribution by Company (no score threshold)](Images/Dominant%Label%Distribution%by%Company%(no score threshold).png)
+![Dominant Label Distribution by Company (no score threshold)](Images/Dominant%20Label%20Distribution%20by%20Company%20(no score threshold).png)
 
 >
 > 📌 The results vary significantly across companies:
@@ -345,7 +345,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 
 📊 **ESG label proportions by company **:
 
-![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%of%ESG-Classified%Sentences%over%Total%by%Company%(based on Dominant Label).png)
+![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based on Dominant%20Label).png)
 
 This chart shows the proportion of ESG-classified sentences over the total, but **based exclusively on each sentence's *dominant* label** — in other words, each sentence is counted **once**, according to its strongest ESG dimension (Environmental, Social, or Governance).
 
