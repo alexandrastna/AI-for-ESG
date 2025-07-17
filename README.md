@@ -310,7 +310,7 @@ This chart presents the **proportion of ESG-classified sentences (score > 0.9)**
 
 📊 **Proportion of ESG sentences per company**:
 
-![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](Images/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(score > 0.9).png)
+![Proportion of ESG-Classified Sentences over Total by Company (score > 0.9)](Images/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(score%20>%200.9).png)
 
 > 🧮 This metric controls for differences in report length or number of documents. Holcim and ABB stand out with the highest shares of high-confidence ESG content, suggesting a relatively strong ESG signal density across their documents.
 >
@@ -330,7 +330,7 @@ To avoid **double-counting** sentences in multiple pillars, we introduce a domin
 
 In this chart, each sentence is assigned a **dominant label** — the ESG category (Environmental, Social, or Governance) with the **highest classification score** (or not ESG), regardless of whether the score exceeds a threshold. This allows us to analyze how ESG topics are distributed across companies when we force a single label per sentence.
 
-![Dominant Label Distribution by Company (no score threshold)](Images/Dominant%20Label%20Distribution%20by%20Company%20(no score threshold).png)
+![Dominant Label Distribution by Company (no score threshold)](Images/Dominant%20Label%20Distribution%20by%20Company%20(no%20score%20threshold).png)
 
 >
 > 📌 The results vary significantly across companies:
@@ -345,7 +345,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 
 📊 **ESG label proportions by company **:
 
-![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based on Dominant%20Label).png)
+![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on Dominant%20Label).png)
 
 This chart shows the proportion of ESG-classified sentences over the total, but **based exclusively on each sentence's *dominant* label** — in other words, each sentence is counted **once**, according to its strongest ESG dimension (Environmental, Social, or Governance).
 
