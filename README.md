@@ -274,7 +274,7 @@ Each sentence is assigned to a **classification type** based on whether one or m
 
 📊 **Distribution of classification types** (with score > 0.9):
 
-![Distribution of Sentences by ESG Classification Type](Images/Distribution of Sentences by ESG Classification Type.png)
+![Distribution of Sentences by ESG Classification Type](Images/Distribution%20of%20Sentences%20by%20ESG%20Classification%20Type.png)
 
 > 🔍 Most sentences do not exceed the 0.9 threshold for any label and are therefore classified as `none`, so not ESG related. Among valid ESG sentences, Environmental classifications appear most frequently, followed by Social and Governance. Multi-label sentences are present.
 
