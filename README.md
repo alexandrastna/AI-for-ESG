@@ -409,3 +409,85 @@ This output is ready for downstream analysis.
 
 🧠 Code available in `Notebooks/Thesis_6.ipynb`
 
+## 🧠 Thesis Step 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
+
+In this step, we test **GPT-3.5** as an alternative to the **FinBERT classifier** used previously. The goal is to evaluate whether GPT-3.5 can produce comparable or better sentiment predictions on ESG-related sentences, while maintaining a **good cost-performance balance**.
+
+---
+
+### 💡 Why GPT-3.5 and not GPT-4?
+
+We chose **GPT-3.5** because:
+
+- It offers a **significantly lower cost** than GPT-4:
+  - GPT-3.5-turbo-0125: ~$0.50 per 1,000 requests (1-token outputs)
+  - GPT-4-turbo: ~$10–15 per 1,000 requests (depending on context size)
+- For a **simple classification task** like ours—predicting `positive`, `neutral`, or `negative`—GPT-4 would be overkill.
+- GPT-3.5 has proven to be **accurate enough**, and is therefore the best choice in terms of **price/performance ratio**, especially in an academic project context where budget matters.
+
+---
+
+### 📦 What are OpenAI Batches?
+
+Rather than sending thousands of API calls one-by-one from Google Colab (which would be **extremely slow and unstable**), we used **OpenAI’s Batch API**:
+
+- You upload a `.jsonl` file with thousands of requests.
+- OpenAI processes them asynchronously in the cloud.
+- You receive a single `.jsonl` file with all the results.
+
+This approach is up to **100× faster** than looping inside Colab—but it has limitations:
+
+- **Only one batch job can run at a time**.
+- Each batch can take **up to 24 hours** to complete.
+- There is a **maximum file size per batch**, so we had to split our dataset into **4 separate batch files**.
+
+---
+
+### ✍️ What is a Prompt, and Why Does It Matter?
+
+A **prompt** defines how GPT interprets a task. In our case, we crafted a `system` prompt that tells the model exactly **what kind of response we expect**:
+
+```text
+You are an assistant that performs sentiment classification for ESG-related sentences.
+For each input, respond only with one of the following labels: 'positive', 'neutral', or 'negative'.
+Use 'positive' if the sentence describes an improvement, benefit, or progress.
+Use 'negative' if it describes controversies, problems, or deteriorations.
+Use 'neutral' if it is descriptive without clear judgment or consequence.
+
+This prompt is included once per request, and its clarity directly impacts the consistency and accuracy of the model’s response. A vague or overly complex prompt can lead to irrelevant or inconsistent labels. That’s why prompt engineering is a critical part of using LLMs for classification.
+
+📁 What is JSONL Format?  
+The `.jsonl` format (JSON Lines) is a plain text file where each line is a valid JSON object. For OpenAI’s batch endpoint, each line defines a single request with:
+
+- a `custom_id` to track results,  
+- the `messages` field with both system and user content,  
+- model parameters like `max_tokens`, `temperature`, etc.
+
+This format is lightweight, line-by-line parseable, and highly efficient for batch processing.
+
+---
+
+🧪 Process Summary  
+
+**Thesis_7_1:**  
+- Load ESG sentences from the DataFrame.  
+- Create 4 `.jsonl` batch files using a fixed system prompt.  
+- Save files to disk for upload to OpenAI’s Batch API.  
+
+👉 See full code in `notebooks/Thesis_7_1.ipynb`
+
+---
+
+**Thesis_7_2:**  
+- Parse the 4 `.jsonl` output files returned by OpenAI.  
+- Map each sentiment label (`positive`, `neutral`, `negative`) back to the original DataFrame using the `custom_id`.  
+- Save the updated dataset for comparison with FinBERT results.  
+
+A snippet of the final output table looks like this:
+
+| company | year | document_type     | sentence                                                                                                                                      | label_env   | score_env | label_soc | score_soc | label_gov | score_gov | label_dominant | sentiment_gpt_batch |
+|---------|------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|------------|-----------|------------|-----------|----------------|----------------------|
+| ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
+
+👉 See full code in `notebooks/Thesis_7_2.ipynb`
+
