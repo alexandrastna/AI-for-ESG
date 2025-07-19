@@ -409,7 +409,7 @@ This output is ready for downstream analysis.
 
 🧠 Code available in `Notebooks/Thesis_6.ipynb`
 
-## 🧠 Thesis Step 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
+### 🧠 Thesis 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
 
 In this step, we test **GPT-3.5** as an alternative to the **FinBERT classifier** used previously. The goal is to evaluate whether GPT-3.5 can produce comparable or better sentiment predictions on ESG-related sentences, while maintaining a **good cost-performance balance**.
 
@@ -455,22 +455,27 @@ Use 'negative' if it describes controversies, problems, or deteriorations.
 Use 'neutral' if it is descriptive without clear judgment or consequence.
 ```
 
-This prompt is included once per request, and its clarity directly impacts the consistency and accuracy of the model’s response. A vague or overly complex prompt can lead to irrelevant or inconsistent labels. That’s why prompt engineering is a critical part of using LLMs for classification.
+This prompt is included once per request, and its **clarity directly impacts the consistency and accuracy** of the model’s response.  
+A vague or overly complex prompt can lead to irrelevant or inconsistent labels. That’s why **prompt engineering is a critical part of using LLMs for classification.**
 
-📁 What is JSONL Format?  
-The `.jsonl` format (JSON Lines) is a plain text file where each line is a valid JSON object. For OpenAI’s batch endpoint, each line defines a single request with:
+---
+
+### 📁 What is JSONL Format?
+
+The `.jsonl` format (JSON Lines) is a plain text file where each line is a valid JSON object. For OpenAI’s batch endpoint, each line defines a **single request** with:
 
 - a `custom_id` to track results,  
 - the `messages` field with both system and user content,  
 - model parameters like `max_tokens`, `temperature`, etc.
 
-This format is lightweight, line-by-line parseable, and highly efficient for batch processing.
+This format is **lightweight**, line-by-line **parseable**, and highly efficient for batch processing.
 
 ---
 
-🧪 Process Summary  
+### 🧪 Process Summary
 
-**Thesis_7_1:**  
+### 🧷 Thesis_7_1
+
 - Load ESG sentences from the DataFrame.  
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
 - Save files to disk for upload to OpenAI’s Batch API.  
@@ -479,16 +484,16 @@ This format is lightweight, line-by-line parseable, and highly efficient for bat
 
 ---
 
-**Thesis_7_2:**  
+### 🧷 Thesis_7_2
+
 - Parse the 4 `.jsonl` output files returned by OpenAI.  
 - Map each sentiment label (`positive`, `neutral`, `negative`) back to the original DataFrame using the `custom_id`.  
 - Save the updated dataset for comparison with FinBERT results.  
 
-A snippet of the final output table looks like this:
+#### 📊 Example Output Table
 
 | company | year | document_type     | sentence                                                                                                                                      | label_env   | score_env | label_soc | score_soc | label_gov | score_gov | label_dominant | sentiment_gpt_batch |
 |---------|------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|------------|-----------|------------|-----------|----------------|----------------------|
 | ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
 
 👉 See full code in `notebooks/Thesis_7_2.ipynb`
-
