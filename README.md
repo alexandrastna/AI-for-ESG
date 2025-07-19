@@ -480,7 +480,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
 - Save files to disk for upload to OpenAI’s Batch API.  
 
-👉 See full code in `notebooks/Thesis_7_1.ipynb`
+👉 See full code in [`7_1_Thesis.ipynb`](Notebooks/7_1_Thesis.ipynb)
 
 ---
 
@@ -496,4 +496,4 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 |---------|------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|------------|-----------|------------|-----------|----------------|----------------------|
 | ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
 
-👉 See full code in `notebooks/Thesis_7_2.ipynb`
+👉 See full code in [`7_2_Thesis.ipynb`](Notebooks/7_2_Thesis.ipynb)
