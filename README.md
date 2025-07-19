@@ -369,4 +369,42 @@ This section provided a comparative overview of ESG communication across major S
 
 📁 **For further analyses, full code, and dynamic breakdowns**, please refer to the notebook [`5_Thesis.ipynb`](Notebooks/5_Thesis.ipynb).
 
+### Thesis 6 – Sentiment Analysis with FinBERT
+
+In this phase, we enrich our ESG-classified sentences by applying **FinBERT**, a transformer-based model fine-tuned for financial sentiment analysis. This helps us not only classify the nature of ESG content (Environmental, Social, Governance), but also understand **how** companies talk about these topics — whether in a **positive**, **negative**, or **neutral** tone.
+
+🔍 **What is FinBERT?**  
+FinBERT is a domain-specific adaptation of [BERT](https://arxiv.org/abs/1810.04805), pre-trained on financial texts to detect sentiment more accurately in that context. It was developed by researchers at HKUST and is available via Hugging Face:  
+👉 [yiyanghkust/finbert-tone](https://huggingface.co/yiyanghkust/finbert-tone)
+
+💡 **Why do we use it here?**  
+Traditional sentiment models may misinterpret financial or corporate jargon. FinBERT improves precision in our context (company reports, ESG disclosures) and allows us to measure **the tone of ESG-related discourse** for each firm. This can later be aggregated to derive **sentiment-based ESG scores**.
+
+---
+
+#### 📌 Overview of this notebook:
+
+1. **Mount Google Drive & Load ESG Sentences**  
+   We load the CSV from a previous step that contains all extracted sentences, and filter for those classified as ESG (either environmental, social, or governance).
+
+2. **Load FinBERT with GPU Acceleration**  
+   We use the Transformers library to load the FinBERT model and tokenizer. If a GPU is available in the Google Colab environment, inference becomes significantly faster.
+
+3. **Run Sentiment Classification**  
+   Each ESG sentence is passed through FinBERT to generate a sentiment score across three labels: `positive`, `negative`, and `neutral`. The label with the highest probability is selected as the predicted sentiment (`sent_label`).
+
+4. **Export the Results**  
+   The dataset, now enriched with sentiment scores, is saved for further steps.
+---
+
+📦 **Output**  
+The resulting file contains the original ESG sentences along with:
+- `sent_pos`: probability of a positive sentiment  
+- `sent_neg`: probability of a negative sentiment  
+- `sent_neu`: probability of a neutral sentiment  
+- `sent_label`: final sentiment label based on the highest score
+
+This output is ready for downstream analysis.
+
+🧠 Code available in `Notebooks/Thesis_6.ipynb`
 
