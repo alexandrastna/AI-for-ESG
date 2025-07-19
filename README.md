@@ -362,12 +362,13 @@ These changes highlight an important methodological point:
 
 This distinction is crucial for fair comparisons across companies and for avoiding overestimation of ESG communication intensity.
 
----
 ### 📌 Conclusion
 
 This section provided a comparative overview of ESG communication across major Swiss companies, based on the number and proportion of ESG-classified sentences. By switching from a multi-label view to a dominant-label approach, we observed meaningful changes in company rankings — underlining the importance of methodological consistency when interpreting ESG discourse.
 
 📁 **For further analyses, full code, and dynamic breakdowns**, please refer to the notebook [`5_Thesis.ipynb`](Notebooks/5_Thesis.ipynb).
+
+---
 
 ### Thesis 6 – Sentiment Analysis with FinBERT
 
