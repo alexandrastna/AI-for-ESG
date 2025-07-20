@@ -345,7 +345,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 
 📊 **ESG label proportions by company **:
 
-![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/roportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on%20Dominant%20Label).png)
+![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on%20Dominant%20Label).png)
 
 This chart shows the proportion of ESG-classified sentences over the total, but **based exclusively on each sentence's *dominant* label** — in other words, each sentence is counted **once**, according to its strongest ESG dimension (Environmental, Social, or Governance).
 
@@ -497,3 +497,117 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 | ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
 
 👉 See full code in [`7_2_Thesis.ipynb`](Notebooks/7_2_Thesis.ipynb)
+
+## 🧪 Thesis 8 – Model Benchmarking on ESG and Sentiment Classification
+
+This section evaluates the **performance of multiple classification models** on a carefully curated, human-annotated dataset of 188 ESG-related sentences. The goal is to compare both **ESG pillar classification** and **sentiment analysis** across three major approaches:
+
+- A fine-tuned **ESG-BERT model** (`label_dominant`)
+- A finance-specific **FinBERT sentiment model** (`sentiment_finbert`)
+- A prompt-based **GPT-3.5 sentiment and ESG classifier** (`sentiment_gpt_batch`, `esg_gpt3`)
+
+---
+
+### 📁 Thesis_8_1 – Creating the Gold Standard Dataset
+
+We create a **balanced evaluation dataset** of 188 rows, called `gold standard`, used to benchmark the models. It includes:
+
+- 50 sentences for each sentiment class: **positive**, **neutral**, and **negative**
+- At least 50 samples from each ESG pillar: **Environmental**, **Social**, and **Governance**
+- Representation of all document types and companies in the corpus
+
+Additional columns (`sentiment_humain` and `esg_label_humain`) were added for **manual annotation** by a human reviewer, serving as the **ground truth**.
+
+We chose to create a balanced dataset to ensure fair evaluation across both tasks (sentiment and ESG classification) and to avoid any bias introduced by skewed class distributions, which are common in real-world ESG texts. This setup also helps to better interpret the strengths and weaknesses of each model.
+
+Due to time and resource constraints — in particular, the manual effort required to annotate each sentence accurately — we limited the dataset to 188 sentences. Annotating significantly more would not have been feasible for a single person in a short timeframe, and this sample still ensures good representativeness of the corpus.
+
+👉 See full code in [`8_1_Thesis.ipynb`](Notebooks/8_1_Thesis.ipynb)
+
+---
+
+### 📊 Thesis_8_2 – Model Evaluation and Comparison
+
+We evaluate the predictions from the three models against the **human-labeled gold standard**, using accuracy, F1-scores, and confusion matrices.
+
+#### ✅ Evaluated Models
+
+| Task                | Model           | Col. in DataFrame          |
+|---------------------|------------------|-----------------------------|
+| ESG classification  | ESG-BERT         | `label_dominant`           |
+| Sentiment analysis  | FinBERT          | `sentiment_finbert`        |
+| Sentiment analysis  | GPT-3.5          | `sentiment_gpt_batch`      |
+| ESG classification  | GPT-3.5 (prompt) | `esg_gpt3`                 |
+| Human benchmark     | Ground truth     | `sentiment_humain`, `esg_label_humain` |
+
+👉 See full code in [`8_2_Thesis.ipynb`](Notebooks/8_2_Thesis.ipynb)
+
+---
+
+### 📈 Key Results Summary
+
+| Evaluation                          | Accuracy | Macro F1 | Weighted F1 |
+|-------------------------------------|----------|----------|--------------|
+| **ESGBERT vs Human (with 'none')**  | 0.86     | 0.63     | 0.85         |
+| **ESGBERT vs Human (no 'none')**    | 0.88     | 0.86     | 0.88         |
+| **GPT-3.5 vs Human (ESG)**          | 0.73     | 0.59     | 0.79         |
+| **FinBERT vs Human**                | 0.60     | 0.54     | 0.59         |
+| **GPT-3.5 vs Human (Sentiment)**    | 0.72     | 0.68     | 0.74         |
+| **GPT-3.5 vs ESG-BERT**             | 0.71     | 0.56     | 0.76         |
+
+📌 The **GPT-3.5 model outperforms FinBERT** on sentiment, especially for the **positive** and **negative** classes.  
+📌 ESG-BERT remains the most reliable for ESG classification, but GPT-3.5 shows strong potential via prompt-based classification.
+
+---
+
+### 📉 Confusion Matrix Visualizations
+
+All confusion matrix plots are available in the `figures` folder:
+
+- `confmat_sentiment_finbert_vs_human.png`
+- `confmat_sentiment_gpt35_vs_human.png`
+- `confmat_esg_esgbert_vs_human.png`
+- `confmat_esg_esgbert_vs_human_no_none.png`
+- `confmat_esg_gpt35_vs_human.png`
+- `confmat_esg_gpt35_vs_esgbert.png`
+
+Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  
+![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment - GPT vs Human.png)
+
+Comparision of the evaluations :
+
+![Comparison - Accuracy](Images/Comparison_Accuracy.png)
+
+![Comparison - Macro F1](Images/Comparison_Macro F1.png)
+
+![Comparison - Weighted F1](Images/Comparison_Weighted F1.png)
+
+---
+
+### 🔍 Interpretation and Error Analysis
+
+For each test, we printed misclassified examples to better understand where models fail:
+
+- ESG-BERT struggles particularly with the "social" and "governance" classes. It often confuses governance with social, but when it predicts governance, it's usually correct — it tends to miss governance rather than misclassify it.
+- FinBERT often mislabels neutral statements as positive or negative, which can be problematic when aggregating scores at scale or deriving sentiment indicators.
+- GPT-3.5 has difficulties with negative sentiment, especially when the sentence is a factual statement about climate change or environmental risks — it tends to classify such statements as negative, even when they are not evaluative or directed at the company.
+- GPT-3.5 for ESG classification performs decently, but tends to assign "governance" labels to sentences that are actually social, or mark them as "none".
+
+---
+
+### 💡 Takeaways
+
+- **ESGBERT** is the most reliable model for ESG pillar classification.
+
+- **GPT-3.5** outperforms **FinBERT** in sentiment analysis, particularly on the positive and neutral classes. Despite some confusion on factual negative statements, it remains the most robust sentiment model in this benchmark.
+
+- As a result, ESGBERT (for ESG classification) and GPT-3.5 (for sentiment analysis) will be used to compute ESG sentiment scores in the next phase of the thesis.
+
+- Manual annotation remains essential to assess model quality and build a trustworthy benchmark, especially when evaluating real-world performance.
+
+- Prompt engineering with GPT-3.5 offers a flexible, low-cost alternative for quick prototyping, though results depend on prompt clarity and task design.
+
+---
+
+
+
