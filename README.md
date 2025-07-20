@@ -534,7 +534,7 @@ We evaluate the predictions from the three models against the **human-labeled go
 
 | Task                | Model           | Col. in DataFrame          |
 |---------------------|------------------|-----------------------------|
-| ESG classification  | ESG-BERT         | `label_dominant`           |
+| ESG classification  | ESGBERT         | `label_dominant`           |
 | Sentiment analysis  | FinBERT          | `sentiment_finbert`        |
 | Sentiment analysis  | GPT-3.5          | `sentiment_gpt_batch`      |
 | ESG classification  | GPT-3.5 (prompt) | `esg_gpt3`                 |
@@ -572,15 +572,15 @@ All confusion matrix plots are available in the `figures` folder:
 - `confmat_esg_gpt35_vs_esgbert.png`
 
 Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  
-![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment - GPT vs Human.png)
+![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
 
 Comparision of the evaluations :
 
 ![Comparison - Accuracy](Images/Comparison_Accuracy.png)
 
-![Comparison - Macro F1](Images/Comparison_Macro F1.png)
+![Comparison - Macro F1](Images/Comparison_Macro%20F1.png)
 
-![Comparison - Weighted F1](Images/Comparison_Weighted F1.png)
+![Comparison - Weighted F1](Images/Comparison_Weighted%20F1.png)
 
 ---
 
@@ -588,10 +588,10 @@ Comparision of the evaluations :
 
 For each test, we printed misclassified examples to better understand where models fail:
 
-- ESG-BERT struggles particularly with the "social" and "governance" classes. It often confuses governance with social, but when it predicts governance, it's usually correct — it tends to miss governance rather than misclassify it.
-- FinBERT often mislabels neutral statements as positive or negative, which can be problematic when aggregating scores at scale or deriving sentiment indicators.
-- GPT-3.5 has difficulties with negative sentiment, especially when the sentence is a factual statement about climate change or environmental risks — it tends to classify such statements as negative, even when they are not evaluative or directed at the company.
-- GPT-3.5 for ESG classification performs decently, but tends to assign "governance" labels to sentences that are actually social, or mark them as "none".
+- **ESGBERT** struggles particularly with the "social" and "governance" classes. It often confuses governance with social, but when it predicts governance, it's usually correct — it tends to miss governance rather than misclassify it.
+- **FinBERT** often mislabels neutral statements as positive or negative, which can be problematic when aggregating scores at scale or deriving sentiment indicators.
+- **GPT-3.5** has difficulties with negative sentiment, especially when the sentence is a factual statement about climate change or environmental risks — it tends to classify such statements as negative, even when they are not evaluative or directed at the company.
+- **GPT-3.5** for ESG classification performs decently, but tends to assign "governance" labels to sentences that are actually social, or mark them as "none".
 
 ---
 
