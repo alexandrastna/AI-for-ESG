@@ -1,0 +1,31 @@
+# Core libraries
+pandas>=2.0.0
+numpy>=1.24.0
+
+# File & path management
+pathlib
+glob2  # utile si tu veux utiliser glob.recursive dans certains cas
+
+# PDF parsing
+PyMuPDF>=1.22.0  # alias 'fitz'
+
+# NLP and sentence segmentation
+spacy>=3.7.0
+# Spacy model (not on PyPI)
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
+
+# Transformers & deep learning
+transformers>=4.40.0
+torch>=2.1.0
+
+# Model evaluation
+scikit-learn>=1.2.0
+
+# Visualisation
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Utilities
+tqdm>=4.65.0
+unicodedata2>=15.1.0  # pour unicodedata (sur certains systèmes)
+openai>=1.0.0
