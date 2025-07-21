@@ -613,15 +613,28 @@ For each test, we printed misclassified examples to better understand where mode
 
 This notebook computes and compares **ten distinct ESG scores** for each company in the SMI index, based on the classification of sentences extracted from their annual reports, earnings calls, and other key financial documents. The aim is to explore how various analytical methods—both qualitative and quantitative—affect ESG scoring outcomes and comparability.
 
-### 🔍 Why so many methods?
+### 🧠 Why Compare So Many ESG Scores?
 
-Each method represents a different assumption:
-- **Is ESG communication abundant or sparse?**
-- **Are earnings calls more reflective of priorities than general reporting?**
-- **Should all ESG pillars be treated equally, or weighted by relevance (materiality)?**
-- **Should we account for tone (positive vs. negative) or just presence?**
+Each method reflects a different underlying assumption about how ESG priorities manifest in corporate communication:
 
-This comparative approach helps test robustness and explore bias in ESG scoring frameworks.
+- **Is ESG communication abundant or sparse?**  
+  → *How much does the company talk about ESG in its communications?*  
+  (Assuming that frequent mentions signal strategic prioritization.)
+
+- **Are earnings calls more reflective of priorities than general reporting?**  
+  → *Do earnings calls—being less curated and more spontaneous—provide a clearer, less "greenwashed" view of ESG concerns compared to polished sustainability reports?*
+
+- **Do non-ESG-branded documents offer more honest signals?**  
+  → *Do general-purpose documents like financial reports better reflect real ESG priorities than those crafted for marketing or ESG compliance?*
+
+- **Should all ESG pillars be treated equally, or weighted by relevance (materiality)?**  
+  → *Is it realistic to treat Environment, Social, and Governance as equally important? Or should we account for their sector-specific importance using SASB’s materiality framework?*
+
+- **Should we account for tone (positive vs. negative) or just presence?**  
+  → *Is it enough to track ESG mentions, or should we distinguish between positive and negative statements?*  
+  *(Even advanced LLMs like GPT-3.5 and GPT-4 may struggle with nuanced tone—especially sarcasm or subtle criticism. In that context, focusing on **positive-only** mentions may yield more robust results.)*
+
+This comparative approach helps test the **robustness**, **biases**, and **underlying assumptions** behind different ESG scoring frameworks.
 
 ---
 
@@ -650,7 +663,8 @@ For SASB-based methods, we manually assigned materiality weights (`Hybrid E`, `H
 
 These weights ensure:
 - Scores reflect the **sectoral relevance** of each ESG pillar.
-- Weight sum = 1:  
+- Weight sum = 1:
+  
 $$
 ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E + w_S + w_G = 1
 $$
