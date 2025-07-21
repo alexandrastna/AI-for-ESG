@@ -651,9 +651,78 @@ For SASB-based methods, we manually assigned materiality weights (`Hybrid E`, `H
 These weights ensure:
 - Scores reflect the **sectoral relevance** of each ESG pillar.
 - Weight sum = 1:  
-  $$ ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E + w_S + w_G = 1 $$
+$$
+ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E + w_S + w_G = 1
+$$
 
-Reference: [SASB Materiality Map](https://www.sasb.org/standards/materiality-findings/)
+Reference: [SASB Materiality Map](https://sasb.ifrs.org/standards/materiality-finder/find/)
+
+---
+
+### 🧮 ESG Score Formulas
+
+Below are the 10 scoring methods, with their respective formulas:
+
+1. ESG Quantity (Unweighted)
+The share of ESG-related content per pillar, divided by total sentences, then averaged:
+
+$$
+ESG_1 = \frac{1}{3} \left( \frac{E_{qty}}{T} + \frac{S_{qty}}{T} + \frac{G_{qty}}{T} \right)
+$$
+
+2. ESG Quantity with SASB Weights
+
+$$
+ESG_2 = w_E \cdot \frac{E_{qty}}{T} + w_S \cdot \frac{S_{qty}}{T} + w_G \cdot \frac{G_{qty}}{T}
+$$
+
+3. ESG Quantity from Earnings Calls Only (Unweighted)
+
+$$
+ESG_3 = \frac{1}{3} \left( \frac{E_{qty}^{EC}}{T^{EC}} + \frac{S_{qty}^{EC}}{T^{EC}} + \frac{G_{qty}^{EC}}{T^{EC}} \right)
+$$
+
+4. ESG Earnings Calls with SASB Weights
+
+$$
+ESG_4 = w_E \cdot \frac{E_{qty}^{EC}}{T^{EC}} + w_S \cdot \frac{S_{qty}^{EC}}{T^{EC}} + w_G \cdot \frac{G_{qty}^{EC}}{T^{EC}}
+$$
+
+5. ESG Quantity Excluding ESG-Dedicated Documents (Unweighted)
+
+$$
+ESG_5 = \frac{1}{3} \left( \frac{E_{qty}^{noESG}}{T^{noESG}} + \frac{S_{qty}^{noESG}}{T^{noESG}} + \frac{G_{qty}^{noESG}}{T^{noESG}} \right)
+$$
+
+6. ESG No ESG Docs with SASB Weights
+
+$$
+ESG_6 = w_E \cdot \frac{E_{qty}^{noESG}}{T^{noESG}} + w_S \cdot \frac{S_{qty}^{noESG}}{T^{noESG}} + w_G \cdot \frac{G_{qty}^{noESG}}{T^{noESG}}
+$$
+
+7. Net Positive–Negative Sentiment (Unweighted)
+
+$$
+ESG_7 = \frac{1}{3} \left( \frac{E_{pos} - E_{neg}}{E_{tot}} + \frac{S_{pos} - S_{neg}}{S_{tot}} + \frac{G_{pos} - G_{neg}}{G_{tot}} \right)
+$$
+
+8. Net Positive–Negative with SASB Weights
+
+$$
+ESG_8 = w_E \cdot \frac{E_{pos} - E_{neg}}{E_{tot}} + w_S \cdot \frac{S_{pos} - S_{neg}}{S_{tot}} + w_G \cdot \frac{G_{pos} - G_{neg}}{G_{tot}}
+$$
+
+9. Positive Sentiment Only (Unweighted)
+
+$$
+ESG_9 = \frac{1}{3} \left( \frac{E_{pos}}{E_{tot}} + \frac{S_{pos}}{S_{tot}} + \frac{G_{pos}}{G_{tot}} \right)
+$$
+
+10. Positive Sentiment with SASB Weights
+
+$$
+ESG_{10} = w_E \cdot \frac{E_{pos}}{E_{tot}} + w_S \cdot \frac{S_{pos}}{S_{tot}} + w_G \cdot \frac{G_{pos}}{G_{tot}}
+$$
 
 ---
 
