@@ -609,5 +609,86 @@ For each test, we printed misclassified examples to better understand where mode
 
 ---
 
+## 🧮 Thesis 9 – ESG Scoring Methods and Comparison
+
+This notebook computes and compares **ten distinct ESG scores** for each company in the SMI index, based on the classification of sentences extracted from their annual reports, earnings calls, and other key financial documents. The aim is to explore how various analytical methods—both qualitative and quantitative—affect ESG scoring outcomes and comparability.
+
+### 🔍 Why so many methods?
+
+Each method represents a different assumption:
+- **Is ESG communication abundant or sparse?**
+- **Are earnings calls more reflective of priorities than general reporting?**
+- **Should all ESG pillars be treated equally, or weighted by relevance (materiality)?**
+- **Should we account for tone (positive vs. negative) or just presence?**
+
+This comparative approach helps test robustness and explore bias in ESG scoring frameworks.
+
+---
+
+### 🔟 ESG Scoring Methods Explained
+
+Each score is computed per company and year. Here's an overview of the ten methods:
+
+| ID   | Description |
+|------|-------------|
+| **1**  | ESG Quantity — share of E/S/G sentences among all sentences. Equal weight. |
+| **2**  | ESG Quantity weighted by SASB — E/S/G weighted using industry materiality weights. |
+| **3**  | ESG in Earnings Calls — same as (1) but only for earnings call content. |
+| **4**  | Earnings Calls + SASB — same as (2) but restricted to earnings calls. |
+| **5**  | ESG in Core Documents — filtered to reports (annual, half-year, integrated). |
+| **6**  | Core Docs + SASB — same as (5) with materiality weighting. |
+| **7**  | Positive - Negative ESG — sentiment-adjusted ESG: (Pos − Neg) / Total ESG. |
+| **8**  | Pos − Neg + SASB — sentiment-adjusted ESG with SASB weights. |
+| **9**  | Positive Only — share of positive ESG sentences (no negation). |
+| **10** | Positive Only + SASB — same as (9) with SASB weights. |
+
+---
+
+### 🧠 SASB Materiality Weights
+
+For SASB-based methods, we manually assigned materiality weights (`Hybrid E`, `Hybrid S`, `Hybrid G`) to each company based on its **SASB industry classification** and the corresponding topics marked as material. The full list was compiled manually in the file [`Companies_SMI.xlsx`](../Data/Companies_SMI.xlsx).
+
+These weights ensure:
+- Scores reflect the **sectoral relevance** of each ESG pillar.
+- Weight sum = 1:  
+  $$ ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E + w_S + w_G = 1 $$
+
+Reference: [SASB Materiality Map](https://www.sasb.org/standards/materiality-findings/)
+
+---
+
+### 📊 ESG Score Comparison (2023)
+
+| Company | ESG1_quantity | ESG2_quantity_SASB | ESG3_earnings | ESG4_earnings_SASB | ESG5_nocomm | ESG6_nocomm_SASB | ESG7_pos_minus_neg | ESG8_pos_minus_neg_SASB | ESG9_pos_only | ESG10_pos_only_SASB |
+|---------|---------------|---------------------|----------------|---------------------|--------------|-------------------|---------------------|---------------------------|----------------|------------------------|
+| ABB Ltd | 0.121 | 0.148 | 0.017 | 0.026 | 0.072 | 0.089 | 0.569 | 0.610 | 0.615 | 0.652 |
+| Richemont | 0.080 | 0.095 | 0.025 | 0.034 | 0.037 | 0.046 | 0.528 | 0.552 | 0.557 | 0.568 |
+| Holcim | 0.139 | 0.223 | 0.042 | 0.070 | 0.120 | 0.183 | 0.551 | 0.620 | 0.589 | 0.674 |
+| Lonza | 0.083 | 0.088 | 0.006 | 0.005 | 0.032 | 0.035 | 0.513 | 0.601 | 0.551 | 0.624 |
+| Nestlé | 0.076 | 0.089 | 0.029 | 0.036 | 0.033 | 0.040 | 0.554 | 0.605 | 0.583 | 0.639 |
+| Novartis | 0.033 | 0.038 | 0.024 | 0.033 | 0.024 | 0.030 | 0.286 | 0.365 | 0.336 | 0.408 |
+| Roche | 0.046 | 0.062 | 0.008 | 0.011 | 0.046 | 0.062 | 0.542 | 0.610 | 0.587 | 0.649 |
+| Swiss Re | 0.079 | 0.089 | 0.008 | 0.009 | 0.036 | 0.037 | 0.475 | 0.472 | 0.519 | 0.525 |
+| UBS | 0.073 | 0.073 | 0.011 | 0.011 | 0.036 | 0.036 | 0.562 | 0.561 | 0.594 | 0.593 |
+| Zurich | 0.081 | 0.088 | 0.010 | 0.010 | 0.081 | 0.088 | 0.464 | 0.462 | 0.490 | 0.494 |
+
+---
+
+***📈 Preliminary Insights from ESG Score Comparison***
+The comparison table above reveals substantial variations between ESG scores depending on the method used. A few observations stand out:
+
+- Materiality weights (SASB) consistently increase the ESG scores across methods, as seen in the uplift from ESG1 → ESG2, ESG3 → ESG4, etc. This reflects how some companies are stronger in pillars that are more material to their sector.
+
+- Earnings call–based scores (ESG3 and ESG4) are significantly lower than those based on full documents. This suggests that ESG communication is less prominent in spoken financial disclosures, possibly due to time constraints or strategic prioritization.
+
+- Roche, Nestlé, and Holcim perform strongly across most scoring methods, particularly in sentiment-based metrics (ESG7–10), indicating both quantity and positive tone in their ESG discourse.
+
+- Novartis shows relatively low scores across all categories, suggesting either limited ESG communication or a more neutral/negative tone in available disclosures.
+
+- The gap between ESG7 (Net Positive - Negative) and ESG9 (Positive Only) highlights how negative phrasing can impact the sentiment balance. ESG7 is more penalizing for companies with mixed or critical ESG narratives.
+
+These results suggest that ESG scores are highly sensitive to method and weighting choices, which has strong implications for benchmarking, investment decisions, and transparency assessments.
+
+📁 The full code is available in [`9_Thesis.ipynb`](Notebooks/9_Thesis.ipynb)
 
 
