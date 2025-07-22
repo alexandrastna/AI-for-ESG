@@ -1,5 +1,7 @@
 # ESG Signal Extraction from Corporate Disclosures using AI & NLP
 
+## Introduction
+
 This project explores how **natural language processing (NLP)** and **transformer-based AI models** can be used to extract and analyze **Environmental, Social, and Governance (ESG)** signals from the official documents of Switzerland’s largest companies.
 
 We focus on the **top 10 companies in the Swiss Market Index (SMI)**, over the **2021–2023** period, using a manually curated corpus of public disclosures: annual reports, ESG/sustainability reports, earnings calls, and more.
@@ -13,42 +15,57 @@ Through a series of notebooks, we:
 - Design and compare **10 ESG scoring methods**, with and without **SASB materiality weights**.
 - Visualize and interpret inter-company differences in ESG communication.
 
+## Data Disclaimer
+
 ⚠️ **Note**: This repository does not include raw data due to copyright and size limitations. However, all documents are publicly accessible and full methodology is reproducible.
 
-## Repository Index 🗂️
-📦 ESG-NLP-Classification/
-│
-├── README.md                       # Project overview, context, and methodology
-├── requirements.txt               # Python dependencies (transformers, spaCy, torch, etc.)
-│
-├── Notebooks/                     # Main code notebooks, in project order
-│   ├── 1_Thesis.ipynb             # Metadata construction and file parsing
-│   ├── 2_Thesis.ipynb             # Dataset exploration (pivot tables, gaps)
-│   ├── 3_Thesis.ipynb             # Sentence extraction pipeline (spaCy + PyMuPDF)
-│   ├── 4_Thesis.ipynb             # ESG classification using ESGBERT models
-│   ├── 5_Thesis.ipynb             # Classification analysis and visualizations
-│   ├── Thesis_6.ipynb             # Sentiment classification with FinBERT
-│   ├── 7_1_Thesis.ipynb           # GPT-3.5 batch preparation (jsonl formatting)
-│   ├── 7_2_Thesis.ipynb           # GPT-3.5 batch result parsing and integration
-│   ├── 8_1_Thesis.ipynb           # Human-labeled dataset construction (gold standard)
-│   ├── 8_2_Thesis.ipynb           # Model evaluation (FinBERT, GPT, ESGBERT)
-│   ├── 9_Thesis.ipynb             # ESG scoring logic and comparison (10 scoring methods)
-│
-├── Images/                        # Graphs and visualizations for ESG communication
-│   ├── Distribution_of_Sentences_by_ESG_Classification_Type.png
-│   ├── Total_Number_of_Sentences_per_Document_Type.png
-│   ├── Total_Number_of_Classified_Sentences_per_Company.png
-│   ├── Proportion_of_ESG-Classified_Sentences_over_Total_by_Company_(score_>_0.9).png
-│   ├── Dominant_Label_Distribution_by_Company_(no_score_threshold).png
-│   ├── Proportion_ESG_by_Company_(dominant_label).png
-│   ├── Confusion_Sentiment_-_GPT_vs_Human.png
-│   ├── Comparison_Accuracy.png
-│   ├── Comparison_Macro_F1.png
-│   ├── Comparison_Weighted_F1.png
-│
-└── Data/ (🛑 not included in repo)  
-    📌 The raw PDFs and full sentence datasets are stored privately on Google Drive.  
-    📌 Output CSVs (e.g. `df_merged_clean.csv`, sentiment results, etc.) are generated during notebook execution.
+## 📚 Table of Contents
+
+- [Introduction](#introduction)
+- [Data Disclaimer](#data-disclaimer)
+- [Repository Structure](#repository-structure)
+- [🧪 Notebook Pipeline](#-notebook-pipeline)
+  - [0. PDF Collection & Structure](#phase-0–data-collection)
+  - [1. PDF Collection & Structure](#1-pdf-collection--structure)
+  - [2. Text Extraction (spaCy vs Tika)](#2-text-extraction-spacy-vs-tika)
+  - [3. Cleaning & Preprocessing](#3-cleaning--preprocessing)
+  - [4. ESG Classification (BERT & GPT)](#4-esg-classification-bert--gpt)
+  - [5. ESG Scoring Engine](#5-esg-scoring-engine)
+  - [6. SASB Weighting & Filtering](#6-sasb-weighting--filtering)
+  - [7. Sentiment Adjustment (FinBERT)](#7-sentiment-adjustment-finbert)
+  - [8. Report-Based Filtering](#8-report-based-filtering)
+  - [9. Visualization & Export](#9-visualization--export)
+
+## 🗂️ Repository Structure
+
+- `README.md`: This file, providing an overview for the project.
+- `requirements.txt`: List of Python packages required to run the project (transformers, spaCy, torch, etc.).
+- `Data/`: Directory not included in the repository.  
+  - Raw PDFs and sentence datasets are stored on Google Drive.  
+  - Output CSVs (e.g. `df_merged_clean.csv`, sentiment results, etc.) are generated during execution.
+- `Notebooks/`: Directory containing Jupyter notebooks, ordered by project phase.
+  - `1_Thesis.ipynb`: Metadata construction and file parsing.
+  - `2_Thesis.ipynb`: Dataset exploration (pivot tables, gaps, visualizations).
+  - `3_Thesis.ipynb`: Sentence extraction pipeline (PyMuPDF + spaCy).
+  - `4_Thesis.ipynb`: ESG classification using ESGBERT models.
+  - `5_Thesis.ipynb`: Analysis and visualizations of ESG classification results.
+  - `Thesis_6.ipynb`: Sentiment classification using FinBERT.
+  - `7_1_Thesis.ipynb`: Preparation of GPT-3.5 prompts in JSONL format.
+  - `7_2_Thesis.ipynb`: Parsing and integration of GPT-3.5 batch results.
+  - `8_1_Thesis.ipynb`: Construction of human-labeled dataset (gold standard).
+  - `8_2_Thesis.ipynb`: Evaluation of FinBERT, GPT and ESGBERT against human labels.
+  - `9_Thesis.ipynb`: ESG scoring logic and comparison of 10 scoring methods.
+- `Images/`: Directory containing graphs and visualizations.
+  - `Distribution_of_Sentences_by_ESG_Classification_Type.png`
+  - `Total_Number_of_Sentences_per_Document_Type.png`
+  - `Total_Number_of_Classified_Sentences_per_Company.png`
+  - `Proportion_of_ESG-Classified_Sentences_over_Total_by_Company_(score_>_0.9).png`
+  - `Dominant_Label_Distribution_by_Company_(no_score_threshold).png`
+  - `Proportion_ESG_by_Company_(dominant_label).png`
+  - `Confusion_Sentiment_-_GPT_vs_Human.png`
+  - `Comparison_Accuracy.png`
+  - `Comparison_Macro_F1.png`
+  - `Comparison_Weighted_F1.png`
 
 
 ## Phase 0 – Data Collection 📁
