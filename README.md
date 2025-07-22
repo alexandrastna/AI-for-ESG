@@ -82,7 +82,7 @@ Through a series of notebooks, we:
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
 
-### Selected Sources of Information 🔍
+### 🔍 Selected Sources of Information 
 
 The dataset includes the following document types, which are commonly used in ESG assessments and financial analysis:
 
@@ -95,7 +95,7 @@ The dataset includes the following document types, which are commonly used in ES
 
 The goal is to rely on **complete, public, and comparable documents** as the foundation for all subsequent analyses.
 
-### Why the Collection Was Done Manually ⚠️
+### ⚠️ Why the Collection Was Done Manually 
 
 Although web scraping was initially considered, it quickly proved unreliable and inefficient due to the following issues:
 
@@ -109,7 +109,7 @@ Although web scraping was initially considered, it quickly proved unreliable and
 
 ✅ **Conclusion**: Manual collection ensured better reliability, completeness, and clarity.
 
-### Investor Communications and Earnings Call Transcripts 🔊
+### 🔊 Investor Communications and Earnings Call Transcripts
 
 To complement the reports, I manually downloaded a diverse set of **transcripts from investor relations materials**, including **earnings calls**, **fireside chats**, and **Q&A sessions**. These materials are typically less polished and less controlled than formal sustainability or annual reports, making them particularly useful for more **objective ESG analysis**.
 
@@ -122,7 +122,7 @@ Unlike sustainability reports — which are often heavily curated for branding a
 
 Due to **legal and technical limitations**, transcripts were collected manually. Automated scraping was not feasible: Seeking Alpha explicitly prohibits it in their [Terms of Use](https://seekingalpha.com/page/terms-of-use), and they implement active anti-scraping protections.
 
-### File Organization & Metadata 🗂️
+### 🗂️ File Organization & Metadata
 
 All documents were stored in a structured folder on **Google Drive**.
 
@@ -133,7 +133,7 @@ To manage and track the collection process, I created two complementary metadata
 
 The two sheets are linked by a unique `(Company, Year)` key.
 
-### Coverage Summary 📈
+### 📈 Coverage Summary
 
 The table below summarizes the coverage status for the top 10 SMI companies (2021–2023). Most reports and transcripts were successfully collected. A few gaps remain, particularly for some quarterly earnings calls (e.g. Roche Q3 2021, Lonza Q3 2023).
 
@@ -162,6 +162,7 @@ This manual collection phase lays the foundation for all subsequent analysis. Th
 ## Phase 1 : Dataset Construction
 
 > 📁 **Note on data availability** : [Data Disclaimer](#data-disclaimer)
+> 
 > Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository. However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
 
 In this first notebook, I construct the core dataset used for analysis by combining two sources:
@@ -169,7 +170,7 @@ In this first notebook, I construct the core dataset used for analysis by combin
 - **Raw documents**: A manually collected set of PDF files (e.g. annual reports, sustainability reports, earnings call transcripts), stored on Google Drive.  
 - **Metadata file**: An Excel spreadsheet with structured information about the top 10 SMI companies (e.g. company name, sector, report types, years).
 
-### File Parsing and Metadata Extraction 🗂️
+### 🗂️ File Parsing and Metadata Extraction
 
 I programmatically traverse each company's folder in Drive and extract metadata for every `.pdf` file:
 - **Company** (from folder structure)
@@ -188,7 +189,7 @@ A preview of the resulting dataset:
 
 This structured DataFrame is used to match each document with financial and ESG metadata (tickers, industry classification) in the next step.
 
-### Complementary Metadata Table 📄
+### 📄 Complementary Metadata Table
 
 Each document is also described in a second table that includes external metadata, such as tickers, industry classification, and download information.
 
@@ -198,7 +199,7 @@ Each document is also described in a second table that includes external metadat
 | Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Half-Year Report   | Half-Year Report      | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
 
 
-### Metadata Merge 🔗
+### 🔗 Metadata Merge
 
 The extracted document data is then merged with the Excel file, matching each `(Company, Year)` pair.  
 The Excel metadata includes:
@@ -224,7 +225,7 @@ This file is saved in Drive and serves as the input for the next phase of the pr
 
 In this phase, I perform an exploratory analysis of the merged dataset created in [Phase 1](#phase-1--dataset-construction). The goal is to verify data completeness, detect missing entries, and understand the distribution of document types.
 
-### Key Analyses 🧮
+### 🧮 Key Analyses
 
 - **Total number of documents** per company and year  
 - **Distribution of document types** (e.g. Annual Report, Sustainability Report, etc.)  
@@ -242,6 +243,7 @@ A sample of the pivot table below shows how many documents of each type were col
 This overview ensures the corpus is both **comprehensive and well-documented** before proceeding to the text extraction phase.
 
 > 💡 For details and full visualizations, see the notebook:
+> 
 >  [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
 
 ---
@@ -269,6 +271,7 @@ Due to the complexity of the documents and the amount of layout noise, **this st
 This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
 
 > 💡 For full implementation details, see the notebook:
+> 
 > [`3_Thesis.ipynb`](Notebooks/3_Thesis.ipynb)
 
 ---
@@ -291,7 +294,7 @@ Each sentence is passed through all three models. Each model returns:
 - a **label** (either the target class or `"none"`),
 - and a **confidence score** between `0` and `1`.
 
-#### 🔍 How the classification works
+### 🔍 How the classification works
 
 For each sentence:
 - If the model predicts a relevant ESG category (e.g. `"environmental"`, `"social"`...), it returns a confidence score for that label.
@@ -306,7 +309,7 @@ Example result:
 
 This approach ensures that **each sentence is independently evaluated** for its ESG relevance, allowing nuanced and overlapping classifications.
 
-#### 🧱 Batching for Large-Scale Classification
+### 🧱 Batching for Large-Scale Classification
 
 With **over 200,000 sentences** to classify, we split the dataset into **batches of 10,000** sentences for processing. This prevents memory overflow and allows intermediate saving of results. The batch loop:
 1. Loads a slice of the data.
@@ -315,13 +318,11 @@ With **over 200,000 sentences** to classify, we split the dataset into **batches
 
 After all batches are processed, they are concatenated into a single file and a final label column is assigned based on dominant confidence scores.
 
-#### ⚙️ Running on GPU to Save Time (and Money)
+### ⚙️ Running on GPU to Save Time (and Money)
 
 Running transformer models is computationally intensive. Fortunately, Google Colab occasionally offers **free GPU access**. I was able to access a GPU for this classification step, which brought the total runtime down to just over **1 hour**.
 
 Without GPU, this task would likely take several **hours or even days**, depending on hardware. However, after using the GPU for one full classification session, it became unavailable for the rest of the day — highlighting the **budgetary and infrastructural constraints** of this kind of academic project.
-
-#### 🧵 Full Code Available
 
 > 💡 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in :
 > [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
