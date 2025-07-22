@@ -331,7 +331,7 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 
 ## Phase 5 : ESG Classification Analysis
 
-This  step analyzes the ESG sentence-level classifications obtained from the previous stage (`Thesis 4`). The goal is to produce insightful descriptive statistics and visualizations by company, year, and document type.
+This  step analyzes the ESG sentence-level classifications obtained from the previous stage. The goal is to produce insightful descriptive statistics and visualizations by company, year, and document type.
 
 ### 🗂️ Dataset Structure
 
@@ -381,7 +381,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 > UBS, Nestlé, and Swiss Re show the highest overall sentence counts. These differences may reflect disparities in the number, length, and structure of reports published by each firm. For example, some companies release multiple types of documents (annual, sustainability, earnings calls) per year, while others offer fewer disclosures or shorter materials.
 
 
-## 📈 ESG Sentence Share
+### 📈 ESG Sentence Share
 
 This chart presents the **proportion of ESG-classified sentences (score > 0.9)** over the **total number of sentences** for each company. It helps compare the relative prominence of ESG content in corporate disclosures, regardless of total document volume.
 
@@ -397,7 +397,7 @@ This chart presents the **proportion of ESG-classified sentences (score > 0.9)**
 >
 > 🔍 Lastly, the use of a 0.9 threshold ensures high precision in classification, but may exclude more nuanced or indirect ESG references that fall below this confidence level.
 
-##  Dominant Label Overview (No Threshold)
+###  Dominant Label Overview (No Threshold)
 
 Each sentence may receive multiple ESG labels (e.g., both Social and Governance) if it meets high confidence scores in more than one category. This makes sense conceptually, as some statements touch on cross-cutting themes — such as workplace ethics or climate governance — but it poses challenges when we later want to calculate pillar-specific ESG scores.
 
@@ -418,7 +418,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 > 🔍 Notably, many sentences still fall under the 'none' category (i.e., no ESG score exceeded any pillar-specific model), but this doesn’t mean the sentence was irrelevant — it simply wasn’t confidently ESG-tagged by the classifier.
 
 
-##  📈 ESG Sentence Share
+###  📈 ESG Sentence Share
 
 📊 **ESG label proportions by company **:
 
@@ -443,7 +443,8 @@ This distinction is crucial for fair comparisons across companies and for avoidi
 
 This section provided a comparative overview of ESG communication across major Swiss companies, based on the number and proportion of ESG-classified sentences. By switching from a multi-label view to a dominant-label approach, we observed meaningful changes in company rankings — underlining the importance of methodological consistency when interpreting ESG discourse.
 
-📁 **For further analyses, full code, and dynamic breakdowns**, please refer to the notebook [`5_Thesis.ipynb`](Notebooks/5_Thesis.ipynb).
+> 💡 For further analyses, full code, and dynamic breakdowns**, please refer to the notebook:
+> [`5_Thesis.ipynb`](Notebooks/5_Thesis.ipynb).
 
 ---
 
@@ -457,8 +458,6 @@ FinBERT is a domain-specific adaptation of [BERT](https://arxiv.org/abs/1810.048
 
 💡 **Why do we use it here?**  
 Traditional sentiment models may misinterpret financial or corporate jargon. FinBERT improves precision in our context (company reports, ESG disclosures) and allows us to measure **the tone of ESG-related discourse** for each firm. This can later be aggregated to derive **sentiment-based ESG scores**.
-
----
 
 #### 📌 Overview of this notebook:
 
@@ -484,7 +483,8 @@ The resulting file contains the original ESG sentences along with:
 
 This output is ready for downstream analysis.
 
-🧠 Code available in `Notebooks/Thesis_6.ipynb`
+> 💡The code is available in :
+> `Notebooks/Thesis_6.ipynb`
 
 ---
 
@@ -544,19 +544,18 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-### 🧪 Process Summary
-
-## Thesis 7.1 
+## Thesis 7.1  : Creating .jsonl batch files
 
 - Load ESG sentences from the DataFrame.  
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
 - Save files to disk for upload to OpenAI’s Batch API.  
 
-👉 See full code in [`7_1_Thesis.ipynb`](Notebooks/7_1_Thesis.ipynb)
+> 💡 See full code in:
+>  [`7_1_Thesis.ipynb`](Notebooks/7_1_Thesis.ipynb)
 
 ---
 
-## Thesis 7.2
+## Thesis 7.2 : Process output files returned by OpenAI
 
 - Parse the 4 `.jsonl` output files returned by OpenAI.  
 - Map each sentiment label (`positive`, `neutral`, `negative`) back to the original DataFrame using the `custom_id`.  
@@ -568,11 +567,12 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 |---------|------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|------------|-----------|------------|-----------|----------------|----------------------|
 | ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
 
-👉 See full code in [`7_2_Thesis.ipynb`](Notebooks/7_2_Thesis.ipynb)
+> 💡 See full code in :
+>  [`7_2_Thesis.ipynb`](Notebooks/7_2_Thesis.ipynb)
 
 ---
 
-## Phase 8 – Model Benchmarking on ESG and Sentiment Classification
+## Phase 8 : Model Benchmarking on ESG and Sentiment Classification
 
 This section evaluates the **performance of multiple classification models** on a carefully curated, human-annotated dataset of 188 ESG-related sentences. The goal is to compare both **ESG pillar classification** and **sentiment analysis** across three major approaches:
 
@@ -596,11 +596,12 @@ We chose to create a balanced dataset to ensure fair evaluation across both task
 
 Due to time and resource constraints — in particular, the manual effort required to annotate each sentence accurately — we limited the dataset to 188 sentences. Annotating significantly more would not have been feasible for a single person in a short timeframe, and this sample still ensures good representativeness of the corpus.
 
-👉 See full code in [`8_1_Thesis.ipynb`](Notebooks/8_1_Thesis.ipynb)
+> 💡See full code in :
+>  [`8_1_Thesis.ipynb`](Notebooks/8_1_Thesis.ipynb)
 
 ---
 
-## Phase 8.2 – Model Evaluation and Comparison
+## Phase 8.2 : Model Evaluation and Comparison
 
 We evaluate the predictions from the three models against the **human-labeled gold standard**, using accuracy, F1-scores, and confusion matrices.
 
@@ -613,8 +614,6 @@ We evaluate the predictions from the three models against the **human-labeled go
 | Sentiment analysis  | GPT-3.5          | `sentiment_gpt_batch`      |
 | ESG classification  | GPT-3.5 (prompt) | `esg_gpt3`                 |
 | Human benchmark     | Ground truth     | `sentiment_humain`, `esg_label_humain` |
-
-👉 See full code in [`8_2_Thesis.ipynb`](Notebooks/8_2_Thesis.ipynb)
 
 
 ### 📈 Key Results Summary
@@ -674,9 +673,12 @@ For each test, we printed misclassified examples to better understand where mode
 
 - Prompt engineering with GPT-3.5 offers a flexible, low-cost alternative for quick prototyping, though results depend on prompt clarity and task design.
 
+> 💡 See full code in :
+> [`8_2_Thesis.ipynb`](Notebooks/8_2_Thesis.ipynb)
+
 ---
 
-## Phase 9 – ESG Scoring Methods and Comparison
+## Phase 9 : ESG Scoring Methods and Comparison
 
 This notebook computes and compares **ten distinct ESG scores** for each company in the SMI index, based on the classification of sentences extracted from their annual reports, earnings calls, and other key financial documents. The aim is to explore how various analytical methods—both qualitative and quantitative—affect ESG scoring outcomes and comparability.
 
@@ -817,7 +819,6 @@ $$
 | UBS | 0.073 | 0.073 | 0.011 | 0.011 | 0.036 | 0.036 | 0.562 | 0.561 | 0.594 | 0.593 |
 | Zurich | 0.081 | 0.088 | 0.010 | 0.010 | 0.081 | 0.088 | 0.464 | 0.462 | 0.490 | 0.494 |
 
----
 
 ***📈 Preliminary Insights from ESG Score Comparison***
 The comparison table above reveals substantial variations between ESG scores depending on the method used. A few observations stand out:
@@ -834,6 +835,7 @@ The comparison table above reveals substantial variations between ESG scores dep
 
 These results suggest that ESG scores are highly sensitive to method and weighting choices, which has strong implications for benchmarking, investment decisions, and transparency assessments.
 
-📁 The full code is available in [`9_Thesis.ipynb`](Notebooks/9_Thesis.ipynb)
+> 💡 The full code is available in :
+> [`9_Thesis.ipynb`](Notebooks/9_Thesis.ipynb)
 
 
