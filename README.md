@@ -420,7 +420,7 @@ In this chart, each sentence is assigned a **dominant label** — the ESG catego
 
 ###  📈 ESG Sentence Share
 
-📊 **ESG label proportions by company **:
+📊 **ESG label proportions by company:**
 
 ![Proportion of ESG-Classified Sentences over Total by Company (based on Dominant Label)](Images/Proportion%20of%20ESG-Classified%20Sentences%20over%20Total%20by%20Company%20(based%20on%20Dominant%20Label).png)
 
@@ -645,10 +645,10 @@ All confusion matrix plots are available in the `Images` folder:
 - [Confusion – Sentiment GPT vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
 
 
-Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  
+**Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  :**
 ![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
 
-Comparision of the evaluations :
+**Comparision of the evaluations :**
 
 ![Comparison - Accuracy](Images/Comparison_Accuracy.png)
 
