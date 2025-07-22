@@ -17,7 +17,9 @@ Through a series of notebooks, we:
 
 ## Data Disclaimer
 
-⚠️ **Note**: This repository does not include raw data due to copyright and size limitations. However, all documents are publicly accessible and full methodology is reproducible.
+⚠️ **Note**: Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are **not included in this repository**.  
+However, all files used in this project are publicly available online on the official investor relations websites of the selected companies, and full methodology is reproducible..  
+
 
 ## 📚 Table of Contents
 
@@ -26,8 +28,8 @@ Through a series of notebooks, we:
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
   - [Phase 0 – Data Collection 📁](#phase-0–data-collection-)
-  - [1. PDF Collection & Structure](#1-pdf-collection--structure)
-  - [2. Text Extraction (spaCy vs Tika)](#2-text-extraction-spacy-vs-tika)
+  - [Phase 1 – Dataset Construction 🧱](#phase-1–dataset-construction-)
+  - [Phase 2 – Dataset Exploration 🔍](#2-phase-2–dataset-exploration-)
   - [3. Cleaning & Preprocessing](#3-cleaning--preprocessing)
   - [4. ESG Classification (BERT & GPT)](#4-esg-classification-bert--gpt)
   - [5. ESG Scoring Engine](#5-esg-scoring-engine)
@@ -66,7 +68,6 @@ Through a series of notebooks, we:
   - `Comparison_Accuracy.png`
   - `Comparison_Macro_F1.png`
   - `Comparison_Weighted_F1.png`
-
 
 ## Phase 0 – Data Collection 📁
 
@@ -140,7 +141,6 @@ The table below summarizes the coverage status for the top 10 SMI companies (202
 | Swiss Re  | ✅                 | ✅                        |
 | Lonza     | ✅                 | ⚠️ Missing Q1/Q3 for 2021, 2022, 2023 |
 
----
 
 For the missing transcripts, I thoroughly searched across all available sources, including Investor Relations websites, Seeking Alpha, and other financial platforms. I also contacted someone with **Bloomberg Terminal access** (which has extensive coverage), but even there, the transcripts were unavailable. My working hypothesis is that **these earnings calls simply did not take place** — in **Switzerland**, unlike the **United States**, listed companies are **not legally required to hold four earnings calls per year**. Quarterly disclosures are common, but not mandatory or standardized.
 
@@ -148,8 +148,7 @@ For the missing transcripts, I thoroughly searched across all available sources,
 
 This manual collection phase lays the foundation for all subsequent analysis. The next step involves organizing these files into a structured dataframe with standardized metadata.
 
-👉 Proceed to [Phase 1 – Dataset Construction](#phase-1--dataset-construction-🧱)
-
+---
 
 ## Phase 1 – Dataset Construction 🧱
 
@@ -182,8 +181,6 @@ A preview of the resulting dataset:
 
 This structured DataFrame is used to match each document with financial and ESG metadata (tickers, industry classification) in the next step.
 
----
-
 ### 📄 Complementary Metadata Table
 
 Each document is also described in a second table that includes external metadata, such as tickers, industry classification, and download information.
@@ -193,7 +190,6 @@ Each document is also described in a second table that includes external metadat
 | Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Annual Report      | Annual Review         | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
 | Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Half-Year Report   | Half-Year Report      | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
 
----
 
 ### 🔗 Metadata Merge
 
@@ -215,6 +211,8 @@ This file is saved in Drive and serves as the input for the next phase of the pr
 
 > 💡 The full source code for this metadata cleaning and merge process is available in the notebook:  
 > [`1_Thesis.ipynb`](./Notebooks/1_Thesis.ipynb)
+
+---
 
 ## Phase 2 – Dataset Exploration 🔍
 
@@ -239,7 +237,9 @@ This overview ensures the corpus is both **comprehensive and well-documented** b
 
 👉 For details and full visualizations, see the notebook [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
 
-### 🧠 Phase 3 – Sentence Extraction (NLP-ready)
+---
+
+## 🧠 Phase 3 – Sentence Extraction (NLP-ready)
 
 This step is the most **crucial foundation** for the NLP classification phase. It involves extracting clean, meaningful, and self-contained sentences more than 200 corporate documents (Annual Reports, ESG Reports, etc.).
 
@@ -263,7 +263,9 @@ This significantly degraded model performance and introduced semantic noise. As 
 
 ➡️ For full implementation details, see the notebook: [`3_Thesis.ipynb`](Notebooks/3_Thesis.ipynb)
 
-### 🧠 Phase 4 – ESG Sentence Classification Using Transformer Models
+---
+
+## 🧠 Phase 4 – ESG Sentence Classification Using Transformer Models
 
 This notebook performs sentence-level classification across all extracted company reports to assign ESG labels — **Environmental**, **Social**, **Governance**, or **None** — to each sentence.
 
@@ -316,6 +318,8 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in  
 📓 [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
 
+---
+
 ## 🧪 Phase 5 – ESG Classification Analysis
 
 This  step analyzes the ESG sentence-level classifications obtained from the previous stage (`Thesis 4`). The goal is to produce insightful descriptive statistics and visualizations by company, year, and document type.
@@ -331,8 +335,6 @@ Key columns include:
 - `label_soc`, `score_soc`
 - `label_gov`, `score_gov`
 
----
-
 ### 🧮 Global Classification Breakdown
 
 Each sentence is assigned to a **classification type** based on whether one or more pillars have a confidence score > 0.9. The breakdown is as follows:
@@ -346,7 +348,6 @@ Each sentence is assigned to a **classification type** based on whether one or m
 
 > 🔍 Most sentences are classified as `none`, so not ESG related. Among valid ESG sentences, Environmental classifications appear most frequently, followed by Social and Governance. Multi-label sentences are present.
 
----
 
 ### 📄 Sentence Volume by Document Type
 
@@ -370,7 +371,6 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 >
 > UBS, Nestlé, and Swiss Re show the highest overall sentence counts. These differences may reflect disparities in the number, length, and structure of reports published by each firm. For example, some companies release multiple types of documents (annual, sustainability, earnings calls) per year, while others offer fewer disclosures or shorter materials.
 
----
 
 ## 📈 ESG Sentence Share
 
@@ -464,7 +464,7 @@ Traditional sentiment models may misinterpret financial or corporate jargon. Fin
 
 4. **Export the Results**  
    The dataset, now enriched with sentiment scores, is saved for further steps.
----
+
 
 📦 **Output**  
 The resulting file contains the original ESG sentences along with:
@@ -477,11 +477,11 @@ This output is ready for downstream analysis.
 
 🧠 Code available in `Notebooks/Thesis_6.ipynb`
 
+---
+
 ### 🧠 Thesis 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
 
 In this step, we test **GPT-3.5** as an alternative to the **FinBERT classifier** used previously. The goal is to evaluate whether GPT-3.5 can produce comparable or better sentiment predictions on ESG-related sentences, while maintaining a **good cost-performance balance**.
-
----
 
 ### 💡 Why GPT-3.5 and not GPT-4?
 
@@ -492,8 +492,6 @@ We chose **GPT-3.5** because:
   - GPT-4-turbo: ~$10–15 per 1,000 requests (depending on context size)
 - For a **simple classification task** like ours—predicting `positive`, `neutral`, or `negative`—GPT-4 would be overkill.
 - GPT-3.5 has proven to be **accurate enough**, and is therefore the best choice in terms of **price/performance ratio**, especially in an academic project context where budget matters.
-
----
 
 ### 📦 What are OpenAI Batches?
 
@@ -508,8 +506,6 @@ This approach is up to **100× faster** than looping inside Colab—but it has l
 - **Only one batch job can run at a time**.
 - Each batch can take **up to 24 hours** to complete.
 - There is a **maximum file size per batch**, so we had to split our dataset into **4 separate batch files**.
-
----
 
 ### ✍️ What is a Prompt, and Why Does It Matter?
 
@@ -526,7 +522,6 @@ Use 'neutral' if it is descriptive without clear judgment or consequence.
 This prompt is included once per request, and its **clarity directly impacts the consistency and accuracy** of the model’s response.  
 A vague or overly complex prompt can lead to irrelevant or inconsistent labels. That’s why **prompt engineering is a critical part of using LLMs for classification.**
 
----
 
 ### 📁 What is JSONL Format?
 
@@ -565,6 +560,8 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 | ABB Ltd | 2023 | Integrated Report | ABB’s purpose is to enable a more sustainable and resource-efficient ­future with our technology leadership in electrification and automation. | environmental | 0.9976    | none       | 0.9999    | none       | 0.9924    | environmental     | positive             |
 
 👉 See full code in [`7_2_Thesis.ipynb`](Notebooks/7_2_Thesis.ipynb)
+
+---
 
 ## 🧪 Thesis 8 – Model Benchmarking on ESG and Sentiment Classification
 
@@ -610,7 +607,6 @@ We evaluate the predictions from the three models against the **human-labeled go
 
 👉 See full code in [`8_2_Thesis.ipynb`](Notebooks/8_2_Thesis.ipynb)
 
----
 
 ### 📈 Key Results Summary
 
@@ -625,8 +621,6 @@ We evaluate the predictions from the three models against the **human-labeled go
 
 📌 The **GPT-3.5 model outperforms FinBERT** on sentiment, especially for the **positive** and **negative** classes.  
 📌 ESG-BERT remains the most reliable for ESG classification, but GPT-3.5 shows strong potential via prompt-based classification.
-
----
 
 ### 📉 Confusion Matrix Visualizations
 
@@ -650,8 +644,6 @@ Comparision of the evaluations :
 
 ![Comparison - Weighted F1](Images/Comparison_Weighted%20F1.png)
 
----
-
 ### 🔍 Interpretation and Error Analysis
 
 For each test, we printed misclassified examples to better understand where models fail:
@@ -660,8 +652,6 @@ For each test, we printed misclassified examples to better understand where mode
 - **FinBERT** often mislabels neutral statements as positive or negative, which can be problematic when aggregating scores at scale or deriving sentiment indicators.
 - **GPT-3.5** has difficulties with negative sentiment, especially when the sentence is a factual statement about climate change or environmental risks — it tends to classify such statements as negative, even when they are not evaluative or directed at the company.
 - **GPT-3.5** for ESG classification performs decently, but tends to assign "governance" labels to sentences that are actually social, or mark them as "none".
-
----
 
 ### 💡 Takeaways
 
@@ -704,8 +694,6 @@ Each method reflects a different underlying assumption about how ESG priorities 
 
 This comparative approach helps test the **robustness**, **biases**, and **underlying assumptions** behind different ESG scoring frameworks.
 
----
-
 ### 🔟 ESG Scoring Methods Explained
 
 Each score is computed per company and year. Here's an overview of the ten methods:
@@ -723,7 +711,6 @@ Each score is computed per company and year. Here's an overview of the ten metho
 | **9**  | Positive Only — share of positive ESG sentences (no negation). |
 | **10** | Positive Only + SASB — same as (9) with SASB weights. |
 
----
 
 ### 🧠 SASB Materiality Weights
 
@@ -738,8 +725,6 @@ ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E
 $$
 
 Reference: [SASB Materiality Map](https://sasb.ifrs.org/standards/materiality-finder/find/)
-
----
 
 ### 🧮 ESG Score Formulas
 
