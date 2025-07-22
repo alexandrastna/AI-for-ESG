@@ -15,6 +15,42 @@ Through a series of notebooks, we:
 
 ⚠️ **Note**: This repository does not include raw data due to copyright and size limitations. However, all documents are publicly accessible and full methodology is reproducible.
 
+## Repository Index 🗂️
+📦 ESG-NLP-Classification/
+│
+├── README.md                       # Project overview, context, and methodology
+├── requirements.txt               # Python dependencies (transformers, spaCy, torch, etc.)
+│
+├── Notebooks/                     # Main code notebooks, in project order
+│   ├── 1_Thesis.ipynb             # Metadata construction and file parsing
+│   ├── 2_Thesis.ipynb             # Dataset exploration (pivot tables, gaps)
+│   ├── 3_Thesis.ipynb             # Sentence extraction pipeline (spaCy + PyMuPDF)
+│   ├── 4_Thesis.ipynb             # ESG classification using ESGBERT models
+│   ├── 5_Thesis.ipynb             # Classification analysis and visualizations
+│   ├── Thesis_6.ipynb             # Sentiment classification with FinBERT
+│   ├── 7_1_Thesis.ipynb           # GPT-3.5 batch preparation (jsonl formatting)
+│   ├── 7_2_Thesis.ipynb           # GPT-3.5 batch result parsing and integration
+│   ├── 8_1_Thesis.ipynb           # Human-labeled dataset construction (gold standard)
+│   ├── 8_2_Thesis.ipynb           # Model evaluation (FinBERT, GPT, ESGBERT)
+│   ├── 9_Thesis.ipynb             # ESG scoring logic and comparison (10 scoring methods)
+│
+├── Images/                        # Graphs and visualizations for ESG communication
+│   ├── Distribution_of_Sentences_by_ESG_Classification_Type.png
+│   ├── Total_Number_of_Sentences_per_Document_Type.png
+│   ├── Total_Number_of_Classified_Sentences_per_Company.png
+│   ├── Proportion_of_ESG-Classified_Sentences_over_Total_by_Company_(score_>_0.9).png
+│   ├── Dominant_Label_Distribution_by_Company_(no_score_threshold).png
+│   ├── Proportion_ESG_by_Company_(dominant_label).png
+│   ├── Confusion_Sentiment_-_GPT_vs_Human.png
+│   ├── Comparison_Accuracy.png
+│   ├── Comparison_Macro_F1.png
+│   ├── Comparison_Weighted_F1.png
+│
+└── Data/ (🛑 not included in repo)  
+    📌 The raw PDFs and full sentence datasets are stored privately on Google Drive.  
+    📌 Output CSVs (e.g. `df_merged_clean.csv`, sentiment results, etc.) are generated during notebook execution.
+
+
 ## Phase 0 – Data Collection 📁
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
