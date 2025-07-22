@@ -27,16 +27,20 @@ However, all files used in this project are publicly available online on the off
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
-  - [Phase 0 – Data Collection 📁](#phase-0--data-collection-)
-  - [Phase 1 – Dataset Construction 🧱](#phase--1–dataset-construction-)
-  - [Phase 2 – Dataset Exploration 🔍](#phase--2–dataset-exploration-)
-  - [3. Cleaning & Preprocessing](#3-cleaning--preprocessing)
-  - [4. ESG Classification (BERT & GPT)](#4-esg-classification-bert--gpt)
-  - [5. ESG Scoring Engine](#5-esg-scoring-engine)
-  - [6. SASB Weighting & Filtering](#6-sasb-weighting--filtering)
-  - [7. Sentiment Adjustment (FinBERT)](#7-sentiment-adjustment-finbert)
-  - [8. Report-Based Filtering](#8-report-based-filtering)
-  - [9. Visualization & Export](#9-visualization--export)
+  - [Phase 1 – Dataset Construction 🧱](#phase-1--dataset-construction-)
+  - [Phase 2 – Dataset Exploration 🔍](#phase-2--dataset-exploration-)
+  - [Phase 3 – Sentence Extraction (NLP-ready) 🧠](#phase-3--sentence-extraction-nlp-ready-)
+  - [Phase 4 – ESG Sentence Classification Using Transformer Models](#phase-4--esg-sentence-classification-using-transformer-models)
+  - [Phase 5 – ESG Classification Analysis 🧪](#phase-5--esg-classification-analysis-)
+  - [Thesis 6 – Sentiment Analysis with FinBERT](#thesis-6--sentiment-analysis-with-finbert)
+  - [Thesis 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#thesis-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
+  - [Thesis_7_1](#thesis_7_1)
+  - [Thesis_7_2](#thesis_7_2)
+  - [Thesis 8 – Model Benchmarking on ESG and Sentiment Classification](#thesis-8--model-benchmarking-on-esg-and-sentiment-classification)
+  - [Thesis_8_1 – Creating the Gold Standard Dataset](#thesis_8_1--creating-the-gold-standard-dataset)
+  - [Thesis_8_2 – Model Evaluation and Comparison](#thesis_8_2--model-evaluation-and-comparison)
+  - [Thesis 9 – ESG Scoring Methods and Comparison](#thesis-9--esg-scoring-methods-and-comparison)
+
 
 ## 🗂️ Repository Structure
 
@@ -51,29 +55,34 @@ However, all files used in this project are publicly available online on the off
   - `3_Thesis.ipynb`: Sentence extraction pipeline (PyMuPDF + spaCy).
   - `4_Thesis.ipynb`: ESG classification using ESGBERT models.
   - `5_Thesis.ipynb`: Analysis and visualizations of ESG classification results.
-  - `Thesis_6.ipynb`: Sentiment classification using FinBERT.
+  - `6_Thesis.ipynb`: Sentiment classification using FinBERT.
   - `7_1_Thesis.ipynb`: Preparation of GPT-3.5 prompts in JSONL format.
   - `7_2_Thesis.ipynb`: Parsing and integration of GPT-3.5 batch results.
   - `8_1_Thesis.ipynb`: Construction of human-labeled dataset (gold standard).
   - `8_2_Thesis.ipynb`: Evaluation of FinBERT, GPT and ESGBERT against human labels.
   - `9_Thesis.ipynb`: ESG scoring logic and comparison of 10 scoring methods.
 - `Images/`: Directory containing graphs and visualizations.
-  - `Distribution_of_Sentences_by_ESG_Classification_Type.png`
-  - `Total_Number_of_Sentences_per_Document_Type.png`
-  - `Total_Number_of_Classified_Sentences_per_Company.png`
-  - `Proportion_of_ESG-Classified_Sentences_over_Total_by_Company_(score_>_0.9).png`
-  - `Dominant_Label_Distribution_by_Company_(no_score_threshold).png`
-  - `Proportion_ESG_by_Company_(dominant_label).png`
-  - `Confusion_Sentiment_-_GPT_vs_Human.png`
   - `Comparison_Accuracy.png`
-  - `Comparison_Macro_F1.png`
-  - `Comparison_Weighted_F1.png`
+  - `Comparison_Macro F1.png`
+  - `Comparison_Weighted F1.png`
+  - `Confusion_ESG GPT vs ESGBERT.png`
+  - `Confusion_ESG GPT vs Human.png`
+  - `Confusion_ESGBERT vs Human (without none).png`
+  - `Confusion_ESGBERT vs Human.png`
+  - `Confusion_Sentiment - FinBert vs Human.png`
+  - `Confusion_Sentiment - GPT vs Human.png`
+  - `Distribution of Sentences by ESG Classification Type.png`
+  - `Dominant Label Distribution by Company (no score threshold).png`
+  - `Proportion of ESG-Classified Sentences over Total by Company (by dominant label).png`
+  - `Proportion of ESG-Classified Sentences over Total by Company (score > 0.9).png`
+  - `Total Number of Classified Sentences per Company.png`
+  - `Total Number of Sentences per Document Type.png`
 
 ## Phase 0 – Data Collection 📁
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
 
-### 🔍 Selected Sources of Information
+### Selected Sources of Information 🔍
 
 The dataset includes the following document types, which are commonly used in ESG assessments and financial analysis:
 
@@ -86,7 +95,7 @@ The dataset includes the following document types, which are commonly used in ES
 
 The goal is to rely on **complete, public, and comparable documents** as the foundation for all subsequent analyses.
 
-### ⚠️ Why the Collection Was Done Manually
+### Why the Collection Was Done Manually ⚠️
 
 Although web scraping was initially considered, it quickly proved unreliable and inefficient due to the following issues:
 
@@ -100,7 +109,7 @@ Although web scraping was initially considered, it quickly proved unreliable and
 
 ✅ **Conclusion**: Manual collection ensured better reliability, completeness, and clarity.
 
-### 🔊 Investor Communications and Earnings Call Transcripts
+### Investor Communications and Earnings Call Transcripts 🔊
 
 To complement the reports, I manually downloaded a diverse set of **transcripts from investor relations materials**, including **earnings calls**, **fireside chats**, and **Q&A sessions**. These materials are typically less polished and less controlled than formal sustainability or annual reports, making them particularly useful for more **objective ESG analysis**.
 
@@ -113,7 +122,7 @@ Unlike sustainability reports — which are often heavily curated for branding a
 
 Due to **legal and technical limitations**, transcripts were collected manually. Automated scraping was not feasible: Seeking Alpha explicitly prohibits it in their [Terms of Use](https://seekingalpha.com/page/terms-of-use), and they implement active anti-scraping protections.
 
-### 🗂️ File Organization & Metadata
+### File Organization & Metadata 🗂️
 
 All documents were stored in a structured folder on **Google Drive**.
 
@@ -124,7 +133,7 @@ To manage and track the collection process, I created two complementary metadata
 
 The two sheets are linked by a unique `(Company, Year)` key.
 
-### 📈 Coverage Summary
+### Coverage Summary 📈
 
 The table below summarizes the coverage status for the top 10 SMI companies (2021–2023). Most reports and transcripts were successfully collected. A few gaps remain, particularly for some quarterly earnings calls (e.g. Roche Q3 2021, Lonza Q3 2023).
 
