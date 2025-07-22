@@ -17,8 +17,7 @@ Through a series of notebooks, we:
 
 ## Data Disclaimer
 
-⚠️ **Note**: Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are **not included in this repository**.  
-However, all files used in this project are publicly available online on the official investor relations websites of the selected companies, and full methodology is reproducible..  
+⚠️ **Note**: Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository. However, all files used in this project are publicly available online on the official investor relations websites of the selected companies, and full methodology is reproducible.  
 
 
 ## 📚 Table of Contents
@@ -27,7 +26,7 @@ However, all files used in this project are publicly available online on the off
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
-  - [Phase 1 – Dataset Construction 🧱](#phase-1--dataset-construction-)
+  - [Phase 1 – Dataset Construction](#phase-1--dataset-construction-)
   - [Phase 2 – Dataset Exploration 🔍](#phase-2--dataset-exploration-)
   - [Phase 3 – Sentence Extraction (NLP-ready) 🧠](#phase-3--sentence-extraction-nlp-ready-)
   - [Phase 4 – ESG Sentence Classification Using Transformer Models](#phase-4--esg-sentence-classification-using-transformer-models)
@@ -78,7 +77,7 @@ However, all files used in this project are publicly available online on the off
   - `Total Number of Classified Sentences per Company.png`
   - `Total Number of Sentences per Document Type.png`
 
-## Phase 0 – Data Collection 📁
+## Phase 0 – Data Collection
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
 
@@ -159,17 +158,17 @@ This manual collection phase lays the foundation for all subsequent analysis. Th
 
 ---
 
-## Phase 1 – Dataset Construction 🧱
+## Phase 1 – Dataset Construction
 
 > 📁 **Note on data availability**  
-Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are **not included in this repository**.  
+[Data Disclaimer](#data-disclaimer)
+Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository.  
 However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
-For convenience and reproducibility, **copies of all documents are stored in a private Google Drive folder** and are accessed programmatically (see paths in the code).
 
 In this first notebook, I construct the core dataset used for analysis by combining two sources:
 
-1. A manually downloaded collection of PDF documents (annual reports, sustainability reports, transcripts, etc.) stored on Google Drive.
-2. An Excel file containing structured metadata for the top 10 SMI companies.
+> 1. **Raw documents**: A manually collected set of PDF files (e.g. annual reports, sustainability reports, earnings call transcripts), stored on Google Drive.  
+> 2. **Metadata file**: An Excel spreadsheet with structured information about the top 10 SMI companies (e.g. company name, sector, report types, years).
 
 ### 🗂️ File Parsing and Metadata Extraction
 
