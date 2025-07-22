@@ -1,4 +1,19 @@
-# AI-for-ESG
+# ESG Signal Extraction from Corporate Disclosures using AI & NLP
+
+This project explores how **natural language processing (NLP)** and **transformer-based AI models** can be used to extract and analyze **Environmental, Social, and Governance (ESG)** signals from the official documents of Switzerland’s largest companies.
+
+We focus on the **top 10 companies in the Swiss Market Index (SMI)**, over the **2021–2023** period, using a manually curated corpus of public disclosures: annual reports, ESG/sustainability reports, earnings calls, and more.
+
+Through a series of notebooks, we:
+
+- Build a structured and metadata-rich corpus from raw PDFs.
+- Extract clean, self-contained sentences for NLP processing.
+- Classify sentences using **ESGBERT** and **FinBERT** models.
+- Benchmark results against **GPT-3.5** predictions and human annotations.
+- Design and compare **10 ESG scoring methods**, with and without **SASB materiality weights**.
+- Visualize and interpret inter-company differences in ESG communication.
+
+⚠️ **Note**: This repository does not include raw data due to copyright and size limitations. However, all documents are publicly accessible and full methodology is reproducible.
 
 ## Phase 0 – Data Collection 📁
 
