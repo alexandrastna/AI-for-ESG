@@ -25,7 +25,7 @@ Through a series of notebooks, we:
 - [Introduction](#introduction)
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
-- [🧪 Notebook Pipeline](#-notebook-pipeline)
+- [Notebook Pipeline](#-notebook-pipeline)
   - [Phase 0 : Data Collection](#phase-0--data-collection)
   - [Phase 1 : Dataset Construction](#phase-1--dataset-construction)
   - [Phase 2 : Dataset Exploration](#phase-2--dataset-exploration)
@@ -632,14 +632,18 @@ We evaluate the predictions from the three models against the **human-labeled go
 
 ### 📉 Confusion Matrix Visualizations
 
-All confusion matrix plots are available in the `figures` folder:
+All confusion matrix plots are available in the `Images` folder:
 
-- `confmat_sentiment_finbert_vs_human.png`
-- `confmat_sentiment_gpt35_vs_human.png`
-- `confmat_esg_esgbert_vs_human.png`
-- `confmat_esg_esgbert_vs_human_no_none.png`
-- `confmat_esg_gpt35_vs_human.png`
-- `confmat_esg_gpt35_vs_esgbert.png`
+- [Comparison Accuracy](Images/Comparison_Accuracy.png)
+- [Comparison Macro F1](Images/Comparison_Macro%20F1.png)
+- [Comparison Weighted F1](Images/Comparison_Weighted%20F1.png)
+- [Confusion – ESG GPT vs ESGBERT](Images/Confusion_ESG%20GPT%20vs%20ESGBERT.png)
+- [Confusion – ESG GPT vs Human](Images/Confusion_ESG%20GPT%20vs%20Human.png)
+- [Confusion – ESGBERT vs Human (without none)](Images/Confusion_ESGBERT%20vs%20Human%20(without%20none).png)
+- [Confusion – ESGBERT vs Human](Images/Confusion_ESGBERT%20vs%20Human.png)
+- [Confusion – Sentiment FinBERT vs Human](Images/Confusion_Sentiment%20-%20FinBert%20vs%20Human.png)
+- [Confusion – Sentiment GPT vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
+
 
 Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  
 ![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
@@ -705,7 +709,7 @@ Each method reflects a different underlying assumption about how ESG priorities 
 
 This comparative approach helps test the **robustness**, **biases**, and **underlying assumptions** behind different ESG scoring frameworks.
 
-### 🔟 ESG Scoring Methods Explained
+### ESG Scoring Methods Explained
 
 Each score is computed per company and year. Here's an overview of the ten methods:
 
@@ -821,6 +825,7 @@ $$
 
 
 ***📈 Preliminary Insights from ESG Score Comparison***
+
 The comparison table above reveals substantial variations between ESG scores depending on the method used. A few observations stand out:
 
 - Materiality weights (SASB) consistently increase the ESG scores across methods, as seen in the uplift from ESG1 → ESG2, ESG3 → ESG4, etc. This reflects how some companies are stronger in pillars that are more material to their sector.
