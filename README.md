@@ -34,11 +34,11 @@ Through a series of notebooks, we:
   - [Phase 5 : ESG Classification Analysis](#phase-5--esg-classification-analysis)
   - [Phase 6 : Sentiment Analysis with FinBERT](#phase-6--sentiment-analysis-with-finbert)
   - [Phase 7 : GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#phase-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
-  - [Phase_7.1](#phase_7_1)
-  - [Phase_7.2](#phase_7_2)
+  - [Phase 7.1  : Creating .jsonl batch files](#phase-71--creating-jsonl-batch-files)
+  - [Phase 7.2 : Process output files returned by OpenAI](#phase-72--process-output-files-returned-by-openai)
   - [Phases 8 : Model Benchmarking on ESG and Sentiment Classification](#phase-8--model-benchmarking-on-esg-and-sentiment-classification)
-  - [Phase_8.1 : Creating the Gold Standard Dataset](#phase_8_1--creating-the-gold-standard-dataset)
-  - [Phase_8.2 : Model Evaluation and Comparison](#phase_8_2--model-evaluation-and-comparison)
+  - [Phase 8.1 : Creating the Gold Standard Dataset](#phase-81--creating-the-gold-standard-dataset)
+  - [Phase 8.2 : Model Evaluation and Comparison](#phase-82--model-evaluation-and-comparison)
   - [Phase 9 : ESG Scoring Methods and Comparison](#phase-9--esg-scoring-methods-and-comparison)
 
 
@@ -544,7 +544,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-## Thesis 7.1  : Creating .jsonl batch files
+## Phase 7.1  : Creating .jsonl batch files
 
 - Load ESG sentences from the DataFrame.  
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
@@ -555,7 +555,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-## Thesis 7.2 : Process output files returned by OpenAI
+## Phase 7.2 : Process output files returned by OpenAI
 
 - Parse the 4 `.jsonl` output files returned by OpenAI.  
 - Map each sentiment label (`positive`, `neutral`, `negative`) back to the original DataFrame using the `custom_id`.  
