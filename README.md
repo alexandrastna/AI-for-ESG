@@ -25,7 +25,7 @@ Through a series of notebooks, we:
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
-  - [0. PDF Collection & Structure](#phase-0–data-collection)
+  - [Phase 0 – Data Collection 📁](#phase-0–data-collection-)
   - [1. PDF Collection & Structure](#1-pdf-collection--structure)
   - [2. Text Extraction (spaCy vs Tika)](#2-text-extraction-spacy-vs-tika)
   - [3. Cleaning & Preprocessing](#3-cleaning--preprocessing)
