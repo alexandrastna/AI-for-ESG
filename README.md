@@ -27,19 +27,19 @@ Through a series of notebooks, we:
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
   - [Phase 0 : Data Collection](#phase-0--data-collection)
-  - [Phase 1 – Dataset Construction](#phase-1--dataset-construction-)
-  - [Phase 2 – Dataset Exploration 🔍](#phase-2--dataset-exploration-)
-  - [Phase 3 – Sentence Extraction (NLP-ready) 🧠](#phase-3--sentence-extraction-nlp-ready-)
-  - [Phase 4 – ESG Sentence Classification Using Transformer Models](#phase-4--esg-sentence-classification-using-transformer-models)
-  - [Phase 5 – ESG Classification Analysis 🧪](#phase-5--esg-classification-analysis-)
-  - [Thesis 6 – Sentiment Analysis with FinBERT](#thesis-6--sentiment-analysis-with-finbert)
-  - [Thesis 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#thesis-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
-  - [Thesis_7_1](#thesis_7_1)
-  - [Thesis_7_2](#thesis_7_2)
-  - [Thesis 8 – Model Benchmarking on ESG and Sentiment Classification](#thesis-8--model-benchmarking-on-esg-and-sentiment-classification)
-  - [Thesis_8_1 – Creating the Gold Standard Dataset](#thesis_8_1--creating-the-gold-standard-dataset)
-  - [Thesis_8_2 – Model Evaluation and Comparison](#thesis_8_2--model-evaluation-and-comparison)
-  - [Thesis 9 – ESG Scoring Methods and Comparison](#thesis-9--esg-scoring-methods-and-comparison)
+  - [Phase 1 : Dataset Construction](#phase-1--dataset-construction)
+  - [Phase 2 : Dataset Exploration](#phase-2--dataset-exploration)
+  - [Phase 3 : Sentence Extraction (NLP-ready)](#phase-3--sentence-extraction-nlp-ready)
+  - [Phase 4 : ESG Sentence Classification Using Transformer Models](#phase-4--esg-sentence-classification-using-transformer-models)
+  - [Phase 5 : ESG Classification Analysis](#phase-5--esg-classification-analysis)
+  - [Phase 6 : Sentiment Analysis with FinBERT](#phase-6--sentiment-analysis-with-finbert)
+  - [Phase 7 : GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#phase-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
+  - [Phase_7.1](#phase_7_1)
+  - [Phase_7.2](#phase_7_2)
+  - [Phases 8 : Model Benchmarking on ESG and Sentiment Classification](#phase-8--model-benchmarking-on-esg-and-sentiment-classification)
+  - [Phase_8.1 : Creating the Gold Standard Dataset](#phase_8_1--creating-the-gold-standard-dataset)
+  - [Phase_8.2 : Model Evaluation and Comparison](#phase_8_2--model-evaluation-and-comparison)
+  - [Phase 9 : ESG Scoring Methods and Comparison](#phase-9--esg-scoring-methods-and-comparison)
 
 
 ## 🗂️ Repository Structure
@@ -222,7 +222,7 @@ This file is saved in Drive and serves as the input for the next phase of the pr
 
 ## Phase 2 : Dataset Exploration
 
-In this phase, I perform an exploratory analysis of the merged dataset created in [Phase 1](#phase-1--dataset-construction-🧱). The goal is to verify data completeness, detect missing entries, and understand the distribution of document types.
+In this phase, I perform an exploratory analysis of the merged dataset created in [Phase 1](#phase-1--dataset-construction). The goal is to verify data completeness, detect missing entries, and understand the distribution of document types.
 
 ### Key Analyses 🧮
 
@@ -323,12 +323,12 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 
 #### 🧵 Full Code Available
 
-The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in  
-📓 [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
+> 💡 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in :
+> [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
 
 ---
 
-## 🧪 Phase 5 – ESG Classification Analysis
+## Phase 5 : ESG Classification Analysis
 
 This  step analyzes the ESG sentence-level classifications obtained from the previous stage (`Thesis 4`). The goal is to produce insightful descriptive statistics and visualizations by company, year, and document type.
 
@@ -446,7 +446,7 @@ This section provided a comparative overview of ESG communication across major S
 
 ---
 
-### Thesis 6 – Sentiment Analysis with FinBERT
+## Phase 6 – Sentiment Analysis with FinBERT
 
 In this phase, we enrich our ESG-classified sentences by applying **FinBERT**, a transformer-based model fine-tuned for financial sentiment analysis. This helps us not only classify the nature of ESG content (Environmental, Social, Governance), but also understand **how** companies talk about these topics — whether in a **positive**, **negative**, or **neutral** tone.
 
@@ -487,7 +487,7 @@ This output is ready for downstream analysis.
 
 ---
 
-### 🧠 Thesis 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
+## Phase 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
 
 In this step, we test **GPT-3.5** as an alternative to the **FinBERT classifier** used previously. The goal is to evaluate whether GPT-3.5 can produce comparable or better sentiment predictions on ESG-related sentences, while maintaining a **good cost-performance balance**.
 
@@ -545,7 +545,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ### 🧪 Process Summary
 
-### 🧷 Thesis_7_1
+## Thesis 7.1 
 
 - Load ESG sentences from the DataFrame.  
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
@@ -555,7 +555,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-### 🧷 Thesis_7_2
+## Thesis 7.2
 
 - Parse the 4 `.jsonl` output files returned by OpenAI.  
 - Map each sentiment label (`positive`, `neutral`, `negative`) back to the original DataFrame using the `custom_id`.  
@@ -571,7 +571,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-## 🧪 Thesis 8 – Model Benchmarking on ESG and Sentiment Classification
+## Phase 8 – Model Benchmarking on ESG and Sentiment Classification
 
 This section evaluates the **performance of multiple classification models** on a carefully curated, human-annotated dataset of 188 ESG-related sentences. The goal is to compare both **ESG pillar classification** and **sentiment analysis** across three major approaches:
 
@@ -581,7 +581,7 @@ This section evaluates the **performance of multiple classification models** on 
 
 ---
 
-### 📁 Thesis_8_1 – Creating the Gold Standard Dataset
+## Phase 8.1 – Creating the Gold Standard Dataset
 
 We create a **balanced evaluation dataset** of 188 rows, called `gold standard`, used to benchmark the models. It includes:
 
@@ -599,7 +599,7 @@ Due to time and resource constraints — in particular, the manual effort requir
 
 ---
 
-### 📊 Thesis_8_2 – Model Evaluation and Comparison
+## Phase 8.2 – Model Evaluation and Comparison
 
 We evaluate the predictions from the three models against the **human-labeled gold standard**, using accuracy, F1-scores, and confusion matrices.
 
@@ -675,7 +675,7 @@ For each test, we printed misclassified examples to better understand where mode
 
 ---
 
-## 🧮 Thesis 9 – ESG Scoring Methods and Comparison
+## Phase 9 – ESG Scoring Methods and Comparison
 
 This notebook computes and compares **ten distinct ESG scores** for each company in the SMI index, based on the classification of sentences extracted from their annual reports, earnings calls, and other key financial documents. The aim is to explore how various analytical methods—both qualitative and quantitative—affect ESG scoring outcomes and comparability.
 
