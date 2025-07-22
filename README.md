@@ -34,7 +34,7 @@ Through a series of notebooks, we:
   - [Phase 5 : ESG Classification Analysis](#phase-5--esg-classification-analysis)
   - [Phase 6 : Sentiment Analysis with FinBERT](#phase-6--sentiment-analysis-with-finbert)
   - [Phase 7 : GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#phase-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
-  - [Phase 7.1  : Creating .jsonl batch files](#phase-71--creating-jsonl-batch-files)
+  - [Phase 7.1 : Creating .jsonl batch files](#phase-71--creating-jsonl-batch-files)
   - [Phase 7.2 : Process output files returned by OpenAI](#phase-72--process-output-files-returned-by-openai)
   - [Phases 8 : Model Benchmarking on ESG and Sentiment Classification](#phase-8--model-benchmarking-on-esg-and-sentiment-classification)
   - [Phase 8.1 : Creating the Gold Standard Dataset](#phase-81--creating-the-gold-standard-dataset)
