@@ -544,7 +544,7 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ---
 
-## Phase 7.1  : Creating .jsonl batch files
+## Phase 7.1 : Creating .jsonl batch files
 
 - Load ESG sentences from the DataFrame.  
 - Create 4 `.jsonl` batch files using a fixed system prompt.  
