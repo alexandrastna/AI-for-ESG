@@ -26,7 +26,7 @@ Through a series of notebooks, we:
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
-  - [Phase 0 – Data Collection](#phase-0--dataset-collection)
+  - [Phase 0 : Data Collection](#phase-0--data-collection)
   - [Phase 1 – Dataset Construction](#phase-1--dataset-construction-)
   - [Phase 2 – Dataset Exploration 🔍](#phase-2--dataset-exploration-)
   - [Phase 3 – Sentence Extraction (NLP-ready) 🧠](#phase-3--sentence-extraction-nlp-ready-)
@@ -78,7 +78,7 @@ Through a series of notebooks, we:
   - `Total Number of Classified Sentences per Company.png`
   - `Total Number of Sentences per Document Type.png`
 
-## Phase 0 – Data Collection
+## Phase 0 : Data Collection
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
 
@@ -159,18 +159,17 @@ This manual collection phase lays the foundation for all subsequent analysis. Th
 
 ---
 
-## Phase 1 – Dataset Construction
+## Phase 1 : Dataset Construction
 
 > 📁 **Note on data availability** : [Data Disclaimer](#data-disclaimer)
-Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository.  
-However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
+> Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository. However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
 
 In this first notebook, I construct the core dataset used for analysis by combining two sources:
 
 - **Raw documents**: A manually collected set of PDF files (e.g. annual reports, sustainability reports, earnings call transcripts), stored on Google Drive.  
 - **Metadata file**: An Excel spreadsheet with structured information about the top 10 SMI companies (e.g. company name, sector, report types, years).
 
-### 🗂️ File Parsing and Metadata Extraction
+### File Parsing and Metadata Extraction 🗂️
 
 I programmatically traverse each company's folder in Drive and extract metadata for every `.pdf` file:
 - **Company** (from folder structure)
@@ -189,7 +188,7 @@ A preview of the resulting dataset:
 
 This structured DataFrame is used to match each document with financial and ESG metadata (tickers, industry classification) in the next step.
 
-### 📄 Complementary Metadata Table
+### Complementary Metadata Table 📄
 
 Each document is also described in a second table that includes external metadata, such as tickers, industry classification, and download information.
 
@@ -199,7 +198,7 @@ Each document is also described in a second table that includes external metadat
 | Nestlé SA   | 2023 | NESN        | NSRGY                     | 1                | Food & Beverage    | Half-Year Report   | Half-Year Report      | Nestlé Website | https://www.nestle.com/investors/publications                    | PDF    | No                    | Yes         |
 
 
-### 🔗 Metadata Merge
+### Metadata Merge 🔗
 
 The extracted document data is then merged with the Excel file, matching each `(Company, Year)` pair.  
 The Excel metadata includes:
@@ -214,19 +213,18 @@ Before merging, I performed several standardization steps to ensure consistency 
 After merging, I removed perfect duplicates based on core metadata fields to ensure a clean dataset.
 
 📄 **Output file**: `df_merged_clean.csv`  
-This file is saved in Drive and serves as the input for the next phase of the project:  
-**[Phase 2 – PDF Text Extraction and Preprocessing](#phase-2--text-extraction--pre-processing-🧪)**
+This file is saved in Drive and serves as the input for the next phase of the project.
 
 > 💡 The full source code for this metadata cleaning and merge process is available in the notebook:  
 > [`1_Thesis.ipynb`](./Notebooks/1_Thesis.ipynb)
 
 ---
 
-## Phase 2 – Dataset Exploration 🔍
+## Phase 2 : Dataset Exploration
 
 In this phase, I perform an exploratory analysis of the merged dataset created in [Phase 1](#phase-1--dataset-construction-🧱). The goal is to verify data completeness, detect missing entries, and understand the distribution of document types.
 
-### 🧮 Key Analyses
+### Key Analyses 🧮
 
 - **Total number of documents** per company and year  
 - **Distribution of document types** (e.g. Annual Report, Sustainability Report, etc.)  
@@ -243,11 +241,12 @@ A sample of the pivot table below shows how many documents of each type were col
 
 This overview ensures the corpus is both **comprehensive and well-documented** before proceeding to the text extraction phase.
 
-👉 For details and full visualizations, see the notebook [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
+> 💡 For details and full visualizations, see the notebook:
+>  [`2_Thesis.ipynb`](Notebooks/2_Thesis.ipynb).
 
 ---
 
-## 🧠 Phase 3 – Sentence Extraction (NLP-ready)
+## Phase 3 : Sentence Extraction (NLP-ready)
 
 This step is the most **crucial foundation** for the NLP classification phase. It involves extracting clean, meaningful, and self-contained sentences more than 200 corporate documents (Annual Reports, ESG Reports, etc.).
 
@@ -269,11 +268,12 @@ Due to the complexity of the documents and the amount of layout noise, **this st
 
 This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
 
-➡️ For full implementation details, see the notebook: [`3_Thesis.ipynb`](Notebooks/3_Thesis.ipynb)
+> 💡 For full implementation details, see the notebook:
+> [`3_Thesis.ipynb`](Notebooks/3_Thesis.ipynb)
 
 ---
 
-## 🧠 Phase 4 – ESG Sentence Classification Using Transformer Models
+## Phase 4 : ESG Sentence Classification Using Transformer Models
 
 This notebook performs sentence-level classification across all extracted company reports to assign ESG labels — **Environmental**, **Social**, **Governance**, or **None** — to each sentence.
 
