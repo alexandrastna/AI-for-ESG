@@ -160,15 +160,14 @@ This manual collection phase lays the foundation for all subsequent analysis. Th
 
 ## Phase 1 – Dataset Construction
 
-> 📁 **Note on data availability**  
-[Data Disclaimer](#data-disclaimer)
+> 📁 **Note on data availability** : [Data Disclaimer](#data-disclaimer)
 Due to file size limitations and copyright considerations, the raw PDF documents (annual reports, earnings call transcripts, etc.) are not included in this repository.  
 However, all files used in this project are publicly available online on the official investor relations websites of the selected companies.  
 
 In this first notebook, I construct the core dataset used for analysis by combining two sources:
 
-> 1. **Raw documents**: A manually collected set of PDF files (e.g. annual reports, sustainability reports, earnings call transcripts), stored on Google Drive.  
-> 2. **Metadata file**: An Excel spreadsheet with structured information about the top 10 SMI companies (e.g. company name, sector, report types, years).
+- **Raw documents**: A manually collected set of PDF files (e.g. annual reports, sustainability reports, earnings call transcripts), stored on Google Drive.  
+- **Metadata file**: An Excel spreadsheet with structured information about the top 10 SMI companies (e.g. company name, sector, report types, years).
 
 ### 🗂️ File Parsing and Metadata Extraction
 
