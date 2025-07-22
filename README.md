@@ -27,7 +27,7 @@ However, all files used in this project are publicly available online on the off
 - [Data Disclaimer](#data-disclaimer)
 - [Repository Structure](#repository-structure)
 - [🧪 Notebook Pipeline](#-notebook-pipeline)
-  - [Phase 0 – Data Collection 📁](#phase--0–data-collection-)
+  - [Phase 0 – Data Collection 📁](#phase-0--data-collection-)
   - [Phase 1 – Dataset Construction 🧱](#phase--1–dataset-construction-)
   - [Phase 2 – Dataset Exploration 🔍](#phase--2–dataset-exploration-)
   - [3. Cleaning & Preprocessing](#3-cleaning--preprocessing)
