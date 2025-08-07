@@ -727,17 +727,58 @@ Each score is computed per company and year. Here's an overview of the ten metho
 | **10** | Positive Only + SASB — same as (9) with SASB weights. |
 
 
-### 🧠 SASB Materiality Weights
+### 🧮 SASB Hybrid Weights Methodology
 
-For SASB-based methods, we manually assigned materiality weights (`Hybrid E`, `Hybrid S`, `Hybrid G`) to each company based on its **SASB industry classification** and the corresponding topics marked as material. The full list was compiled manually in the file [`Companies_SMI.xlsx`](../Data/Companies_SMI.xlsx).
+To refine the ESG scoring and account for sector-specific relevance of each pillar (Environment, Social, Governance), we created **custom hybrid weights** for each company using the SASB Materiality Map.
 
-These weights ensure:
-- Scores reflect the **sectoral relevance** of each ESG pillar.
-- Weight sum = 1:
+**⚙️ How Hybrid Weights Were Calculated**
+
+We manually identified the *relevant material issues* for each company based on their SASB industry classification, and assigned them to one of the ESG pillars (E, S, or G).
+
+Then, for each company:
+
+- We **counted** the number of relevant topics per pillar.
+- We **normalized** those counts by the total number of relevant topics, obtaining relative weights:
   
-$$
-ESG_{SASB} = w_E \cdot E + w_S \cdot S + w_G \cdot G \quad \text{with} \quad w_E + w_S + w_G = 1
-$$
+  \[
+  w_E = \frac{n_E}{n_{E+S+G}},\quad w_S = \frac{n_S}{n_{E+S+G}},\quad w_G = \frac{n_G}{n_{E+S+G}}
+  \]
+
+However, in some cases, one pillar could receive a zero weight (e.g., no relevant issues marked as "Governance"). To **avoid discarding** entire pillars while still reflecting sector-specific priorities, we introduced a **hybrid weighting scheme** using a fixed blending factor:
+
+**⚖️ Hybrid Formula with α = 0.7**
+
+We set:
+
+- **α = 0.7** as the relative weight given to the SASB-derived proportions (materiality-based)
+- **1 − α = 0.3** to ensure a baseline equal weighting across pillars
+
+Thus, for each company, the final weights are calculated as:
+
+\[
+\text{Hybrid}_E = \alpha \cdot w_E + (1 - \alpha) \cdot \frac{1}{3}
+\]
+\[
+\text{Hybrid}_S = \alpha \cdot w_S + (1 - \alpha) \cdot \frac{1}{3}
+\]
+\[
+\text{Hybrid}_G = \alpha \cdot w_G + (1 - \alpha) \cdot \frac{1}{3}
+\]
+
+This ensures:
+
+- No pillar is ever assigned zero weight
+- More than 50% of the weight (α = 0.7) still reflects the SASB materiality guidance
+- Final weights sum to 1
+
+This hybrid weighting approach allows for a **balanced yet sector-aware** ESG scoring system that avoids distortions due to missing material issues in SASB standards, especially in niche sectors.
+
+**📚 Reference and Rationale**
+
+> “Each company determines which sustainability-related risks and opportunities are relevant to its business. The Standard is designed for the typical company in an industry, but individual companies may choose to report on different sustainability-related risks and opportunities based on their unique business model.”  
+— *SASB Standards Guide*
+
+By integrating both **industry-level guidance (SASB)** and **baseline equity among ESG dimensions**, this method supports **comparability across companies** while retaining sectoral specificity.
 
 Reference: [SASB Materiality Map](https://sasb.ifrs.org/standards/materiality-finder/find/)
 
