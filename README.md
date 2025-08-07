@@ -758,15 +758,15 @@ We set:
 Thus, for each company, the final weights are calculated as:
 
 $$
-\w_E = \alpha \cdot w_E^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
+w_E = \alpha \cdot w_E^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 $$
-\w_S = \alpha \cdot w_S^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
+w_S = \alpha \cdot w_S^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 $$
-\w_G = \alpha \cdot w_G^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
+w_G = \alpha \cdot w_G^{(0)} + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 This ensures:
