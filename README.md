@@ -742,7 +742,7 @@ Then, for each company:
 
 $$
   \
-  w_E = \frac{n_E}{n_{E+S+G}},\quad w_S = \frac{n_S}{n_{E+S+G}},\quad w_G = \frac{n_G}{n_{E+S+G}}
+  w0_E = \frac{n_E}{n_{E+S+G}},\quad w0_S = \frac{n_S}{n_{E+S+G}},\quad w0_G = \frac{n_G}{n_{E+S+G}}
   \
 $$
 
@@ -758,15 +758,15 @@ We set:
 Thus, for each company, the final weights are calculated as:
 
 $$
-\text{Hybrid}_E = \alpha \cdot w_E + (1 - \alpha) \cdot \frac{1}{3}
+\text{Hybrid}_E = \alpha \cdot w0_E + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 $$
-\text{Hybrid}_S = \alpha \cdot w_S + (1 - \alpha) \cdot \frac{1}{3}
+\text{Hybrid}_S = \alpha \cdot w0_S + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 $$
-\text{Hybrid}_G = \alpha \cdot w_G + (1 - \alpha) \cdot \frac{1}{3}
+\text{Hybrid}_G = \alpha \cdot w0_G + (1 - \alpha) \cdot \frac{1}{3}
 $$
 
 This ensures:
