@@ -739,10 +739,12 @@ Then, for each company:
 
 - We **counted** the number of relevant topics per pillar.
 - We **normalized** those counts by the total number of relevant topics, obtaining relative weights:
-  
-  \[
+
+$$
+  \
   w_E = \frac{n_E}{n_{E+S+G}},\quad w_S = \frac{n_S}{n_{E+S+G}},\quad w_G = \frac{n_G}{n_{E+S+G}}
-  \]
+  \
+$$
 
 However, in some cases, one pillar could receive a zero weight (e.g., no relevant issues marked as "Governance"). To **avoid discarding** entire pillars while still reflecting sector-specific priorities, we introduced a **hybrid weighting scheme** using a fixed blending factor:
 
@@ -755,15 +757,17 @@ We set:
 
 Thus, for each company, the final weights are calculated as:
 
-\[
+$$
 \text{Hybrid}_E = \alpha \cdot w_E + (1 - \alpha) \cdot \frac{1}{3}
-\]
-\[
+$$
+
+$$
 \text{Hybrid}_S = \alpha \cdot w_S + (1 - \alpha) \cdot \frac{1}{3}
-\]
-\[
+$$
+
+$$
 \text{Hybrid}_G = \alpha \cdot w_G + (1 - \alpha) \cdot \frac{1}{3}
-\]
+$$
 
 This ensures:
 
