@@ -1081,3 +1081,134 @@ A few selected examples illustrate where the two methodologies converge or diver
 > 💡 The full code is available in:  
 > [10_Thesis.ipynb](Notebooks/10_Thesis.ipynb)
 
+---
+
+## Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights
+
+This notebook investigates how the **custom hybrid SASB weights** (developed in Phase 9 using the SASB materiality framework and a hybridization factor α = 0.7) compare against the **Refinitiv ESG pillar weights** for the same set of Swiss Market Index (SMI) companies.
+
+The goal is to evaluate whether our **theoretically derived, sector-aware weights** align with the **market standard weights** used by Refinitiv, and to identify **systematic divergences** across companies and industries.
+
+### ⚙️ Methodology
+
+1. **Data Sources**  
+   - SASB hybrid weights (from Phase 9, sheet *SASB* in `SMI Companies.xlsx`)  
+   - Refinitiv ESG pillar weights for 2021 (sheet *Refinitiv ESG*)  
+
+2. **Comparison Metrics**  
+   For each company, we compare SASB vs Refinitiv at two levels:
+
+   **(a) Raw differences per pillar (directional, pillar-by-pillar)**  
+   Positive values mean *Refinitiv > SASB* on that pillar; negative values mean the opposite.  
+   $$
+   \begin{aligned}
+   E_{\text{diff}} &= E_{\text{Refinitiv}} - E_{\text{SASB}} \\
+   S_{\text{diff}} &= S_{\text{Refinitiv}} - S_{\text{SASB}} \\
+   G_{\text{diff}} &= G_{\text{Refinitiv}} - G_{\text{SASB}}
+   \end{aligned}
+   $$
+
+   **(b) Aggregate distances (one number summarizing all three pillars)**  
+   Let \(p=(E_{\text{SASB}},S_{\text{SASB}},G_{\text{SASB}})\) and \(q=(E_{\text{Ref}},S_{\text{Ref}},G_{\text{Ref}})\), with \(E+S+G=1\).
+
+   • **Euclidean distance** — absolute geometric gap across pillars (symmetric measure):  
+   $$
+   d_{\text{Euclid}}(p,q)=\sqrt{(E_{\text{Ref}}-E_{\text{SASB}})^2+(S_{\text{Ref}}-S_{\text{SASB}})^2+(G_{\text{Ref}}-G_{\text{SASB}})^2}
+   $$
+   Range in this setting: \(0 \le d_{\text{Euclid}} \le \sqrt{2}\).
+
+   • **Hellinger distance** — divergence between *distributions* (better suited for normalized proportions):  
+   $$
+   d_H(p,q)=\frac{1}{\sqrt{2}}\;\left\|\sqrt{p}-\sqrt{q}\right\|_2
+   = \frac{1}{\sqrt{2}}\sqrt{(\sqrt{E_{\text{SASB}}}-\sqrt{E_{\text{Ref}}})^2+(\sqrt{S_{\text{SASB}}}-\sqrt{S_{\text{Ref}}})^2+(\sqrt{G_{\text{SASB}}}-\sqrt{G_{\text{Ref}}})^2}
+   $$
+   Bounded in \([0,1]\); 0 = identical distributions.
+
+3. **Visualization**  
+   - Radar charts for each company (SASB vs Refinitiv).  
+   - Rankings by Euclidean and Hellinger distances (largest and smallest gaps).
+
+
+#### How to interpret the metrics
+- **Raw differences** → show *where* the gap is and in *which direction* (pillar-specific insights).  
+- **Euclidean distance** → shows the *overall magnitude* of the gap across all pillars (simple, intuitive).  
+- **Hellinger distance** → measures the *distributional divergence* between the two weighting schemes (more robust for proportions, always normalized between 0 and 1).  
+
+**Recommendation:**  
+I use **Hellinger distance** as the main ranking metric (since both SASB and Refinitiv weights are proportions).  
+I use **Euclidean distance** as a secondary check for magnitude.  
+I use **raw differences** to explain which specific pillar (E, S, or G) is driving the divergence.
+
+### 📊 Key Results
+
+**Per-pillar deltas (Refinitiv − SASB)**
+
+| Pillar  | Mean   | Std Dev |
+|---------|-------:|--------:|
+| **E_diff** | **−0.094** | 0.195 |
+| **S_diff** | **+0.022** | 0.170 |
+| **G_diff** | **+0.072** | 0.056 |
+
+> **Reading:** On average, Refinitiv **assigns less weight to E** and **more to G** (and slightly S) than my SASB-hybrid weights.
+
+**Top 5 companies with largest gaps (Euclidean distance):**
+| Company | Distance |
+|---------|----------|
+| Swiss Re Ltd | 0.391 |
+| Zurich Insurance Group AG | 0.391 |
+| Lonza Group AG | 0.335 |
+| Holcim Ltd | 0.283 |
+| ABB Ltd | 0.282 |
+
+**Top 5 companies with largest gaps (Hellinger distance):**
+| Company | Distance |
+|---------|----------|
+| Swiss Re Ltd | 0.256 |
+| Zurich Insurance Group AG | 0.256 |
+| Lonza Group AG | 0.207 |
+| UBS Group AG | 0.166 |
+| Holcim Ltd | 0.165 |
+
+**Top 5 companies with smallest gaps (Hellinger distance):**
+| Company | Distance |
+|---------|----------|
+| Richemont | 0.085 |
+| Nestlé SA | 0.121 |
+| Roche Holding AG | 0.139 |
+| Novartis AG | 0.139 |
+| ABB Ltd | 0.164 |
+
+### 📉 Radar Chart Visualizations
+
+A few selected examples illustrate where the two methodologies converge or diverge:
+
+**Closest examples** (good alignment):  
+![Richemont](Images/Radar_Chart_Richemont.png)  
+![Nestlé](Images/Radar_Chart_Nestlé.png)
+
+**Farthest examples** (large re-weighting, notably in insurance/biotech):  
+![Swiss Re](Images/Radar_Chart_SwissRe.png)  
+![Zurich](Images/Radar_Chart_Zurich.png)  
+![Lonza](Images/Radar_Chart_Lonza.png)
+
+**Additional sector flavor** (industrial / materials):  
+![ABB](Images/Radar_Chart_ABB.png)  
+![Holcim](Images/Radar_Chart_Holcim.png)
+
+### 🔍 Interpretation
+
+- **Systematic patterns**  
+  - Refinitiv tends to **overweight Governance**, while SASB hybridization favors **Environment**, especially in sectors with strong environmental materiality.  
+  - Social pillar differences are modest on average, but individual companies show large variations.  
+
+- **Sectoral divergence**  
+  - **Financial sector firms (Swiss Re, Zurich, UBS)** show the **largest divergences**, reflecting Refinitiv’s heavier emphasis on Governance compared to SASB.  
+  - **Consumer goods and luxury (Nestlé, Richemont)** display close alignment, suggesting consistent weighting across frameworks.  
+
+- **Implications**  
+  - The choice of weighting scheme (SASB vs Refinitiv) can significantly affect the emphasis placed on each ESG pillar, especially in **finance and healthcare sectors**.  
+  - This highlights the importance of **transparency in ESG rating methodologies** and demonstrates how **different assumptions about materiality** directly impact company evaluations.
+
+> 💡 The full code is available in:  
+> [10_Thesis.ipynb](Notebooks/10_Thesis.ipynb)
+
