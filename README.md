@@ -888,199 +888,6 @@ These results suggest that ESG scores are highly sensitive to method and weighti
 > 💡 The full code is available in :
 > [`9_Thesis.ipynb`](Notebooks/9_Thesis.ipynb)
 
-## Phase 10: Materiality — My Hybrid SASB Weights vs Refinitiv Weights (E/S/G)
-
-This phase checks how closely my **pillar weights** (E/S/G) derived from **SASB materiality** align with **Refinitiv’s pillar weights**. For each company, I compare the two 3-component vectors of weights and quantify their distance.
-
-- **My weights**: hybrid SASB weights (blend of SASB proportions and equal weights with **α = 0.7**).
-- **Refinitiv weights**: `E Weight`, `S Weight`, `G Weight` from the **Refinitiv ESG** sheet (filtered to **2021**).
-
-
-### 10.1 — Data & Method
-
-- **Input**: `Data/SMI companies.xlsx`  
-  - `SASB` sheet → `Hybrid E/S/G` → renamed to `SASB_E/S/G`  
-  - `Refinitiv ESG` sheet → `E/S/G Weight` (year = **2021**) → renamed to `Refinitiv_E/S/G`
-- **Join**: inner merge on `Company`.
-- **Per-pillar differences**:  
-  \(\Delta_E = \text{Refinitiv}_E - \text{SASB}_E\) (similarly for S and G).
-- **Vector distances** on the 3D weight vectors:
-  - **Euclidean distance**
-  - **Hellinger distance** (recommended for proportions):
-    \[
-    H(p,q)=\frac{\|\sqrt{p}-\sqrt{q}\|_2}{\sqrt{2}}
-    \]
-- **Visualization**: company-level **radar charts** overlaying SASB vs Refinitiv.
-
----
-
-### 10.2 — Key Results (2021)
-
-**Per-pillar deltas (Refinitiv − SASB)**
-
-| Pillar  | Mean   | Std Dev |
-|---------|-------:|--------:|
-| **E_diff** | **−0.094** | 0.195 |
-| **S_diff** | **+0.022** | 0.170 |
-| **G_diff** | **+0.072** | 0.056 |
-
-> **Reading:** On average, Refinitiv **assigns less weight to E** and **more to G** (and slightly S) than my SASB-hybrid weights.
-
-**Largest gaps (Hellinger distance — higher = more different)**
-
-| Company | Hellinger |
-|---|---:|
-| **Swiss Re Ltd** | **0.256** |
-| **Zurich Insurance Group AG** | **0.256** |
-| **Lonza Group AG** | 0.207 |
-| **UBS Group AG** | 0.166 |
-| **Holcim Ltd** | 0.165 |
-
-**Smallest gaps (Hellinger distance — lower = more similar)**
-
-| Company | Hellinger |
-|---|---:|
-| **Compagnie Financière Richemont** | **0.085** |
-| **Nestlé SA** | 0.121 |
-| **Roche Holding AG** | 0.139 |
-| **Novartis AG** | 0.139 |
-| **ABB Ltd** | 0.164 |
-
-*(Euclidean ranking flags the same “most different” pair at the top: Swiss Re & Zurich.)*
-
----
-
-### 10.3 — Radar Plots (SASB vs Refinitiv)
-
-**Closest examples** (good alignment):  
-![Richemont](Images/Radar_Chart_Richemont.png)  
-![Nestlé](Images/Radar_Chart_Nestlé.png)
-
-**Farthest examples** (large re-weighting, notably in insurance/biotech):  
-![Swiss Re](Images/Radar_Chart_SwissRe.png)  
-![Zurich](Images/Radar_Chart_Zurich.png)  
-![Lonza](Images/Radar_Chart_Lonza.png)
-
-**Additional sector flavor** (industrial / materials):  
-![ABB](Images/Radar_Chart_ABB.png)  
-![Holcim](Images/Radar_Chart_Holcim.png)
-
----
-
-### 10.4 — Interpretation & Takeaways
-
-- **Systematic shift**: Refinitiv tends to **de-emphasize E** and **up-weight G** relative to SASB-hybrid weights in this SMI sample.  
-- **Sector pattern**: **Insurance** names (Swiss Re, Zurich) are among the **most different**, suggesting Refinitiv emphasizes a pillar mix that diverges from the SASB-topic blend in that sector.  
-- **Stable matches**: **Consumer/pharma** names (Richemont, Nestlé, Roche, Novartis) show **high similarity**, indicating good agreement between SASB-hybrid and Refinitiv pillar emphasis.
-
-**Implication for scoring**: If the goal is to align with Refinitiv’s emphasis, consider **sector-specific re-calibration** of E/S/G weights—or explicitly justify keeping the SASB-driven mix as a standards-based alternative.
-
-> 💡 See full code in:  
-> [`10_Thesis.ipynb`](Notebooks/10_Thesis.ipynb)
-
----
-
-## Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights
-
-This notebook investigates how the **custom hybrid SASB weights** (developed in Phase 9 using the SASB materiality framework and a hybridization factor α = 0.7) compare against the **Refinitiv ESG pillar weights** for the same set of Swiss Market Index (SMI) companies.
-
-The goal is to evaluate whether our **theoretically derived, sector-aware weights** align with the **market standard weights** used by Refinitiv, and to identify **systematic divergences** across companies and industries.
-
----
-
-### ⚙️ Methodology
-
-1. **Data Sources**  
-   - SASB hybrid weights (from Phase 9, sheet *SASB* in `SMI Companies.xlsx`)  
-   - Refinitiv ESG pillar weights for 2021 (sheet *Refinitiv ESG*)  
-
-2. **Comparison Metrics**  
-   For each company, we computed:  
-   - **Raw differences per pillar**:  
-     \[
-     E_{diff} = E_{Refinitiv} - E_{SASB}, \quad
-     S_{diff} = S_{Refinitiv} - S_{SASB}, \quad
-     G_{diff} = G_{Refinitiv} - G_{SASB}
-     \]  
-   - **Euclidean distance** (overall divergence across the three pillars).  
-   - **Hellinger distance** (distributional divergence, better suited for normalized proportions).  
-
-3. **Visualization**  
-   - Radar charts for each company plotting SASB vs. Refinitiv weights.  
-   - Rankings of companies with the **largest** and **smallest** divergences.
-
----
-
-### 📊 Key Results
-
-**Average differences across pillars**:  
-- **E pillar**: −0.094 (Refinitiv tends to underweight Environment compared to SASB)  
-- **S pillar**: +0.022 (slight overweight by Refinitiv)  
-- **G pillar**: +0.072 (Refinitiv systematically gives more weight to Governance)  
-
-**Top 5 companies with largest gaps (Euclidean distance):**
-| Company | Distance |
-|---------|----------|
-| Swiss Re Ltd | 0.391 |
-| Zurich Insurance Group AG | 0.391 |
-| Lonza Group AG | 0.335 |
-| Holcim Ltd | 0.283 |
-| ABB Ltd | 0.282 |
-
-**Top 5 companies with largest gaps (Hellinger distance):**
-| Company | Distance |
-|---------|----------|
-| Swiss Re Ltd | 0.256 |
-| Zurich Insurance Group AG | 0.256 |
-| Lonza Group AG | 0.207 |
-| UBS Group AG | 0.166 |
-| Holcim Ltd | 0.165 |
-
-**Top 5 companies with smallest gaps (Hellinger distance):**
-| Company | Distance |
-|---------|----------|
-| Richemont | 0.085 |
-| Nestlé SA | 0.121 |
-| Roche Holding AG | 0.139 |
-| Novartis AG | 0.139 |
-| ABB Ltd | 0.164 |
-
----
-
-### 📉 Radar Chart Visualizations
-
-A few selected examples illustrate where the two methodologies converge or diverge:
-
-- **Close alignment**:  
-  - [Richemont](Images/Radar_Chart_Richemont.png)  
-  - [Nestlé](Images/Radar_Chart_Nestlé.png)  
-
-- **Strong divergence**:  
-  - [Swiss Re](Images/Radar_Chart_SwissRe.png)  
-  - [Zurich Insurance Group](Images/Radar_Chart_Zurich.png)  
-  - [Lonza](Images/Radar_Chart_Lonza.png)  
-
----
-
-### 🔍 Interpretation
-
-- **Systematic patterns**  
-  - Refinitiv tends to **overweight Governance**, while SASB hybridization favors **Environment**, especially in sectors with strong environmental materiality.  
-  - Social pillar differences are modest on average, but individual companies show large variations.  
-
-- **Sectoral divergence**  
-  - **Financial sector firms (Swiss Re, Zurich, UBS)** show the **largest divergences**, reflecting Refinitiv’s heavier emphasis on Governance compared to SASB.  
-  - **Consumer goods and luxury (Nestlé, Richemont)** display close alignment, suggesting consistent weighting across frameworks.  
-
-- **Implications**  
-  - The choice of weighting scheme (SASB vs Refinitiv) can significantly affect the emphasis placed on each ESG pillar, especially in **finance and healthcare sectors**.  
-  - This highlights the importance of **transparency in ESG rating methodologies** and demonstrates how **different assumptions about materiality** directly impact company evaluations.
-
----
-
-> 💡 The full code is available in:  
-> [10_Thesis.ipynb](Notebooks/10_Thesis.ipynb)
-
 ---
 
 ## Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights
@@ -1100,39 +907,42 @@ The goal is to evaluate whether our **theoretically derived, sector-aware weight
 
    **(a) Raw differences per pillar (directional, pillar-by-pillar)**  
    Positive values mean *Refinitiv > SASB* on that pillar; negative values mean the opposite.  
+
    $$
-   \begin{aligned}
-   E_{\text{diff}} &= E_{\text{Refinitiv}} - E_{\text{SASB}} \\
-   S_{\text{diff}} &= S_{\text{Refinitiv}} - S_{\text{SASB}} \\
-   G_{\text{diff}} &= G_{\text{Refinitiv}} - G_{\text{SASB}}
-   \end{aligned}
+   E_{diff} = E_{Refinitiv} - E_{SASB}
+   $$
+
+   $$
+   S_{diff} = S_{Refinitiv} - S_{SASB}
+   $$
+
+   $$
+   G_{diff} = G_{Refinitiv} - G_{SASB}
    $$
 
    **(b) Aggregate distances (one number summarizing all three pillars)**  
-   Let \(p=(E_{\text{SASB}},S_{\text{SASB}},G_{\text{SASB}})\) and \(q=(E_{\text{Ref}},S_{\text{Ref}},G_{\text{Ref}})\), with \(E+S+G=1\).
+   Let $p = (E_{SASB}, S_{SASB}, G_{SASB})$ and $q = (E_{Refinitiv}, S_{Refinitiv}, G_{Refinitiv})$, with $E+S+G=1$.
 
-   • **Euclidean distance** — absolute geometric gap across pillars (symmetric measure):  
+   - **Euclidean distance** — absolute geometric gap across pillars (symmetric measure):  
+
    $$
-   d_{\text{Euclid}}(p,q)=\sqrt{(E_{\text{Ref}}-E_{\text{SASB}})^2+(S_{\text{Ref}}-S_{\text{SASB}})^2+(G_{\text{Ref}}-G_{\text{SASB}})^2}
+   d_{Euclid}(p,q) = \sqrt{(E_{Ref}-E_{SASB})^2 + (S_{Ref}-S_{SASB})^2 + (G_{Ref}-G_{SASB})^2}
    $$
-   Range in this setting: \(0 \le d_{\text{Euclid}} \le \sqrt{2}\).
 
-   • **Hellinger distance** — divergence between *distributions* (better suited for normalized proportions):  
+   Range in this setting: $0 \leq d_{Euclid} \leq \sqrt{2}$.
+
+   - **Hellinger distance** — divergence between *distributions* (better suited for normalized proportions):  
+
    $$
-   d_H(p,q)=\frac{1}{\sqrt{2}}\;\left\|\sqrt{p}-\sqrt{q}\right\|_2
-   = \frac{1}{\sqrt{2}}\sqrt{(\sqrt{E_{\text{SASB}}}-\sqrt{E_{\text{Ref}}})^2+(\sqrt{S_{\text{SASB}}}-\sqrt{S_{\text{Ref}}})^2+(\sqrt{G_{\text{SASB}}}-\sqrt{G_{\text{Ref}}})^2}
+   d_H(p,q) = \frac{1}{\sqrt{2}} \; \sqrt{(\sqrt{E_{SASB}}-\sqrt{E_{Ref}})^2 + (\sqrt{S_{SASB}}-\sqrt{S_{Ref}})^2 + (\sqrt{G_{SASB}}-\sqrt{G_{Ref}})^2}
    $$
-   Bounded in \([0,1]\); 0 = identical distributions.
 
-3. **Visualization**  
-   - Radar charts for each company (SASB vs Refinitiv).  
-   - Rankings by Euclidean and Hellinger distances (largest and smallest gaps).
+   Bounded in $[0,1]$; $0 =$ identical distributions.
 
-
-#### How to interpret the metrics
-- **Raw differences** → show *where* the gap is and in *which direction* (pillar-specific insights).  
-- **Euclidean distance** → shows the *overall magnitude* of the gap across all pillars (simple, intuitive).  
-- **Hellinger distance** → measures the *distributional divergence* between the two weighting schemes (more robust for proportions, always normalized between 0 and 1).  
+3. **How to interpret the metrics**
+   - **Raw differences** → show *where* the gap is and in *which direction* (pillar-specific insights).  
+   - **Euclidean distance** → shows the *overall magnitude* of the gap across all pillars (simple, intuitive).  
+   - **Hellinger distance** → measures the *distributional divergence* between the two weighting schemes (more robust for proportions, always normalized between 0 and 1).  
 
 **Recommendation:**  
 I use **Hellinger distance** as the main ranking metric (since both SASB and Refinitiv weights are proportions).  
@@ -1208,6 +1018,7 @@ A few selected examples illustrate where the two methodologies converge or diver
 - **Implications**  
   - The choice of weighting scheme (SASB vs Refinitiv) can significantly affect the emphasis placed on each ESG pillar, especially in **finance and healthcare sectors**.  
   - This highlights the importance of **transparency in ESG rating methodologies** and demonstrates how **different assumptions about materiality** directly impact company evaluations.
+
 
 > 💡 The full code is available in:  
 > [10_Thesis.ipynb](Notebooks/10_Thesis.ipynb)
