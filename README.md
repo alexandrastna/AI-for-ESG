@@ -1189,83 +1189,148 @@ _All ESG variants also show **positive** r (0.25 → 0.61)._
 
 ### Part C — My **ESG totals** vs **Refinitiv ESG / ESGC** (2022)
 
-**What’s computed**
-- For each ESG<sub>k</sub> vs `Ref_ESG` and vs `Ref_ESGC`:
-  - **Pearson** on values (expect **positive** if scales align).  
-  - **Spearman/Kendall** on ranks (higher = closer ordering).  
-  - **MAR** and **Jaccard@3** (top‑k overlap).
+We compare my 10 ESG variants with Refinitiv’s:
+- **Ref_ESG**: ESG score *without* controversies (0–100; higher = better).
+- **Ref_ESGC**: ESG score *including* controversies overlay (0–100; higher = better).
+
+For each variant I report:
+- **Pearson r (values)** — linear association (my ESG in 0–1 vs Refinitiv in 0–100).
+- **Spearman ρ & Kendall τ-b (ranks)** — do the **orderings** match? (rank 1 = best).
+- **MAR** — Mean Absolute Rank error (avg rank gap; **lower is better**).
+- **Jaccard@3** — overlap between **top-3** companies by my score and by Refinitiv (0..1).
 
 **Reading**
 - High agreement suggests my composite captures similar signals as Refinitiv.  
 - Differences highlight **methodological choices** (documents covered, sentiment treatment, SASB weighting, etc.).
 
-**Tables to insert**
-- C.1 — *My ESG vs Ref_ESG:* best by rank agreement + Pearson  
-- C.2 — *My ESG vs Ref_ESGC:* best by rank agreement + Pearson
+### Example scatter plots
+- ![ESG1 vs Ref_ESG](Images/ESG1%20vs%20Ref_ESG.png)
+- ![ESG1 vs Ref_ESGC](Images/ESG1%20vs%20Ref_ESGC.png)
+- ![ESG2 vs Ref_ESG](Images/ESG2%20vs%20Ref_ESG.png)
+- ![ESG2 vs Ref_ESGC](Images/ESG2%20vs%20Ref_ESGC.png)
 
-**Optional visuals**
-- Scatter with fit line and clean labels (company short names):  
-  - `![ESG7 vs Ref_ESG](Images/ESG7_vs_RefESG.png)`  
-  - `![ESG7 vs Ref_ESGC](Images/ESG7_vs_RefESGC.png)`
+### A — My ESG vs **Ref_ESG** (no controversies) — best by rank agreement
+| ESG_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_r | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ESG10 | 10 | 0.061 | 0.868 | 0.000 | 1.000 | **3.3** | 0.2 | −0.201 | 0.577 |
+| ESG8  | 10 | 0.055 | 0.881 | 0.000 | 1.000 | **3.3** | 0.2 | −0.196 | 0.588 |
+| ESG7  | 10 | −0.085 | 0.815 | −0.045 | 0.857 | 3.5 | 0.2 | −0.220 | 0.542 |
+| ESG9  | 10 | −0.085 | 0.815 | −0.045 | 0.857 | 3.5 | 0.2 | −0.241 | 0.503 |
+| ESG6  | 10 | −0.116 | 0.751 | −0.135 | 0.590 | 3.7 | 0.2 | −0.223 | 0.535 |
+| ESG5  | 10 | −0.158 | 0.663 | −0.180 | 0.472 | 3.7 | 0.2 | −0.188 | 0.603 |
+| ESG1  | 10 | −0.255 | 0.476 | −0.225 | 0.369 | 3.9 | 0.2 | −0.338 | 0.339 |
+| ESG2  | 10 | −0.328 | 0.354 | −0.270 | 0.281 | 3.7 | 0.2 | −0.363 | 0.302 |
+| ESG4  | 10 | −0.541 | 0.106 | −0.360 | 0.151 | 4.1 | 0.2 | −0.495 | 0.146 |
+| ESG3  | 10 | −0.571 | 0.084 | −0.405 | 0.106 | 4.3 | 0.0 | **−0.564** | 0.089 |
+
+### B — My ESG vs **Ref_ESGC** (with controversies) — best by rank agreement
+| ESG_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_r | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| **ESG6** | 10 | **0.608** | 0.062 | **0.449** | 0.072 | **2.1** | 0.2 | 0.332 | 0.348 |
+| **ESG5** | 10 | 0.559 | 0.093 | 0.405 | 0.106 | 2.3 | 0.2 | 0.249 | 0.489 |
+| ESG8     | 10 | 0.298 | 0.403 | 0.135 | 0.590 | 2.7 | 0.2 | 0.206 | 0.568 |
+| ESG10    | 10 | 0.225 | 0.532 | 0.135 | 0.590 | 2.7 | 0.2 | 0.143 | 0.693 |
+| ESG2     | 10 | 0.140 | 0.700 | 0.135 | 0.590 | 3.1 | 0.2 | −0.028 | 0.939 |
+| ESG4     | 10 | 0.085 | 0.815 | 0.045 | 0.857 | 3.3 | 0.2 | 0.162 | 0.655 |
+| ESG3     | 10 | 0.018 | 0.960 | 0.000 | 1.000 | 3.3 | 0.2 | 0.085 | 0.816 |
+| ESG1     | 10 | −0.012 | 0.973 | 0.045 | 0.857 | 3.5 | 0.2 | −0.209 | 0.563 |
+| ESG7     | 10 | −0.188 | 0.602 | −0.180 | 0.472 | 3.9 | 0.0 | −0.004 | 0.991 |
+| ESG9     | 10 | −0.188 | 0.602 | −0.180 | 0.472 | 3.9 | 0.0 | −0.052 | 0.886 |
+
+**Takeaways (Part C)**  
+- Against **Ref_ESG**, associations are weak and mostly negative.  
+- Against **Ref_ESGC**, **ESG6** (No-ESG-docs + SASB) and **ESG5** (No-ESG-docs) show **moderate positive rank alignment** and the **smallest MAR**.
 
 ### Part D — My **ESG totals** vs **Refinitiv Controversies**
 
 **Targets**
 - `Ref_C` (0–100, **higher = fewer controversies**).  
-- `BadCont` = 100 − Ref_C (**higher = more controversies**).
 
 **What’s computed**
-- For each ESG<sub>k</sub>:
-  - Panel A: vs **Ref_C** — expect **positive** alignment for “goodness” scores.  
-  - Panel B: vs **BadCont** — a *risk‑oriented* score would move **positively** with BadCont (or **negatively** with Ref_C).  
-  - In both panels: Pearson, Spearman/Kendall, MAR, Jaccard@3.
+For each ESG<sub>k</sub>:
+- **Spearman ρ** and **Kendall τ<sub>b</sub>** on ranks (1 = “best ESG”, 1 = “fewest controversies”). Higher = closer ordering.
+- **MAR** (Mean Absolute Rank error): average distance in rank positions. Lower is better.
+- **Jaccard@3**: overlap between my **top-3** ESG companies and Refinitiv’s **top-3** by Ref_C.
+- **Pearson r** on values (my ESG in [0,1] vs Ref_C in [0,100]). Positive r = higher ESG where controversies are fewer.
 
-**Tables to insert**
-- D.1 — *ESG vs Ref_C (fewer controversies = better):* rank & Pearson  
-- D.2 — *ESG vs BadCont (more controversies = worse):* rank & Pearson
+### Results (k = 3, n = 10)
+**Table — best by rank agreement (higher ρ/τ, lower MAR).**
 
-**Reading**
-- If a variant is intentionally *penalizing risk*, it should correlate **positively** with BadCont.
+| ESG variant | ρ (Spearman) | τ<sub>b</sub> (Kendall) | MAR | Jaccard@3 | r (Pearson) | p-value (r) |
+|---|---:|---:|---:|---:|---:|---:|
+| **ESG6** (No-ESG docs + SASB) | **0.450** | **0.310** | **3.0** | 0.20 | 0.342 | 0.334 |
+| **ESG5** (No-ESG docs) | 0.381 | 0.310 | 3.2 | 0.20 | 0.235 | 0.512 |
+| **ESG4** (Earnings + SASB) | 0.244 | 0.167 | 3.2 | **0.50** | **0.343** | 0.332 |
+| **ESG8** (Pos–Neg + SASB) | 0.225 | 0.119 | 3.4 | 0.00 | 0.329 | 0.353 |
+| **ESG3** (Earnings) | 0.194 | 0.119 | 3.2 | **0.50** | 0.304 | 0.393 |
+| ESG10 (Pos-only + SASB) | 0.131 | 0.072 | 3.6 | 0.20 | 0.270 | 0.450 |
+| ESG2 | 0.019 | 0.024 | 3.8 | 0.20 | 0.087 | 0.811 |
+| ESG7 (Pos–Neg) | −0.113 | −0.072 | 4.2 | 0.20 | 0.108 | 0.767 |
+| ESG9 (Pos-only) | −0.113 | −0.072 | 4.2 | 0.20 | 0.073 | 0.842 |
+| ESG1 (Quantity) | −0.150 | −0.072 | 4.4 | 0.20 | −0.095 | 0.795 |
 
+> **Note.** With only *n = 10* firms, p-values are large; treat these as **directional** signals rather than proof of significance.
+
+### What this says
+- The **best alignment with “fewer controversies”** is delivered by **ESG6** (No-ESG-branded docs + SASB weights) and **ESG5** (same, unweighted).  
+  These choices reduce marketing/CSR bias and focus on core documents — intuitively closer to operational risk.
+- **Earnings-based** variants (**ESG4**/ESG3) also move in the right direction and achieve the **highest Jaccard@3** overlap (0.50) with Refinitiv’s top-3 low-controversy firms.
+- **Tone-centric** scores (**ESG7–ESG9**, based on net-sentiment or positive-only) show weak or negative rank agreement with Ref_C — they capture *how positively companies talk*, not necessarily *how controversy-free they are*.
+
+### Takeaways
+- If you want an ESG composite that **tracks external controversy risk**, prefer:
+  1) **ESG6** (No-ESG docs + SASB) → ρ = 0.45, τ = 0.31, MAR = 3.0.  
+  2) **ESG5** (No-ESG docs) → ρ = 0.38, τ = 0.31.  
+  3) **ESG4/ESG3** (Earnings-focused) → useful secondary signals; strongest Top-3 overlap.
+- Keep sample size in mind. These are **consistency checks**, not causal claims. Still, the pattern suggests that **less curated sources** (core reports, earnings calls) and **materiality weighting** (SASB) are better aligned with third-party controversy assessments.
 
 ### Part E — **Refinitiv** scores vs **Carbon Intensity**
 
+If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negative Pearson** and strong rank agreement with low carbon.
+
 **What’s computed**
-- `Ref_E` and `Ref_ESG` vs carbon (Scope 1–3 and 1–2):  
-  - Rank agreement (ρ/τ‑b), **MAR**, **Jaccard@3**, and **Pearson** (values).
+- Compare **Ref_E** and **Ref_ESG** to carbon intensity:
+  - Both **Total Scope 1–3** and **Scope 1–2** (“NoScope3”), using `log(1 + carbon)`.
+  - Report **Spearman ρ / Kendall τ-b** (rank agreement with “lowest-carbon-first”), **MAR** (mean absolute rank error), **Jaccard@3** (top-3 overlap), and **Pearson r** (values).
 
-**Reading**
-- If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negative Pearson** and strong rank agreement with low carbon.
 
-**Tables / visuals to insert**
-- E.1 — *Refinitiv vs Carbon (Total S1–3):* summary table  
-- E.2 — *Refinitiv vs Carbon (Scope 1–2):* summary table  
-- Example scatter:  
-  - `![Ref_E vs Carbon Total](Images/RefE_vs_Carbon_Total.png)`  
-  - `![Ref_ESG vs Carbon NoScope3](Images/RefESG_vs_Carbon_S12.png)`
+**E.1 — Refinitiv vs Carbon (Total S1–3): summary table**
 
-### 🧭 Interpretation Guide (quick)
+| metric   | n  | Spearman ρ | p-value | Kendall τ-b | p-value | MAR | Jaccard@3 | Pearson r (values) | p-value |
+|:---------|:--:|-----------:|:------:|------------:|:------:|----:|----------:|--------------------:|:------:|
+| Ref_E    | 10 | −0.261     | 0.466  | −0.180      | 0.472  | 3.5 | 0.2       | **+0.157**          | 0.664  |
+| Ref_ESG  | 10 | −0.267     | 0.455  | −0.180      | 0.472  | 3.7 | 0.0       | **+0.171**          | 0.636  |
 
-- **Pearson r (values)**  
-  - *Carbon analyses*: **negative** is good (score↑ when carbon↓).  
-  - *My ESG vs Refinitiv*: **positive** is good (scale alignment).
-- **Spearman ρ / Kendall τ‑b (ranks)**  
-  - Higher = closer ordering; robust to skew/outliers.  
-- **MAR (rank gap)**  
-  - Lower = better (average distance in rank positions).  
-- **Jaccard@3**  
-  - How similar are the **top performers** across two lists?
+**E.2 — Refinitiv vs Carbon (Scope 1–2): summary table**
 
-### 🗂️ Provenance / Manifests
+| metric   | n  | Spearman ρ | p-value | Kendall τ-b | p-value | MAR | Jaccard@3 | Pearson r (values) | p-value |
+|:---------|:--:|-----------:|:------:|------------:|:------:|----:|----------:|--------------------:|:------:|
+| Ref_ESG  | 10 | −0.055     | 0.881  | +0.045      | 0.857  | 3.7 | 0.0       | **−0.256**          | 0.476  |
+| Ref_E    | 10 | −0.103     | 0.776  | −0.045      | 0.857  | 3.7 | 0.0       | **−0.098**          | 0.787  |
 
-I log which file/column feeds each variant so results are reproducible:
 
-- **E variant manifest** (what E<sub>1..10</sub> mean).  
-  *(Insert small table or link to CSV export.)*  
+**Results (summary)**
+- Correlations are **weak and not significant** overall.
+- On **Total S1–3**, Pearson is **slightly positive** for both Refinitiv metrics.
+- On **Scope 1–2**, Pearson turns **slightly negative** for Ref_ESG (still small / ns).
+- Rank agreement with low-carbon ordering is **weak to negative**; **MAR ≈ 3.5–3.7**; **Jaccard@3 = 0.0–0.2**.
 
-- **ESG variant manifest** (what ESG<sub>1..10</sub> mean).  
-  *(Insert small table or link to CSV export.)*
+**Figures**
+- ![Ref_E vs Carbon (Total)](Images/Ref_E%20vs%20Carbon%20%28Total%29.png)
+- ![Ref_E vs Carbon (NoScope3)](Images/Ref_E%20vs%20Carbon%20%28No%20Scope%203%29.png)
+- ![Ref_ESG vs Carbon (Total)](Images/Ref_ESG%20vs%20Carbon%20%28Total%29.png)
+- ![Ref_ESG vs Carbon (NoScope3)](Images/Ref_ESG%20vs%20Carbon%20%28No%20Scope%203%29.png)
 
+**Takeaways**
+- On this sample/year, **Refinitiv’s E/ESG scores do not track low carbon intensity** in a reliable way (positive or near-zero Pearson on Total; weak rank agreement; low top-3 overlap).
+- If the target is explicit **decarbonization**, rely on carbon metrics directly or a purpose-built E-pillar; use Refinitiv scores for broader ESG constructs rather than as a carbon proxy.
+- Caveat: **n = 10** firms, single year; extend to more years/firms to tighten inference.
+
+**How to read**
+- **Pearson r (values)**: for carbon analyses, **negative** is the expected sign (score ↑ when carbon ↓).
+- **Spearman ρ / Kendall τ-b**: higher = closer ordering to “lowest-carbon-first”.
+- **MAR**: lower = better (average rank gap).
+- **Jaccard@3**: overlap of the top-3 by score with the three lowest-carbon companies.
 
 ### 📎 Notebook
 
