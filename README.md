@@ -905,44 +905,28 @@ The goal is to evaluate whether our **theoretically derived, sector-aware weight
 2. **Comparison Metrics**  
    For each company, we compare SASB vs Refinitiv at two levels:
 
-   **(a) Raw differences per pillar (directional, pillar-by-pillar)**  
+  **(a) Raw differences per pillar (directional, pillar‑by‑pillar)**  
    Positive values mean *Refinitiv > SASB* on that pillar; negative values mean the opposite.  
-
-   $$
-   E_{diff} = E_{Refinitiv} - E_{SASB}
-   $$
-
-   $$
-   S_{diff} = S_{Refinitiv} - S_{SASB}
-   $$
-
-   $$
-   G_{diff} = G_{Refinitiv} - G_{SASB}
-   $$
+   **Equations (GitHub‑safe):**  
+   - E<sub>diff</sub> = E<sub>Refinitiv</sub> − E<sub>SASB</sub>  
+   - S<sub>diff</sub> = S<sub>Refinitiv</sub> − S<sub>SASB</sub>  
+   - G<sub>diff</sub> = G<sub>Refinitiv</sub> − G<sub>SASB</sub>  
 
    **(b) Aggregate distances (one number summarizing all three pillars)**  
-   Let $p = (E_{SASB}, S_{SASB}, G_{SASB})$ and $q = (E_{Refinitiv}, S_{Refinitiv}, G_{Refinitiv})$, with $E+S+G=1$.
+   Let **p** = (E<sub>SASB</sub>, S<sub>SASB</sub>, G<sub>SASB</sub>) and **q** = (E<sub>Ref</sub>, S<sub>Ref</sub>, G<sub>Ref</sub>), with E+S+G = 1.
 
    - **Euclidean distance** — absolute geometric gap across pillars (symmetric measure):  
+     d<sub>Euclid</sub>(p,q) = √((E<sub>Ref</sub> − E<sub>SASB</sub>)<sup>2</sup> + (S<sub>Ref</sub> − S<sub>SASB</sub>)<sup>2</sup> + (G<sub>Ref</sub> − G<sub>SASB</sub>)<sup>2</sup>)  
+     *Range in this setting: 0 ≤ d<sub>Euclid</sub> ≤ √2.*
 
-   $$
-   d_{Euclid}(p,q) = \sqrt{(E_{Ref}-E_{SASB})^2 + (S_{Ref}-S_{SASB})^2 + (G_{Ref}-G_{SASB})^2}
-   $$
-
-   Range in this setting: $0 \leq d_{Euclid} \leq \sqrt{2}$.
-
-   - **Hellinger distance** — divergence between *distributions* (better suited for normalized proportions):  
-
-   $$
-   d_H(p,q) = \frac{1}{\sqrt{2}} \; \sqrt{(\sqrt{E_{SASB}}-\sqrt{E_{Ref}})^2 + (\sqrt{S_{SASB}}-\sqrt{S_{Ref}})^2 + (\sqrt{G_{SASB}}-\sqrt{G_{Ref}})^2}
-   $$
-
-   Bounded in $[0,1]$; $0 =$ identical distributions.
+   - **Hellinger distance** — divergence between **distributions** (best for normalized proportions):  
+     d<sub>H</sub>(p,q) = (1/√2) · √((√E<sub>SASB</sub> − √E<sub>Ref</sub>)<sup>2</sup> + (√S<sub>SASB</sub> − √S<sub>Ref</sub>)<sup>2</sup> + (√G<sub>SASB</sub> − √G<sub>Ref</sub>)<sup>2</sup>)  
+     *Bounded in \[0, 1\]; 0 = identical distributions.*
 
 3. **How to interpret the metrics**
-   - **Raw differences** → show *where* the gap is and in *which direction* (pillar-specific insights).  
+   - **Raw differences** → show *where* the gap is and in *which direction* (pillar‑specific insight).  
    - **Euclidean distance** → shows the *overall magnitude* of the gap across all pillars (simple, intuitive).  
-   - **Hellinger distance** → measures the *distributional divergence* between the two weighting schemes (more robust for proportions, always normalized between 0 and 1).  
+   - **Hellinger distance** → measures the *distributional divergence* between the two weighting schemes (robust for proportions, always normalized \[0–1\]).  
 
 **Recommendation:**  
 I use **Hellinger distance** as the main ranking metric (since both SASB and Refinitiv weights are proportions).  
