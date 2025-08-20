@@ -1008,3 +1008,268 @@ A few selected examples illustrate where the two methodologies converge or diver
 > 💡 The full code is available in:  
 > [10_Thesis.ipynb](Notebooks/10_Thesis.ipynb)
 
+---
+
+## Phase 11 : Validating My ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (Year = 2022)
+
+This phase stress‑tests my **E pillar** and **total ESG scores** against external signals:
+1) **Carbon intensity** (Refinitiv): do *higher* scores line up with *lower* emissions?
+2) **Refinitiv ESG/ESGC**: are my rankings consistent with a major vendor’s scores?
+3) **Refinitiv Controversies**: do high scores align with *fewer* controversies?
+
+I run the analysis on **2022** (latest complete year in the dataset).
+
+### 🔧 Data & Preprocessing
+
+- **My scores**: `df1_*.csv` … `df10_*.csv` exported in Phase 9  
+  - **E<sub>k</sub>**: for each `dfk_*`, pick `E_score` if present, else `E_net` or `E_pos_ratio`.  
+  - **ESG<sub>k</sub>**: for each `dfk_*`, pick a total column among `ESG_total`, `ESG_score`, `ESG`.
+- **Carbon intensity** (Refinitiv Excel, sheet *Refinitiv Carbon Intensity*):  
+  - `Carbon_Total` = Scope 1–3  
+  - `Carbon_wo_Scope3` = Scope 1–2  
+  - Also store `log(1 + Carbon)` for value‑based Pearson tests.
+- **Refinitiv scores** (sheet *Refinitiv ESG*):  
+  - `Ref_E` (Environmental), `Ref_ESG` (overall w/o controversies), `Ref_ESGC` (overall with controversies), `Ref_C` (Controversies).
+
+**Rank conventions**
+- For my scores and Refinitiv scores: **higher is better** → rank 1 = highest.  
+- For carbon intensity: **lower is better** → rank 1 = lowest.
+
+### 📏 Metrics
+
+**Directional differences** (used earlier in Phase 10; included here for reference):  
+- E<sub>diff</sub> = E<sub>Refinitiv</sub> − E<sub>SASB</sub> (idem for S, G)
+
+**Rank agreement**  
+- **Spearman ρ** and **Kendall τ‑b** on rank series (higher = better agreement).  
+- **MAR** (Mean Absolute Rank error): average |rank<sub>mine</sub> − rank<sub>ref</sub>| (lower = better).
+
+**Top‑k overlap**  
+- **Jaccard@k** = |Top<sub>k</sub>(A) ∩ Top<sub>k</sub>(B)| / |Top<sub>k</sub>(A) ∪ Top<sub>k</sub>(B)|, k = 3 by default.
+
+**Pearson (values)**  
+- Correlate **log(1 + Carbon)** with the score value.  
+  - **Negative** r ⇒ *higher* score when *carbon is lower* (desirable for “low‑carbon” alignment).  
+- When comparing **my ESG** to **Refinitiv ESG/ESGC**: **Positive** r ⇒ similar scaling.
+
+
+### Part A & B  
+**Validating my E/ESG scores vs Carbon Intensity (2022)**
+
+This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>**) and **ESG** totals (**ESG<sub>1..10</sub>**) against **Refinitiv carbon intensity**:
+- **Carbon_Total** = Scope 1–3; **Carbon_wo_Scope3** = Scope 1–2  
+- Pearson is computed on **log(1 + Carbon)** (to reduce skew); rank metrics compare **“higher score = better”** vs **“lower carbon = better”**.
+
+### 1) Data visualization & quality checks
+
+**E-variant manifest (what E<sub>k</sub> means)**
+| E_variant | file                        | E_column_used |
+|---|---|---|
+| E1  | df1_ESG_quantity.csv         | E_score     |
+| E10 | df10_Pos_only_SASB.csv       | E_pos_ratio |
+| E2  | df2_ESG_quantity_SASB.csv    | E_score     |
+| E3  | df3_ESG_earnings.csv         | E_score     |
+| E4  | df4_ESG_earnings_SASB.csv    | E_score     |
+| E5  | df5_ESG_no_comm.csv          | E_score     |
+| E6  | df6_ESG_no_comm_SASB.csv     | E_score     |
+| E7  | df7_Pos_minus_Neg.csv        | E_net       |
+| E8  | df8_Pos_minus_Neg_SASB.csv   | E_net       |
+| E9  | df9_Pos_only.csv             | E_pos_ratio |
+
+**Skew of carbon distributions (higher = more skewed)**
+- Total S1–3: **2.695**  
+- Scope 1–2: **3.155**
+
+**Rank preview (sample)**  
+*(rank 1 = lowest carbon / highest score)*
+
+| Company | Carbon_Total | Carbon_Total_rank | Carbon_wo_Scope3 | Carbon_wo_Scope3_rank | E1_rank | E2_rank | E3_rank |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ABB Ltd | 13299.746 | 10.0 | 7.490 | 6.0 | 2.0 | 2.0 | 2.0 |
+| Compagnie Financière Richemont | 82.606 | 3.0 | 3.719 | 3.0 | 8.0 | 8.0 | 3.0 |
+| Holcim Ltd | 4215.455 | 9.0 | 2646.914 | 10.0 | 1.0 | 1.0 | 1.0 |
+| Lonza Group AG | 366.637 | 7.0 | 83.536 | 9.0 | 7.0 | 7.0 | 6.0 |
+| Nestlé SA | 1158.483 | 8.0 | 59.112 | 8.0 | 6.0 | 6.0 | 4.0 |
+| Novartis AG | 127.190 | 6.0 | 12.055 | 7.0 | 10.0 | 10.0 | 8.0 |
+| Roche Holding AG | 101.991 | 4.0 | 5.483 | 5.0 | 9.0 | 9.0 | 9.0 |
+| Swiss Re Ltd | 3.255 | 1.0 | 0.225 | 1.0 | 3.0 | 3.0 | 5.0 |
+| UBS Group AG | 7.455 | 2.0 | 4.760 | 4.0 | 4.0 | 5.0 | 7.0 |
+| Zurich Insurance Group AG | 115.790 | 5.0 | 0.427 | 2.0 | 5.0 | 4.0 | 10.0 |
+
+**Example scatter plots (value correlation, log carbon on X)**  
+- ![E1 vs Carbon (NoScope3)](Images/E1_vs_Carbon%28NoScope3%29.png)  
+- ![E1 vs Carbon (Total)](Images/E1_vs_Carbon%28Total%29.png)  
+- ![E2 vs Carbon (Total)](Images/E2_vs_Carbon%28Total%29.png)  
+- ![E3 vs Carbon (Total)](Images/E3_vs_Carbon%28Total%29.png)
+
+### 2) Results — **E** vs Carbon Intensity
+
+**A. Total S1–3 — ranked by agreement (higher ρ/τ-b, lower MAR)**
+
+| E_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_logX | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| E1 | 10 | −0.248 | 0.489 | −0.111 | 0.727 | 3.6 | 0.2 | **0.214** | 0.553 |
+| E2 | 10 | −0.285 | 0.425 | −0.156 | 0.601 | 3.8 | 0.2 | **0.408** | 0.242 |
+| E5 | 10 | −0.358 | 0.310 | −0.244 | 0.381 | 4.2 | 0.0 | **0.323** | 0.363 |
+| E8 | 10 | −0.394 | 0.260 | −0.200 | 0.484 | 4.2 | 0.0 | **0.588** | 0.074 |
+| E10 | 10 | −0.394 | 0.260 | −0.200 | 0.484 | 4.2 | 0.0 | **0.551** | 0.098 |
+| E6 | 10 | −0.418 | 0.229 | −0.289 | 0.291 | 4.2 | 0.0 | **0.438** | 0.205 |
+| E4 | 10 | −0.455 | 0.187 | −0.289 | 0.291 | 4.2 | 0.0 | **0.596** | 0.069 |
+| E3 | 10 | −0.455 | 0.187 | −0.333 | 0.216 | 4.2 | 0.2 | **0.614** | 0.059 |
+| E9 | 10 | −0.539 | 0.108 | −0.333 | 0.216 | 4.6 | 0.0 | **0.488** | 0.153 |
+| E7 | 10 | −0.600 | 0.067 | −0.422 | 0.108 | 4.6 | 0.0 | **0.505** | 0.136 |
+
+**B. Total S1–3 — ranked by Pearson (more negative would be better)**  
+_All E variants show **positive** r (0.21 → 0.61), i.e., higher E when carbon is higher._
+
+**C. Scope 1–2 — ranked by agreement**
+
+| E_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_logX | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| E2 | 10 | 0.006 | 0.987 | 0.067 | 0.862 | 3.4 | 0.2 | **0.300** | 0.400 |
+| E1 | 10 | −0.018 | 0.960 | 0.022 | 1.000 | 3.4 | 0.2 | **0.169** | 0.641 |
+| E5 | 10 | −0.030 | 0.934 | −0.022 | 1.000 | 3.4 | 0.2 | **0.196** | 0.586 |
+| E6 | 10 | −0.079 | 0.829 | −0.067 | 0.862 | 3.6 | 0.2 | **0.352** | 0.319 |
+| E4 | 10 | −0.152 | 0.676 | −0.067 | 0.862 | 3.8 | 0.0 | **0.740** | 0.014 |
+| E8 | 10 | −0.152 | 0.676 | −0.067 | 0.862 | 3.8 | 0.0 | **0.484** | 0.156 |
+| E10 | 10 | −0.152 | 0.676 | −0.067 | 0.862 | 3.8 | 0.0 | **0.452** | 0.190 |
+| E3 | 10 | −0.382 | 0.276 | −0.289 | 0.291 | 4.0 | 0.2 | **0.781** | 0.0077 |
+| E9 | 10 | −0.515 | 0.128 | −0.378 | 0.156 | 4.4 | 0.0 | **0.477** | 0.163 |
+| E7 | 10 | −0.539 | 0.108 | −0.378 | 0.156 | 4.4 | 0.0 | **0.468** | 0.172 |
+
+**Takeaway (E vs Carbon)**  
+- Across both Scope settings, **Pearson is positive** for all E variants (several moderately/strongly so: **E3/E4/E8/E10**).  
+- Rank agreement with “lowest carbon first” is weak to negative.  
+- Interpretation: **E variants are *not* decarbonization scores**. They appear closer to *“how much & how positively firms talk about E”*; high emitters (e.g., **Holcim**) may discuss E more, pushing E upward despite higher carbon.
+
+### 3) Results — **ESG totals** vs Carbon Intensity
+
+**A. Total S1–3 — ranked by agreement**
+
+| ESG_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_logX | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ESG1 | 10 | −0.176 | 0.627 | −0.111 | 0.727 | 3.6 | 0.2 | **0.252** | 0.483 |
+| ESG5 | 10 | −0.248 | 0.489 | −0.156 | 0.601 | 4.0 | 0.0 | **0.277** | 0.439 |
+| ESG6 | 10 | −0.297 | 0.405 | −0.200 | 0.484 | 3.8 | 0.0 | **0.415** | 0.233 |
+| ESG7 | 10 | −0.358 | 0.310 | −0.244 | 0.381 | 4.0 | 0.2 | **0.319** | 0.369 |
+| ESG9 | 10 | −0.358 | 0.310 | −0.244 | 0.381 | 4.0 | 0.2 | **0.318** | 0.370 |
+| ESG3 | 10 | −0.394 | 0.260 | −0.244 | 0.381 | 4.4 | 0.2 | **0.590** | 0.073 |
+| ESG4 | 10 | −0.418 | 0.229 | −0.289 | 0.291 | 4.4 | 0.2 | **0.613** | 0.060 |
+| ESG2 | 10 | −0.467 | 0.174 | −0.289 | 0.291 | 4.4 | 0.2 | **0.448** | 0.194 |
+| ESG8 | 10 | −0.648 | 0.0425 | −0.467 | 0.0726 | 4.8 | 0.0 | **0.526** | 0.119 |
+| ESG10 | 10 | −0.685 | 0.0289 | −0.556 | 0.0286 | 4.8 | 0.0 | **0.544** | 0.104 |
+
+**B. Total S1–3 — ranked by Pearson (more negative would be better)**  
+_All ESG variants also show **positive** r (0.25 → 0.61)._
+
+**C. Scope 1–2 — ranked by agreement**
+
+| ESG_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_logX | pearson_p |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ESG6 | 10 | 0.042 | 0.907 | 0.022 | 1.000 | 3.0 | 0.2 | **0.312** | 0.379 |
+| ESG1 | 10 | 0.042 | 0.907 | 0.022 | 1.000 | 3.4 | 0.2 | **0.113** | 0.756 |
+| ESG5 | 10 | 0.030 | 0.934 | −0.022 | 1.000 | 3.2 | 0.2 | **0.098** | 0.788 |
+| ESG7 | 10 | −0.236 | 0.511 | −0.111 | 0.727 | 3.8 | 0.2 | **0.166** | 0.646 |
+| ESG9 | 10 | −0.236 | 0.511 | −0.111 | 0.727 | 3.8 | 0.2 | **0.193** | 0.593 |
+| ESG2 | 10 | −0.273 | 0.446 | −0.156 | 0.601 | 4.2 | 0.2 | **0.334** | 0.345 |
+| ESG4 | 10 | −0.418 | 0.229 | −0.244 | 0.381 | 4.2 | 0.2 | **0.774** | 0.00863 |
+| ESG3 | 10 | −0.442 | 0.200 | −0.289 | 0.291 | 4.2 | 0.2 | **0.721** | 0.0186 |
+| ESG8 | 10 | −0.576 | 0.0816 | −0.422 | 0.108 | 4.6 | 0.0 | **0.483** | 0.157 |
+| ESG10 | 10 | −0.576 | 0.0816 | −0.422 | 0.108 | 4.6 | 0.0 | **0.517** | 0.126 |
+
+**Takeaway (ESG vs Carbon)**  
+- **ESG totals behave similarly to the E pillar**: **positive Pearson** and weak/negative rank agreement with low-carbon.  
+- Significant positive Pearson for **ESG3/ESG4** with Scope 1–2 (r ≈ **0.72–0.77**, p \< 0.02) confirms that **high emitters tend to have higher ESG<sub>k</sub> in my current definitions**.
+
+
+### What this means (so far)
+
+- My Phase-9 score designs (quantity, earnings-only, no-ESG-docs, pos-minus-neg, etc., with/without SASB) **do not produce a decarbonization ranking** out-of-the-box.  
+- Instead, they capture **communication intensity/positivity** about ESG (especially E), which can be **higher in heavy-emitting sectors**.  
+
+### Part C — My **ESG totals** vs **Refinitiv ESG / ESGC** (2022)
+
+**What’s computed**
+- For each ESG<sub>k</sub> vs `Ref_ESG` and vs `Ref_ESGC`:
+  - **Pearson** on values (expect **positive** if scales align).  
+  - **Spearman/Kendall** on ranks (higher = closer ordering).  
+  - **MAR** and **Jaccard@3** (top‑k overlap).
+
+**Reading**
+- High agreement suggests my composite captures similar signals as Refinitiv.  
+- Differences highlight **methodological choices** (documents covered, sentiment treatment, SASB weighting, etc.).
+
+**Tables to insert**
+- C.1 — *My ESG vs Ref_ESG:* best by rank agreement + Pearson  
+- C.2 — *My ESG vs Ref_ESGC:* best by rank agreement + Pearson
+
+**Optional visuals**
+- Scatter with fit line and clean labels (company short names):  
+  - `![ESG7 vs Ref_ESG](Images/ESG7_vs_RefESG.png)`  
+  - `![ESG7 vs Ref_ESGC](Images/ESG7_vs_RefESGC.png)`
+
+### Part D — My **ESG totals** vs **Refinitiv Controversies**
+
+**Targets**
+- `Ref_C` (0–100, **higher = fewer controversies**).  
+- `BadCont` = 100 − Ref_C (**higher = more controversies**).
+
+**What’s computed**
+- For each ESG<sub>k</sub>:
+  - Panel A: vs **Ref_C** — expect **positive** alignment for “goodness” scores.  
+  - Panel B: vs **BadCont** — a *risk‑oriented* score would move **positively** with BadCont (or **negatively** with Ref_C).  
+  - In both panels: Pearson, Spearman/Kendall, MAR, Jaccard@3.
+
+**Tables to insert**
+- D.1 — *ESG vs Ref_C (fewer controversies = better):* rank & Pearson  
+- D.2 — *ESG vs BadCont (more controversies = worse):* rank & Pearson
+
+**Reading**
+- If a variant is intentionally *penalizing risk*, it should correlate **positively** with BadCont.
+
+
+### Part E — **Refinitiv** scores vs **Carbon Intensity**
+
+**What’s computed**
+- `Ref_E` and `Ref_ESG` vs carbon (Scope 1–3 and 1–2):  
+  - Rank agreement (ρ/τ‑b), **MAR**, **Jaccard@3**, and **Pearson** (values).
+
+**Reading**
+- If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negative Pearson** and strong rank agreement with low carbon.
+
+**Tables / visuals to insert**
+- E.1 — *Refinitiv vs Carbon (Total S1–3):* summary table  
+- E.2 — *Refinitiv vs Carbon (Scope 1–2):* summary table  
+- Example scatter:  
+  - `![Ref_E vs Carbon Total](Images/RefE_vs_Carbon_Total.png)`  
+  - `![Ref_ESG vs Carbon NoScope3](Images/RefESG_vs_Carbon_S12.png)`
+
+### 🧭 Interpretation Guide (quick)
+
+- **Pearson r (values)**  
+  - *Carbon analyses*: **negative** is good (score↑ when carbon↓).  
+  - *My ESG vs Refinitiv*: **positive** is good (scale alignment).
+- **Spearman ρ / Kendall τ‑b (ranks)**  
+  - Higher = closer ordering; robust to skew/outliers.  
+- **MAR (rank gap)**  
+  - Lower = better (average distance in rank positions).  
+- **Jaccard@3**  
+  - How similar are the **top performers** across two lists?
+
+### 🗂️ Provenance / Manifests
+
+I log which file/column feeds each variant so results are reproducible:
+
+- **E variant manifest** (what E<sub>1..10</sub> mean).  
+  *(Insert small table or link to CSV export.)*  
+
+- **ESG variant manifest** (what ESG<sub>1..10</sub> mean).  
+  *(Insert small table or link to CSV export.)*
+
+
+### 📎 Notebook
+
+Full code: `Notebooks/11_Thesis.ipynb`  
+(Colab setup, data loading, metrics, and plot helpers included.)
+
+
