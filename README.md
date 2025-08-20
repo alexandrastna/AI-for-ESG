@@ -40,6 +40,7 @@ Through a series of notebooks, we:
   - [Phase 8.1 : Creating the Gold Standard Dataset](#phase-81--creating-the-gold-standard-dataset)
   - [Phase 8.2 : Model Evaluation and Comparison](#phase-82--model-evaluation-and-comparison)
   - [Phase 9 : ESG Scoring Methods and Comparison](#phase-9--esg-scoring-methods-and-comparison)
+  - [Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights](#phase-10--comparing-sasb-hybrid-weights-with-refinitiv-esg-weights)
 
 
 ## 🗂️ Repository Structure
