@@ -1037,21 +1037,33 @@ I run the analysis on **2022** (latest complete year in the dataset).
 
 ### 📏 Metrics
 
-**Directional differences** (used earlier in Phase 10; included here for reference):  
-- E<sub>diff</sub> = E<sub>Refinitiv</sub> − E<sub>SASB</sub> (idem for S, G)
+Metrics — what each one measures (and how to read them)**
 
-**Rank agreement**  
-- **Spearman ρ** and **Kendall τ‑b** on rank series (higher = better agreement).  
-- **MAR** (Mean Absolute Rank error): average |rank<sub>mine</sub> − rank<sub>ref</sub>| (lower = better).
+- **Directional differences (pillar-by-pillar)**  
+  Raw, signed gaps used earlier for SASB vs Refinitiv weights:  
+  E<sub>diff</sub> = E<sub>Refinitiv</sub> − E<sub>SASB</sub> (idem for S, G).  
+  *Use when you want to know which pillar drives the gap and in which direction.*
 
-**Top‑k overlap**  
-- **Jaccard@k** = |Top<sub>k</sub>(A) ∩ Top<sub>k</sub>(B)| / |Top<sub>k</sub>(A) ∪ Top<sub>k</sub>(B)|, k = 3 by default.
+- **Rank agreement (ordering similarity)**  
+  - **Spearman ρ** — correlation between the **ranks** of two lists. Captures any *monotonic* relationship (not just linear). Range: −1…+1.  
+    Higher ρ ⇒ stronger agreement in ordering.
+  - **Kendall τ-b** — compares all company pairs and counts how many are **concordant** vs **discordant**, with a correction for ties (the “b”). Range: −1…+1.  
+    More robust than Spearman when there are ties or small samples.
+  - Why both? ρ is intuitive and widely used; τ-b is pairwise/robust. If both say “low agreement,” that’s strong evidence the orderings differ.
 
-**Pearson (values)**  
-- Correlate **log(1 + Carbon)** with the score value.  
-  - **Negative** r ⇒ *higher* score when *carbon is lower* (desirable for “low‑carbon” alignment).  
-- When comparing **my ESG** to **Refinitiv ESG/ESGC**: **Positive** r ⇒ similar scaling.
+- **MAR (Mean Absolute Rank error)**  
+  MAR = mean\(|rank<sub>A</sub> − rank<sub>B</sub>|\). Unit = “rank positions.”  
+  Lower MAR ⇒ closer lists. Example: MAR ≈ 3.5 means, on average, firms are ~3–4 places apart.
 
+- **Top-k overlap (Jaccard@k)**  
+  J@k = \|Top<sub>k</sub>(A) ∩ Top<sub>k</sub>(B)\| / \|Top<sub>k</sub>(A) ∪ Top<sub>k</sub>(B)\| (default k = 3).  
+  0 ⇒ no common names in the two top-k lists; 1 ⇒ identical top-k.  
+  *Good for answering “do the top names match?” without caring about exact ranks.*
+
+- **Pearson r on values (linear association)**  
+  We correlate **log(1 + Carbon)** with the score value.  
+  - For **carbon analyses**: **negative** r ⇒ scores are **higher when carbon is lower** (the desired “low-carbon” alignment).  
+  - For **my ESG vs Refinitiv ESG/ESGC**: **positive** r ⇒ similar scaling across vendors (even if absolute ranges differ).
 
 ### Part A & B  
 **Validating my E/ESG scores vs Carbon Intensity (2022)**
@@ -1076,9 +1088,16 @@ This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>
 | E8  | df8_Pos_minus_Neg_SASB.csv   | E_net       |
 | E9  | df9_Pos_only.csv             | E_pos_ratio |
 
-**Skew of carbon distributions (higher = more skewed)**
-- Total S1–3: **2.695**  
-- Scope 1–2: **3.155**
+
+**Skewness & the log transform — why it matters here**
+
+- Measured skewness of carbon intensities (2022):  
+  **Total S1–3 = 2.695**, **Scope 1–2 = 3.155** → both are **heavily right-skewed** (few very large emitters).
+- Consequences of skew: in un-logged space, a handful of high values dominate scatterplots and can **distort Pearson r** (which assumes linearity and is sensitive to leverage).
+- Remedy: we use **log(1 + Carbon)** on the X-axis. The log:
+  - **Compresses outliers**, making the cloud of points more regular;
+  - Makes linear trends (if any) easier to detect;
+  - Improves readability of plots and stability of **Pearson r**.
 
 **Rank preview (sample)**  
 *(rank 1 = lowest carbon / highest score)*
@@ -1101,6 +1120,8 @@ This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>
 - ![E1 vs Carbon (Total)](Images/E1%20vs%20Carbon%20%28Total%29.png)  
 - ![E2 vs Carbon (Total)](Images/E2%20vs%20Carbon%20%28Total%29.png)  
 - ![E3 vs Carbon (Total)](Images/E3%20vs%20Carbon%20%28Total%29.png)  
+
+**All remaining figures** for this section are available in the **`Images/`** folder with consistent filenames.
 
 ### 2) Results — **E** vs Carbon Intensity
 
@@ -1137,10 +1158,16 @@ _All E variants show **positive** r (0.21 → 0.61), i.e., higher E when carbon 
 | E9 | 10 | −0.515 | 0.128 | −0.378 | 0.156 | 4.4 | 0.0 | **0.477** | 0.163 |
 | E7 | 10 | −0.539 | 0.108 | −0.378 | 0.156 | 4.4 | 0.0 | **0.468** | 0.172 |
 
-**Takeaway (E vs Carbon)**  
-- Across both Scope settings, **Pearson is positive** for all E variants (several moderately/strongly so: **E3/E4/E8/E10**).  
-- Rank agreement with “lowest carbon first” is weak to negative.  
-- Interpretation: **E variants are *not* decarbonization scores**. They appear closer to *“how much & how positively firms talk about E”*; high emitters (e.g., **Holcim**) may discuss E more, pushing E upward despite higher carbon.
+
+**Takeaway (E vs Carbon)** 
+- **Direction of association.** Across **Total S1–3**, every E variant has **positive Pearson** (≈ **0.21 → 0.61**) with *p* mostly > 0.05 (borderline for **E3/E4/E8/E10**). On **Scope 1–2**, the pattern strengthens for **E3/E4** (r ≈ **0.78/0.74**, *p* ≈ **0.0077/0.014**), i.e., **higher E when carbon is higher**.
+- **Ordering disagreement.** Spearman/Kendall are largely **negative** (e.g., ρ down to **−0.60**), and **MAR ≈ 3.4–4.6** ranks → my E orderings **do not** mirror “lowest-carbon-first.” Jaccard@3 is **0.0–0.2**, so **top-3 lists rarely overlap**.
+- **Which E’s drive this?**  
+  - **E3 / E4** (earnings-based variants) show the **strongest positive** value links, especially on Scope 1–2.  
+  - **E8 / E10** (SASB-weighted / positive-only) are also **positively** associated with carbon on Total (near-significant).  
+  - **E1/E2** (quantity-based) are weaker but still **positive**.
+- **Interpretation.** These E variants behave like **disclosure/positivity intensity** measures: larger/heavier emitters (e.g., **Holcim**) tend to publish more or more positive E-content, which **pushes E up despite higher carbon**. With **n = 10** firms (one year), noise is expected, but the direction is consistent across variants and scopes.
+
 
 ### 3) Results — **ESG totals** vs Carbon Intensity
 
@@ -1178,9 +1205,12 @@ _All ESG variants also show **positive** r (0.25 → 0.61)._
 | ESG10 | 10 | −0.576 | 0.0816 | −0.422 | 0.108 | 4.6 | 0.0 | **0.517** | 0.126 |
 
 **Takeaway (ESG vs Carbon)**  
-- **ESG totals behave similarly to the E pillar**: **positive Pearson** and weak/negative rank agreement with low-carbon.  
-- Significant positive Pearson for **ESG3/ESG4** with Scope 1–2 (r ≈ **0.72–0.77**, p \< 0.02) confirms that **high emitters tend to have higher ESG<sub>k</sub> in my current definitions**.
-
+- **Same direction as E.** For **Total S1–3**, all ESG variants show **positive Pearson** (≈ **0.25 → 0.61**). For **Scope 1–2**, **ESG3/ESG4** are **strong and significant** (r ≈ **0.72/0.77**, *p* ≈ **0.019/0.0086**).  
+- **Ordering mismatch.** Rank agreement is weak/negative; **MAR ≈ 3.0–4.8**; **Jaccard@3 ≤ 0.2**.  
+- **Variant differences.**  
+  - **ESG8/ESG10** (Pos−Neg SASB / Pos-only SASB) are among the **least aligned** by rank (ρ ≈ **−0.65/−0.69**) on Total.  
+  - **ESG1/ESG5/ESG6** (quantity / no-ESG-docs) are milder but still **not low-carbon aligned**.  
+- **Takeaway.** My ESG totals—regardless of construction—look closer to **communication breadth/tilt** than to decarbonization. Heavy emitters may invest more in ESG reporting and initiatives, which these text-based scores **pick up**, yielding **higher ESG where carbon is higher**.
 
 ### What this means (so far)
 
@@ -1238,8 +1268,10 @@ For each variant I report:
 | ESG9     | 10 | −0.188 | 0.602 | −0.180 | 0.472 | 3.9 | 0.0 | −0.052 | 0.886 |
 
 **Takeaways (Part C)**  
-- Against **Ref_ESG**, associations are weak and mostly negative.  
-- Against **Ref_ESGC**, **ESG6** (No-ESG-docs + SASB) and **ESG5** (No-ESG-docs) show **moderate positive rank alignment** and the **smallest MAR**.
+- **Against Ref_ESG (no controversies).** Associations are **weak/negative** overall (e.g., **ESG3** Pearson **−0.56**, *p* ≈ 0.089; ρ often ≤ 0). **MAR ~3.3–4.3**; **Jaccard@3 ≈ 0.0–0.2** → limited overlap in top names.
+- **Against Ref_ESGC (with controversies overlay).** **ESG6** (*no-ESG-docs + SASB*) and **ESG5** (*no-ESG-docs*) show **moderate positive rank alignment** (ρ ≈ **0.61/0.56**, τ-b ≈ **0.45/0.41**) and the **smallest MAR** (**2.1–2.3**). Value correlations are positive but not significant.
+- **What changes with the controversies overlay?** Removing firm-produced ESG docs in my variants (**ESG5/ESG6**) seems to **reduce “self-promotion” bias**, making my lists **closer to ESGC**, which itself penalizes controversies. In contrast, variants that lean on earnings, positivity, or firm ESG docs align **less** with Refinitiv’s orderings.
+- **Net:** My scores are **closer to Ref_ESGC** than to Ref_ESG, but agreement is still **modest** on this sample.
 
 ### Part D — My **ESG totals** vs **Refinitiv Controversies**
 
@@ -1322,19 +1354,15 @@ If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negati
 - ![Ref_ESG vs Carbon (NoScope3)](Images/Ref_ESG%20vs%20Carbon%20%28No%20Scope%203%29.png)
 
 **Takeaways**
-- On this sample/year, **Refinitiv’s E/ESG scores do not track low carbon intensity** in a reliable way (positive or near-zero Pearson on Total; weak rank agreement; low top-3 overlap).
-- If the target is explicit **decarbonization**, rely on carbon metrics directly or a purpose-built E-pillar; use Refinitiv scores for broader ESG constructs rather than as a carbon proxy.
-- Caveat: **n = 10** firms, single year; extend to more years/firms to tighten inference.
-
-**How to read**
-- **Pearson r (values)**: for carbon analyses, **negative** is the expected sign (score ↑ when carbon ↓).
-- **Spearman ρ / Kendall τ-b**: higher = closer ordering to “lowest-carbon-first”.
-- **MAR**: lower = better (average rank gap).
-- **Jaccard@3**: overlap of the top-3 by score with the three lowest-carbon companies.
+Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon (Total slightly **positive**, Scope 1–2 slightly **negative**, all **ns**), with **poor rank agreement** and **low top-3 overlap**.
+- **Conclusion.** Neither my text-based scores **nor** Refinitiv’s E/ESG scores can be treated as **decarbonization measures** in this data slice.  
+  - For **decarbonization targeting**, use **carbon intensity** directly or build a **purpose-designed E pillar** (e.g., penalizing emissions mechanically, sector-adjusted).  
+  - Use **Refinitiv** and my variants for **broader ESG/communication** signals, not as a carbon proxy.  
 
 ### 📎 Notebook
 
-Full code: `Notebooks/11_Thesis.ipynb`  
-(Colab setup, data loading, metrics, and plot helpers included.)
+> 💡 The full code and results are available in:  
+> [11_Thesis.ipynb](Notebooks/11_Thesis.ipynb)
+
 
 
