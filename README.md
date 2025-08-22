@@ -1097,10 +1097,10 @@ This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>
 | Zurich Insurance Group AG | 115.790 | 5.0 | 0.427 | 2.0 | 5.0 | 4.0 | 10.0 |
 
 **Example scatter plots (value correlation, log carbon on X)**  
-- ![E1 vs Carbon (NoScope3)](Images/E1_vs_Carbon%28NoScope3%29.png)  
-- ![E1 vs Carbon (Total)](Images/E1_vs_Carbon%28Total%29.png)  
-- ![E2 vs Carbon (Total)](Images/E2_vs_Carbon%28Total%29.png)  
-- ![E3 vs Carbon (Total)](Images/E3_vs_Carbon%28Total%29.png)
+- ![E1 vs Carbon (NoScope3)](Images/E1%20vs%20Carbon%20%28NoScope3%29.png)  
+- ![E1 vs Carbon (Total)](Images/E1%20vs%20Carbon%20%28Total%29.png)  
+- ![E2 vs Carbon (Total)](Images/E2%20vs%20Carbon%20%28Total%29.png)  
+- ![E3 vs Carbon (Total)](Images/E3%20vs%20Carbon%20%28Total%29.png)  
 
 ### 2) Results — **E** vs Carbon Intensity
 
