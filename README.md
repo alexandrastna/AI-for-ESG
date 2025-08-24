@@ -1217,6 +1217,8 @@ _All ESG variants also show **positive** r (0.25 → 0.61)._
 - My Phase-9 score designs (quantity, earnings-only, no-ESG-docs, pos-minus-neg, etc., with/without SASB) **do not produce a decarbonization ranking** out-of-the-box.  
 - Instead, they capture **communication intensity/positivity** about ESG (especially E), which can be **higher in heavy-emitting sectors**.  
 
+---
+
 ### Part C — My **ESG totals** vs **Refinitiv ESG / ESGC** (2022)
 
 We compare my 10 ESG variants with Refinitiv’s:
@@ -1272,6 +1274,8 @@ For each variant I report:
 - **Against Ref_ESGC (with controversies overlay).** **ESG6** (*no-ESG-docs + SASB*) and **ESG5** (*no-ESG-docs*) show **moderate positive rank alignment** (ρ ≈ **0.61/0.56**, τ-b ≈ **0.45/0.41**) and the **smallest MAR** (**2.1–2.3**). Value correlations are positive but not significant.
 - **What changes with the controversies overlay?** Removing firm-produced ESG docs in my variants (**ESG5/ESG6**) seems to **reduce “self-promotion” bias**, making my lists **closer to ESGC**, which itself penalizes controversies. In contrast, variants that lean on earnings, positivity, or firm ESG docs align **less** with Refinitiv’s orderings.
 - **Net:** My scores are **closer to Ref_ESGC** than to Ref_ESG, but agreement is still **modest** on this sample.
+
+---
 
 ### Part D — My **ESG totals** vs **Refinitiv Controversies**
 
@@ -1358,6 +1362,147 @@ Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon 
 - **Conclusion.** Neither my text-based scores **nor** Refinitiv’s E/ESG scores can be treated as **decarbonization measures** in this data slice.  
   - For **decarbonization targeting**, use **carbon intensity** directly or build a **purpose-designed E pillar** (e.g., penalizing emissions mechanically, sector-adjusted).  
   - Use **Refinitiv** and my variants for **broader ESG/communication** signals, not as a carbon proxy.  
+
+---
+
+## Part F — Predictive decarbonization (t → t+1)
+
+**What I’m testing.** Do my 2021 scores forecast 2022 carbon intensity?  
+
+For each score *S<sub>t</sub>* (ESG1…ESG10 and E1…E10) I run OLS with HC3 SEs:  
+
+- **Levels:**  
+  log(1 + Carbon<sub>t+1</sub>) = α + β · S<sub>t</sub> + ε  
+  → If scores capture transition, expect **β < 0** (higher score today → lower carbon level tomorrow).  
+
+- **Changes:**  
+  Δlog Carbon = log(1+Carbon<sub>t+1</sub>) − log(1+Carbon<sub>t</sub>) = α + β · S<sub>t</sub> + ε  
+  and %Δ Carbon = α + β · S<sub>t</sub> + ε  
+  → Here β < 0 means higher score today → decline in carbon next year.  
+
+I do this for **Total (Scope 1–3)** and **NoScope3 (Scope 1–2)**.  
+Sample: *n = 10 firms present in 2021 & 2022*.  
+
+
+### How to read
+
+- **β (beta):** effect size. Scores are in [0,1]; a +0.10 change in the score shifts the outcome by 0.10 × β.  
+- **log(1+Carbon):** a change of Δ ≈ Δ×100% change in the original carbon measure.  
+- **Δlog Carbon:** directly an approximate % change (e.g., −0.05 ≈ −5%).  
+- **p-value:** probability of seeing the effect if the true effect were zero (smaller = stronger evidence). With n = 10, treat p-values as exploratory.  
+
+### Results — Levels (log(1+Carbon<sub>t+1</sub>))
+
+**ESG variants**  
+- **Scope 1–3 (Total):** clear β > 0 for ESG3 (+126.90, p<0.001) and ESG4 (+66.91, p<0.001). ESG10 (+14.52, p≈0.001) and ESG8 (+11.60, p≈0.022) are also positive.  
+- **Scope 1–2:** ESG3 is positive and significant (+75.77, p<0.001); the rest small / ns.  
+
+*Reading.* These β > 0 go against a decarbonization signal: higher ESG today → higher carbon levels tomorrow, consistent with a size/sector/communication-volume channel rather than “transition”.  
+
+**E pillar (check)**  
+- **Scope 1–3:** E8 positive (≈ +8.77, p≈0.049); others mostly positive and ns.  
+- **Scope 1–2:** E3 positive and significant (≈ +42.12, p<0.001).  
+
+**Selected coefficients (levels) — “decarbonization” hypothesis (expects β<0):**
+
+| Spec | Predictor | β (level) | p-value | R²   | Meets expectation (β<0)? |
+|------|-----------|-----------|---------|------|--------------------------|
+| S1–3 | ESG3      | +126.90   | <0.001  | 0.684| ❌ |
+| S1–3 | ESG4      | +66.91    | <0.001  | 0.683| ❌ |
+| S1–3 | ESG8      | +11.60    | 0.022   | 0.160| ❌ |
+| S1–3 | ESG10     | +14.52    | 0.001   | 0.202| ❌ |
+| S1–2 | ESG3      | +75.77    | <0.001  | 0.201| ❌ |
+| S1–3 | E8        | +8.77     | 0.049   | 0.304| ❌ |
+| S1–2 | E3        | +42.12    | <0.001  | 0.661| ❌ |
+
+*Note.* With scores in [0,1], a +0.10 increase in ESG3 (Total) implies ≈ +12.7 in log(1+Carbon) next year — directionally higher carbon.  
+
+### Results — Changes (Δlog and %Δ)
+
+- **Δlog (S1–3):** no significant predictors; signs mixed/small.  
+- **Δlog (S1–2):** ESG4 is negative and significant (≈ −4.75, p≈0.003) → higher ESG4 in 2021 associates with lower Scope 1–2 in 2022. Others mostly negative but ns.  
+- **%Δ:** none significant. Some modest negatives on S1–2 (e.g., ESG8/ESG10 p≈0.12–0.15).  
+
+**Selected coefficients (changes) — “decarbonization” hypothesis (expects β<0):**
+
+| Spec | Predictor | β (Δlog) | p-value | R²   | Meets expectation (β<0)? |
+|------|-----------|----------|---------|------|--------------------------|
+| S1–2 | ESG4      | −4.75    | 0.003   | 0.304| ✅ |
+| S1–3 | ESG3      | −10.14   | 0.485   | 0.087| ✅ (ns) |
+
+Under the inverse hypothesis (expects β > 0), none of the change-specs turn significant; the strong result remains ESG4 → lower next-year Scope 1–2.  
+
+
+### 7bis — Inverse hypothesis sanity check (expects β > 0)
+
+Because the “decarbonization” tests mostly showed β > 0, I flipped the hypothesis and re-ran the same specs asking: **do higher scores predict higher future carbon?**  
+
+*Reading reminder.* Scores are in [0,1]. A +0.10 move in a score changes the outcome by 0.10 × β.  
+
+- **Levels:** log(1+Carbon<sub>t+1</sub>) = α + β·S<sub>t</sub> + ε → β>0 means higher future carbon levels.  
+- **p-value:** smaller ⇒ stronger evidence the effect isn’t just noise (here: exploratory, n=10).  
+
+**Top positive coefficients (levels) — inverse lens (β>0):**
+
+| Spec | Predictor | β (level) | p-value | R²   | Meets expectation (β>0)? |
+|------|-----------|-----------|---------|------|--------------------------|
+| S1–3 | ESG3      | +126.90   | <0.001  | 0.684| ✅ |
+| S1–3 | ESG4      | +66.91    | <0.001  | 0.683| ✅ |
+| S1–3 | ESG10     | +14.52    | 0.001   | 0.202| ✅ |
+| S1–3 | ESG8      | +11.60    | 0.022   | 0.160| ✅ |
+| S1–2 | ESG3      | +75.77    | <0.001  | 0.201| ✅ |
+| S1–3 | E8        | +8.77     | 0.049   | 0.304| ✅ |
+| S1–2 | E3        | +42.12    | <0.001  | 0.661| ✅ |
+
+*Quick note on changes (Δlog, %Δ):* under β>0, no change-spec turns significantly positive; effects are small/mixed (consistent with noisy year-over-year moves and the tiny sample).  
+
+**Bottom line.** Under the inverse lens, many ESG/E variants meet β>0—several at conventional significance—reinforcing that my current text-based designs do not encode decarbonization. They align more with communication intensity / firm size / sector than with prospective carbon reductions.  
+
+
+### What this says
+
+- In **levels**, the strongest signals (ESG3/ESG4/ESG8/ESG10; E3/E8) are positive — higher score today ↔ higher carbon tomorrow.  
+- Together with the 7bis run, this supports the earlier conclusion that my designs capture communication intensity/positivity and firm scale/sector, not a transition signal.  
+- In **changes**, only ESG4 (S1–2) clearly lines up with lower next-year carbon.  
+
+*Caveats.* Tiny n = 10, single-year window (2021→2022).  
+
+---
+
+## Part G — Predictive controversies (t → t+1)
+
+**Question.** Do my 2021 scores forecast 2022 Refinitiv Controversies (*Ref_C*, higher = fewer controversies)?  
+
+- **A. Simple:** Ref_C<sub>t+1</sub> = α + β · S<sub>t</sub> + ε → expect β > 0 (higher score today → fewer controversies next year).  
+- **B. With baseline risk:** Ref_C<sub>t+1</sub> = α + β · S<sub>t</sub> + γ · Ref_C<sub>t</sub> + ε (controls for each firm’s starting controversy level).  
+
+
+### Results — Model A (no baseline control)
+
+No significant positive association for ESG1…ESG10 or E1…E10; signs are mixed.  
+
+### Results — Model B (controls for Ref_C<sub>t</sub>)
+
+Several β’s turn negative and hover near the 10% level (suggesting no improvement once baseline risk is considered):  
+
+| Predictor set | Most notable β (expect >0) | β       | p-value | R²   |
+|---------------|-----------------------------|---------|---------|------|
+| ESG           | ESG9                        | −162.74 | 0.065   | 0.547|
+| ESG           | ESG1                        | −745.20 | 0.097   | 0.644|
+| E             | E9                          | −86.02  | 0.072   | 0.555|
+| E             | E8                          | −88.46  | 0.093   | 0.622|
+| E             | E10                         | −87.01  | 0.109   | 0.631|
+
+*Reading.* Ref_C<sub>t</sub> is persistent (high R²). After accounting for it, I do not see evidence that higher scores lead to fewer controversies next year. The weak negatives likely reflect mean reversion, announcement timing, or simply noise in a very small sample.  
+
+**Bottom line.** On this dataset, my scores are not reliable early-warning indicators for future controversies. To test this fairly, I need more firms/years, sector & size controls, richer outcomes (event counts/severity), and longer lags.  
+
+## Where this leaves the project
+
+The prospective checks line up with the same-year analyses: current score designs mostly capture communication intensity/positivity (and sector/scale), not future decarbonization or risk reduction.  
+
+**Useful, but not a “transition” signal yet.**  
+
 
 ### 📎 Notebook
 
