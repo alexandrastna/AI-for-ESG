@@ -303,22 +303,21 @@ We use the **ESGBERT transformer models**, available from HuggingFace ([ESGBERT 
 - `SocialBERT` for social-related content,
 - `GovernanceBERT` for governance themes.
 
-Each sentence is passed through all three models. Each model returns:
+Each sentence is passed through all three models, which are binary classifier for a signel pillar (E, S, or G). Each model returns:
 - a **label** (either the target class or `"none"`),
-- and a **confidence score** between `0` and `1`.
+- a sigmoid probability in `[0,1]` independently of the other pillars (this is multi-label scoring, not a softmax that sums to 1 across classes).
 
-Example result:
+**Example result:**
 
 | company                   | year | document_type       | sentence                                                                                                                                                       | label_env   | score_env | label_soc | score_soc | label_gov | score_gov |
 |---------------------------|------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
 | Compagnie Financière Richemont | 2022 | Sustainability Report | Chaired by dunhill’s CEO, the newly appointed Sustainability Committee ensures the implementation of Richemont’s strategy across the business... | environmental | 0.989977  | social    | 0.996938  | none      | 0.774423  |
 
 
-
-Then, for each sentence:
-- If the model predicts a relevant ESG category (e.g. `"environmental"`, `"social"`...), it returns a confidence score for that label.
-- If no category surpasses a **confidence threshold of 0.5**, the sentence is assigned the label `"none"`.
-- A **majority label** (or more precisely, the label with the highest score above 0.5) is then computed across the three categories.
+We treat the three pillar models independently (multi-label). For downstream aggregation, we then derive a single **dominant label** per sentence as follows:
+- keep all pillars with score > 0.50 (detection threshold);
+- if none exceed 0.50 → label = none;
+- if one or more exceed 0.50 → label = the pillar with the highest score (argmax);
 
 This approach ensures that **each sentence is independently evaluated** for its ESG relevance, allowing nuanced and overlapping classifications.
 
@@ -333,7 +332,7 @@ After all batches are processed, they are concatenated into a single file and a 
 
 ### ⚙️ Running on GPU to Save Time (and Money)
 
-Running transformer models is computationally intensive. Fortunately, Google Colab occasionally offers **free GPU access**. I was able to access a GPU for this classification step, which brought the total runtime down to just over **1 hour**.
+Running transformer models is computationally intensive. Fortunately, Google Colab occasionally offers **free GPU access** (NVIDIA T4, 16 GB VRAM). I was able to access a GPU for this classification step, which brought the total runtime down to just over **1 hour**.
 
 Without GPU, this task would likely take several **hours or even days**, depending on hardware. However, after using the GPU for one full classification session, it became unavailable for the rest of the day — highlighting the **budgetary and infrastructural constraints** of this kind of academic project.
 
@@ -364,6 +363,12 @@ Each sentence is assigned to a **classification type** based on whether one or m
 - `E`, `S`, or `G`: when exactly one pillar is confidently dominant
 - `multi (2)` or `multi (3)`: when two or all three labels are simultaneously strong
 - `none`: when the classification is "none", or when no score exceeds the 0.9 threshold
+
+> *Threshold policy*. We use two thresholds for different purposes:
+> 
+> • 0.50 (detection): minimal confidence to count a sentence as ESG for label assignment (dominant label) and for most analyses.
+> 
+> • 0.90 (high-precision subset): a stricter filter used in selected charts to highlight high-confidence ESG mentions. This favors precision over recall (conservative view of ESG coverage).
 
 📊 **Distribution of classification types** (with score > 0.9):
 
