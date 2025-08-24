@@ -336,6 +336,11 @@ Running transformer models is computationally intensive. Fortunately, Google Col
 
 Without GPU, this task would likely take several **hours or even days**, depending on hardware. However, after using the GPU for one full classification session, it became unavailable for the rest of the day — highlighting the **budgetary and infrastructural constraints** of this kind of academic project.
 
+**Overview - ESG classification pipeline:**  
+
+![Transformer ESG pipeline](Images/Transformer_ESG_pipeline.svg)
+
+
 > 💡 The entire classification pipeline - loading models, batching, applying prediction, and saving results — is detailed in :
 > [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
 
