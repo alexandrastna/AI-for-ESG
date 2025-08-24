@@ -10,10 +10,12 @@ Through a series of notebooks, we:
 
 - Build a structured and metadata-rich corpus from raw PDFs.
 - Extract clean, self-contained sentences for NLP processing.
-- Classify sentences using **ESGBERT** and **FinBERT** models.
-- Benchmark results against **GPT-3.5** predictions and human annotations.
-- Design and compare **10 ESG scoring methods**, with and without **SASB materiality weights**.
+- Classify sentences using ESGBERT (ESG pillars), FinBERT (sentiment), and GPT-3.5 (alternative classifier).
+- Benchmark results against human annotations to evaluate model performance.
+- Design and compare 10 ESG scoring methods, with and without SASB materiality weights.
 - Visualize and interpret inter-company differences in ESG communication.
+- Compare SASB-derived pillar weights with Refinitiv ESG weights to test alignment with market standards.
+- Validate and stress-test the scores against external benchmarks (carbon intensity, Refinitiv ESG/ESGC, and Refinitiv controversies), including predictive checks (2021 → 2022).
 
 ## Data Disclaimer
 
@@ -36,12 +38,12 @@ Through a series of notebooks, we:
   - [Phase 7 : GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)](#phase-7--gpt-35-batch-sentiment-classification-as-finbert-alternative)
   - [Phase 7.1 : Creating .jsonl batch files](#phase-71--creating-jsonl-batch-files)
   - [Phase 7.2 : Process output files returned by OpenAI](#phase-72--process-output-files-returned-by-openai)
-  - [Phases 8 : Model Benchmarking on ESG and Sentiment Classification](#phase-8--model-benchmarking-on-esg-and-sentiment-classification)
+  - [Phase 8 : Model Benchmarking on ESG and Sentiment Classification](#phase-8--model-benchmarking-on-esg-and-sentiment-classification)
   - [Phase 8.1 : Creating the Gold Standard Dataset](#phase-81--creating-the-gold-standard-dataset)
   - [Phase 8.2 : Model Evaluation and Comparison](#phase-82--model-evaluation-and-comparison)
   - [Phase 9 : ESG Scoring Methods and Comparison](#phase-9--esg-scoring-methods-and-comparison)
   - [Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights](#phase-10--comparing-sasb-hybrid-weights-with-refinitiv-esg-weights)
-
+  - [Phase 11 : Validation and Predictive Testing of ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (2021–2022)](#phase-11--validation-and-predictive-testing-of-esg-scores-vs-carbon-intensity-refinitiv-scores-and-controversies-20212022)
 
 ## 🗂️ Repository Structure
 
@@ -82,6 +84,16 @@ Through a series of notebooks, we:
 ## Phase 0 : Data Collection
 
 This project begins with the manual construction of a high-quality document corpus based on **publicly available corporate information** from companies listed in the **Swiss Market Index (SMI)**. To ensure data consistency and feasibility, we focus on the **top 10 SMI companies by market capitalization**, over the **2021–2023** period. These three years provide a sufficiently recent and rich dataset, with wide availability of sustainability and governance disclosures.
+
+The sample also covers a **diverse set of industries**, included sectors are:  
+- Electrical & Electronic Equipment  
+- Processed Foods  
+- Biotechnology & Pharmaceuticals  
+- Apparel, Accessories & Footwear  
+- Insurance  
+- Asset Management & Custody Activities  
+- Construction Materials  
+
 
 ### 🔍 Selected Sources of Information 
 
@@ -267,7 +279,7 @@ Each document is parsed **page by page**, applying a series of custom cleaning o
 
 The resulting sentences were then saved to CSV for further processing.
 
-Due to the complexity of the documents and the amount of layout noise, **this step took over 30 minutes to run** and had to be repeated **entirely from scratch**. Initially, I proceeded with the pipeline, assuming the extraction quality was sufficient. However, at the NLP classification stage, I noticed that the results were poor — many "sentences" were in fact titles, footers, page numbers, or table of contents entries that had been incorrectly parsed as meaningful content.
+Due to the complexity of the documents and the amount of layout noise, **this step took significant runtime (≈30 min on Colab with GPU)** and had to be repeated **entirely from scratch**. Initially, I proceeded with the pipeline, assuming the extraction quality was sufficient. However, at the NLP classification stage, I noticed that the results were poor — many "sentences" were in fact titles, footers, page numbers, or table of contents entries that had been incorrectly parsed as meaningful content.
 
 This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
 
@@ -1010,7 +1022,8 @@ A few selected examples illustrate where the two methodologies converge or diver
 
 ---
 
-## Phase 11 : Validating My ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (Year = 2022)
+## Phase 11 : Validation and Predictive Testing of ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (2021–2022)
+
 
 This phase stress‑tests my **E pillar** and **total ESG scores** against external signals:
 1) **Carbon intensity** (Refinitiv): do *higher* scores line up with *lower* emissions?
@@ -1066,6 +1079,7 @@ Metrics — what each one measures (and how to read them)**
   - For **my ESG vs Refinitiv ESG/ESGC**: **positive** r ⇒ similar scaling across vendors (even if absolute ranges differ).
 
 ### Part A & B  
+
 **Validating my E/ESG scores vs Carbon Intensity (2022)**
 
 This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>**) and **ESG** totals (**ESG<sub>1..10</sub>**) against **Refinitiv carbon intensity**:
@@ -1320,6 +1334,8 @@ For each ESG<sub>k</sub>:
   3) **ESG4/ESG3** (Earnings-focused) → useful secondary signals; strongest Top-3 overlap.
 - Keep sample size in mind. These are **consistency checks**, not causal claims. Still, the pattern suggests that **less curated sources** (core reports, earnings calls) and **materiality weighting** (SASB) are better aligned with third-party controversy assessments.
 
+---
+
 ### Part E — **Refinitiv** scores vs **Carbon Intensity**
 
 If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negative Pearson** and strong rank agreement with low carbon.
@@ -1497,17 +1513,36 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 
 **Bottom line.** On this dataset, my scores are not reliable early-warning indicators for future controversies. To test this fairly, I need more firms/years, sector & size controls, richer outcomes (event counts/severity), and longer lags.  
 
-## Where this leaves the project
+**Key Takeaways for this part:**
 
-The prospective checks line up with the same-year analyses: current score designs mostly capture communication intensity/positivity (and sector/scale), not future decarbonization or risk reduction.  
+- **Carbon intensity (validation):**  
+  My E-pillar and ESG variants show **positive correlations with emissions** (Scope 1–3 and Scope 1–2), especially for **E3/E4** and **SASB-weighted designs**.  
+  Rank agreement is weak/negative, and **top-3 overlaps are minimal**.  
+  Refinitiv’s own E/ESG scores also fail to align with carbon, suggesting both sets of scores reflect **communication breadth/positivity** rather than decarbonization.  
 
-**Useful, but not a “transition” signal yet.**  
+- **Refinitiv ESG/ESGC (validation):**  
+  Alignment with **Ref_ESG (no controversies)** is weak or negative.  
+  Convergence improves modestly with **Ref_ESGC (with controversies)**, especially for **ESG5/ESG6 (no-ESG-docs variants)**, which reduce self-promotional bias.  
 
+- **Refinitiv Controversies (validation):**  
+  Best alignment comes from **ESG6/ESG5 (no-ESG-docs)** and **E3/E4 (earnings-based)**.  
+  Tone-based scores (positive-only, net-sentiment) align poorly, indicating they capture **communication tone** rather than risk.  
 
-### 📎 Notebook
+- **Predictive decarbonization (2021 → 2022):**  
+  Instead of predicting **lower emissions**, several variants (notably **ESG3/ESG4**) predict **higher carbon levels**, consistent with **firm size/sector** or **communication intensity**.  
+  Only **ESG4 (Scope 1–2)** shows a significant negative effect.  
+
+- **Predictive controversies (2021 → 2022):**  
+  My 2021 scores do **not** reliably forecast 2022 controversies.  
+  After controlling for baseline risk (**Ref_C<sub>t</sub>**), coefficients are **weakly negative**, likely reflecting **noise or mean reversion**.  
+
 
 > 💡 The full code and results are available in:  
 > [11_Thesis.ipynb](Notebooks/11_Thesis.ipynb)
+
+---
+
+## Conclusion
 
 
 
