@@ -307,18 +307,18 @@ Each sentence is passed through all three models. Each model returns:
 - a **label** (either the target class or `"none"`),
 - and a **confidence score** between `0` and `1`.
 
-### 🔍 How the classification works
-
-For each sentence:
-- If the model predicts a relevant ESG category (e.g. `"environmental"`, `"social"`...), it returns a confidence score for that label.
-- If no category surpasses a **confidence threshold of 0.5**, the sentence is assigned the label `"none"`.
-- A **majority label** (or more precisely, the label with the highest score above 0.5) is then computed across the three categories.
-
 Example result:
 
 | company                   | year | document_type       | sentence                                                                                                                                                       | label_env   | score_env | label_soc | score_soc | label_gov | score_gov |
 |---------------------------|------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
 | Compagnie Financière Richemont | 2022 | Sustainability Report | Chaired by dunhill’s CEO, the newly appointed Sustainability Committee ensures the implementation of Richemont’s strategy across the business... | environmental | 0.989977  | social    | 0.996938  | none      | 0.774423  |
+
+
+
+Then, for each sentence:
+- If the model predicts a relevant ESG category (e.g. `"environmental"`, `"social"`...), it returns a confidence score for that label.
+- If no category surpasses a **confidence threshold of 0.5**, the sentence is assigned the label `"none"`.
+- A **majority label** (or more precisely, the label with the highest score above 0.5) is then computed across the three categories.
 
 This approach ensures that **each sentence is independently evaluated** for its ESG relevance, allowing nuanced and overlapping classifications.
 
@@ -337,7 +337,7 @@ Running transformer models is computationally intensive. Fortunately, Google Col
 
 Without GPU, this task would likely take several **hours or even days**, depending on hardware. However, after using the GPU for one full classification session, it became unavailable for the rest of the day — highlighting the **budgetary and infrastructural constraints** of this kind of academic project.
 
-> 💡 The entire classification pipeline — loading models, batching, applying prediction, and saving results — is detailed in :
+> 💡 The entire classification pipeline - loading models, batching, applying prediction, and saving results — is detailed in :
 > [`4_Thesis.ipynb`](Notebooks/4_Thesis.ipynb)
 
 ---
@@ -356,6 +356,7 @@ Key columns include:
 - `label_env`, `score_env`
 - `label_soc`, `score_soc`
 - `label_gov`, `score_gov`
+- `label_dominant`
 
 ### 🧮 Global Classification Breakdown
 
@@ -381,7 +382,7 @@ The dataset contains sentences from various types of documents (Annual Reports, 
 
 > 🧾 **Annual Reports** clearly dominate in terms of extracted sentence volume, followed by **Earnings Call Transcripts**. This reflects the length and density of these documents. **Sustainability Reports** are significantly shorter in comparison. Governance-specific and Half-Year reports contribute marginally to the overall corpus.
 >
-> However, this distribution is **not uniform across companies**. Some firms, such as Nestlé or UBS, publish multiple earnings call transcripts per year—sometimes including additional materials like fireside chats or analyst sessions—while others provide fewer or none. This heterogeneity impacts the total number of sentences extracted per document type and should be considered when comparing across firms.---
+> However, this distribution is **not uniform across companies**. Some firms, such as Nestlé or UBS, publish multiple earnings call transcripts per year—sometimes including additional materials like fireside chats or analyst sessions—while others provide fewer or none. This heterogeneity impacts the total number of sentences extracted per document type and should be considered when comparing across firms.
 
 ### 🏢 Sentence Counts by Company
 
@@ -497,7 +498,7 @@ The resulting file contains the original ESG sentences along with:
 This output is ready for downstream analysis.
 
 > 💡The code is available in :
-> `Notebooks/Thesis_6.ipynb`
+> `Notebooks/6_Thesis.ipynb`
 
 ---
 
