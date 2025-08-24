@@ -45,7 +45,7 @@ Through a series of notebooks, we:
   - [Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights](#phase-10--comparing-sasb-hybrid-weights-with-refinitiv-esg-weights)
   - [Phase 11 : Validation and Predictive Testing of ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (2021–2022)](#phase-11--validation-and-predictive-testing-of-esg-scores-vs-carbon-intensity-refinitiv-scores-and-controversies-20212022)
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 - `README.md`: This file, providing an overview for the project.
 - `requirements.txt`: List of Python packages required to run the project (transformers, spaCy, torch, etc.).
@@ -498,8 +498,7 @@ The resulting file contains the original ESG sentences along with:
 This output is ready for downstream analysis.
 
 > 💡The code is available in :
-> `Notebooks/6_Thesis.ipynb`
-
+> [`6_Thesis.ipynb`](Notebooks/6_Thesis.ipynb)
 ---
 
 ## Phase 7 – GPT-3.5 Batch Sentiment Classification (as FinBERT Alternative)
