@@ -1579,8 +1579,9 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 
 ## 📌 General Conclusion
 
-### 📊 Visual Recap (Pipeline)
-![ESG End-to-End Pipeline](ESG_end_to_end_pipeline.svg)
+### Visual Recap (Pipeline)
+
+![ESG End-to-End Pipeline](Images/ESG_end_to_end_pipeline.svg)
 
 
 ### Limitations
