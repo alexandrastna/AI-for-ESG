@@ -833,7 +833,9 @@ This hybrid weighting approach allows for a **balanced yet sector-aware** ESG sc
 **📚 Reference and Rationale**
 
 > “Each company determines which sustainability-related risks and opportunities are relevant to its business. The Standard is designed for the typical company in an industry, but individual companies may choose to report on different sustainability-related risks and opportunities based on their unique business model.”  
-— *SASB Standards Guide*
+— *SASB Standards Guide* [^sasb]
+
+[^sasb]: SASB Standards Guide, *Materiality Map*, [link](https://sasb.ifrs.org/standards/materiality-finder/find/).
 
 **Example mapping (Holcim, Construction Materials):**
 - Environmental: Air Quality, Ecological Impacts, Energy Management, GHG Emissions, Product Design & Lifecycle Management, Waste & Hazardous Materials Management, Water & Wastewater Management
@@ -841,8 +843,6 @@ This hybrid weighting approach allows for a **balanced yet sector-aware** ESG sc
 - Governance: Competitive Behaviour
 
 By integrating both **industry-level guidance (SASB)** and **baseline equity among ESG dimensions**, this method supports **comparability across companies** while retaining sectoral specificity.
-
-Reference: [SASB Materiality Map](https://sasb.ifrs.org/standards/materiality-finder/find/)
 
 ### 🧮 ESG Score Formulas
 
