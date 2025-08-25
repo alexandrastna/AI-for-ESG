@@ -44,11 +44,12 @@ Through a series of notebooks, we:
   - [Phase 9 : ESG Scoring Methods and Comparison](#phase-9--esg-scoring-methods-and-comparison)
   - [Phase 10 : Comparing SASB Hybrid Weights with Refinitiv ESG Weights](#phase-10--comparing-sasb-hybrid-weights-with-refinitiv-esg-weights)
   - [Phase 11 : Validation and Predictive Testing of ESG Scores vs Carbon Intensity, Refinitiv Scores, and Controversies (2021–2022)](#phase-11--validation-and-predictive-testing-of-esg-scores-vs-carbon-intensity-refinitiv-scores-and-controversies-20212022)
+- [General Conclusion](#-general-conclusion)
 
 ## Repository Structure
 
-- `README.md`: This file, providing an overview for the project.
-- `requirements.txt`: List of Python packages required to run the project (transformers, spaCy, torch, etc.).
+- `README.md`: Project overview, methodology, results, and conclusion.  
+- `requirements.txt`: Python dependencies (transformers, spaCy, torch, etc.).  
 - `Data/`: Directory not included in the repository.  
   - Raw PDFs and sentence datasets are stored on Google Drive.  
   - Output CSVs (e.g. `df_merged_clean.csv`, sentiment results, etc.) are generated during execution.
@@ -64,22 +65,9 @@ Through a series of notebooks, we:
   - `8_1_Thesis.ipynb`: Construction of human-labeled dataset (gold standard).
   - `8_2_Thesis.ipynb`: Evaluation of FinBERT, GPT and ESGBERT against human labels.
   - `9_Thesis.ipynb`: ESG scoring logic and comparison of 10 scoring methods.
-- `Images/`: Directory containing graphs and visualizations.
-  - `Comparison_Accuracy.png`
-  - `Comparison_Macro F1.png`
-  - `Comparison_Weighted F1.png`
-  - `Confusion_ESG GPT vs ESGBERT.png`
-  - `Confusion_ESG GPT vs Human.png`
-  - `Confusion_ESGBERT vs Human (without none).png`
-  - `Confusion_ESGBERT vs Human.png`
-  - `Confusion_Sentiment - FinBert vs Human.png`
-  - `Confusion_Sentiment - GPT vs Human.png`
-  - `Distribution of Sentences by ESG Classification Type.png`
-  - `Dominant Label Distribution by Company (no score threshold).png`
-  - `Proportion of ESG-Classified Sentences over Total by Company (by dominant label).png`
-  - `Proportion of ESG-Classified Sentences over Total by Company (score > 0.9).png`
-  - `Total Number of Classified Sentences per Company.png`
-  - `Total Number of Sentences per Document Type.png`
+  - `10_Thesis.ipynb`: Comparison of SASB weights vs Refinitiv weights.
+  - `11_Thesis.ipynb`: Validation & predictive tests (carbon intensity, Refinitiv ESG/ESGC, controversies).
+- `Images/`: Directory containing graphs and visualizations generated in notebooks (confusion matrices, score comparisons, sentence distributions, etc.).
 
 ## Phase 0 : Data Collection
 
@@ -1590,6 +1578,10 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 ---
 
 ## 📌 General Conclusion
+
+### 📊 Visual Recap (Pipeline)
+![ESG End-to-End Pipeline](ESG_end_to_end_pipeline.svg)
+
 
 ### Limitations
 - **Corpus scope**: The dataset covers only the top 10 SMI companies (2021–2023). While this ensures representativeness across key Swiss industries, it excludes mid-sized firms and sectors like energy or transportation. Results may not generalize beyond large-cap, export-oriented firms.  
