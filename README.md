@@ -507,6 +507,15 @@ The resulting file contains the original ESG sentences along with:
 
 This output is ready for downstream analysis.
 
+> **Limitations & domain fit :**
+> FinBERT is purpose-built for **financial** sentiment—pretrained on financial communication (10-K/10-Q, earnings-call transcripts, analyst reports) and commonly fine-tuned on the Financial PhraseBank. ESG discourse uses policy/regulatory/sustainability language that only partly overlaps. In this project we therefore treat FinBERT as a finance-sentiment baseline, not an ESG-specialized classifier, and benchmark it against GPT-3.5 on the same sentences.[^finbert-tone][^prosusai][^araci][^phrasebank]
+
+[^finbert-tone]: Hugging Face — *yiyanghkust/finbert-tone*: https://huggingface.co/yiyanghkust/finbert-tone
+[^prosusai]: Hugging Face — *ProsusAI/finbert* (fine-tuned on Financial PhraseBank): https://huggingface.co/ProsusAI/finbert
+[^araci]: Araci, D. (2019). *FinBERT: Financial Sentiment Analysis with Pre-trained Language Models*. https://arxiv.org/abs/1908.10063
+[^phrasebank]: *Financial PhraseBank* (dataset description): https://www.tensorflow.org/datasets/community_catalog/huggingface/financial_phrasebank
+
+
 > 💡The code is available in :
 > [`6_Thesis.ipynb`](Notebooks/6_Thesis.ipynb)
 ---
@@ -746,7 +755,7 @@ Each method reflects a different underlying assumption about how ESG priorities 
 
 - **Should we account for tone (positive vs. negative) or just presence?**  
   → *Is it enough to track ESG mentions, or should we distinguish between positive and negative statements?*  
-  *(Even advanced LLMs like GPT-3.5 and GPT-4 may struggle with nuanced tone—especially sarcasm or subtle criticism. In that context, focusing on **positive-only** mentions may yield more robust results.)*
+  *(Even advanced LLMs like GPT-3.5 struggled with negative sentences. In that context, focusing on **positive-only** mentions may yield more robust results.)*
 
 This comparative approach helps test the **robustness**, **biases**, and **underlying assumptions** behind different ESG scoring frameworks.
 
@@ -796,6 +805,9 @@ We set:
 - **α = 0.7** as the relative weight given to the SASB-derived proportions (materiality-based)
 - **1 − α = 0.3** to ensure a baseline equal weighting across pillars
 
+> Why α = 0.7 ? We chose α = 0.7 to prioritize materiality (70% SASB-derived) while guaranteeing a floor of 10% per pillar via the equal-weight blend 
+(1−α)/3=0.10. This avoids zeroing any pillar for niche sectors yet keeps more than half of the weight driven by SASB relevance.
+
 Thus, for each company, the final weights are calculated as:
 
 $$
@@ -812,7 +824,7 @@ $$
 
 This ensures:
 
-- No pillar is ever assigned zero weight
+- No pillar is ever assigned zero weight (floor of 10%)
 - More than 50% of the weight (α = 0.7) still reflects the SASB materiality guidance
 - Final weights sum to 1
 
@@ -822,6 +834,11 @@ This hybrid weighting approach allows for a **balanced yet sector-aware** ESG sc
 
 > “Each company determines which sustainability-related risks and opportunities are relevant to its business. The Standard is designed for the typical company in an industry, but individual companies may choose to report on different sustainability-related risks and opportunities based on their unique business model.”  
 — *SASB Standards Guide*
+
+**Example mapping (Holcim, Construction Materials):**
+- Environmental: Air Quality, Ecological Impacts, Energy Management, GHG Emissions, Product Design & Lifecycle Management, Waste & Hazardous Materials Management, Water & Wastewater Management
+- Social: Employee Health & Safety 
+- Governance: Competitive Behaviour
 
 By integrating both **industry-level guidance (SASB)** and **baseline equity among ESG dimensions**, this method supports **comparability across companies** while retaining sectoral specificity.
 
@@ -914,7 +931,7 @@ $$
 
 The comparison table above reveals substantial variations between ESG scores depending on the method used. A few observations stand out:
 
-- Materiality weights (SASB) consistently increase the ESG scores across methods, as seen in the uplift from ESG1 → ESG2, ESG3 → ESG4, etc. This reflects how some companies are stronger in pillars that are more material to their sector.
+- Materiality weights (SASB) consistently increase the ESG scores across methods, as seen in the uplift from ESG1 → ESG2, ESG3 → ESG4, etc. SASB reweights pillars toward sector-material issues; firms whose communication already aligns with those issues see a mechanical uplift when applying SASB weights.
 
 - Earnings call–based scores (ESG3 and ESG4) are significantly lower than those based on full documents. This suggests that ESG communication is less prominent in spoken financial disclosures, possibly due to time constraints or strategic prioritization.
 
@@ -1054,7 +1071,7 @@ A few selected examples illustrate where the two methodologies converge or diver
 
 
 This phase stress‑tests my **E pillar** and **total ESG scores** against external signals:
-1) **Carbon intensity** (Refinitiv): do *higher* scores line up with *lower* emissions?
+1) **Carbon intensity** (tonnes CO2e/$ Million), from Refinitiv: do *higher* scores line up with *lower* emissions?
 2) **Refinitiv ESG/ESGC**: are my rankings consistent with a major vendor’s scores?
 3) **Refinitiv Controversies**: do high scores align with *fewer* controversies?
 
@@ -1427,6 +1444,8 @@ For each score *S<sub>t</sub>* (ESG1…ESG10 and E1…E10) I run OLS with HC3 SE
 I do this for **Total (Scope 1–3)** and **NoScope3 (Scope 1–2)**.  
 Sample: *n = 10 firms present in 2021 & 2022*.  
 
+> ***Identification limits.***
+> With n = 10 firms and a one-year horizon, OLS results are exploratory. A fair test would require panel data (≥5–10 years), sector/size controls, and firm fixed effects.
 
 ### How to read
 
@@ -1570,7 +1589,52 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 
 ---
 
-## Conclusion
+## 📌 General Conclusion
 
+### Limitations
+- **Corpus scope**: The dataset covers only the top 10 SMI companies (2021–2023). While this ensures representativeness across key Swiss industries, it excludes mid-sized firms and sectors like energy or transportation. Results may not generalize beyond large-cap, export-oriented firms.  
+- **Textual reliance**: All scores are derived from corporate disclosures (reports, earnings calls, websites). These reflect **communication strategies**, not necessarily real-world ESG performance.  
+- **Text extraction risk**: Despite improved cleaning, PDF parsing can still leak titles, boilerplate, tables of contents, or fragmented lines. Any residual noise propagates into models and scores.  
+- **Annotation constraints**: The “gold standard” annotations rely on a single annotator, following GPT-prompt guidelines. ESG and sentiment categories are subjective; inter-annotator agreement was not measured.  
+- **Small-n validation**: External checks rely on only 10 firms (one-year forward), so correlations/regressions are exploratory and sensitive to chance, sector mix, and document selection.  
+- **Compute & cost**: GPU type/availability (e.g., T4 in Colab) and API token budgets constrained prompt length and batch design. Longer, more explicit prompts could improve consistency but increase cost.  
+- **Design choices**: Thresholds, document filters, and SASB α-weights materially influence rankings and should be seen as modeling assumptions rather than objective truths.  
+- **Model constraints**: ESGBERT, FinBERT, and GPT capture sentence-level signals but suffer from **context loss**, potential misclassifications, and training biases.  
+- **Benchmarking limits**: Comparisons with Refinitiv ESG, controversies, and carbon intensity show only partial alignment. This raises questions about what “ground truth” ESG should represent.  
+- **Temporal scope (brief)**: The corpus (2021–2023) largely precedes stricter Swiss sustainability reporting laws; see reflections below for implications.  
+
+### Project Findings
+- **They measure communication, not outcomes**: Scores track what firms talk about (and how positively), not verified ESG performance. In this sample, higher E/ESG scores often co-move with higher emissions — consistent with size/sector and disclosure intensity rather than decarbonization.  
+- **Vendor disagreement is real**: Even baseline vendor metrics (Refinitiv) show weak links to carbon intensity. If widely used commercial scores don’t align with decarbonization in this slice, we should not expect simple text-only composites to do so either.  
+- **Sentiment ≠ risk**: Positive tone often reflects narrative management. Tone-driven variants aligned poorly with controversies, while “no-ESG-docs” variants aligned better — hinting at marketing bias in ESG-branded reports.  
+- **Construct validity challenge**: “ESG” is multidimensional and context-dependent. Without explicit impact variables (e.g., verified KPIs, incidents, fines), text signals alone are insufficient to claim reliable environmental or social measurement.  
+- **Weighting matters**: Incorporating SASB materiality weights shifts results substantially, particularly in industries with very asymmetric E/S/G relevance.  
+- **Model comparison**:  
+  - **ESGBERT > GPT-3.5** for structured ESG tagging (higher precision, scalable).  
+  - **GPT-3.5 > FinBERT** for sentiment classification (with `temperature=0`).  
+- **Variants matter**: “No-ESG-docs” (+/- SASB) variants align better with controversies than positivity- or earnings-based ones.  
+- **Predictive power is weak**: Forward-looking tests (t→t+1) showed limited explanatory power for carbon intensity or controversies.  
+
+### Implications for ESG Scoring
+- **Disclosure ≠ performance**: Both custom and vendor scores primarily reflect **communication breadth and positivity**, not real-world decarbonization.  
+- **Methodological transparency**: By building scores openly, this project highlights the **assumptions, design choices, and biases** that shape ESG ratings — an interpretability step often absent in proprietary systems.  
+- **Hybrid necessity**: Pure text-based ESG scores should be complemented by **quantitative indicators** (emissions data, workforce diversity, compliance records) to avoid overweighting narrative disclosure.  
+- **Critical takeaway**: ESG scores are not objective truths but **constructed indicators**. Their validity depends on **what documents are included, how models interpret them, and how results are weighted**. Users should read them as **narratives of ESG discourse**, not as direct measures of sustainability performance.  
+
+### 🚨 Broader Reflections: ESG Communication vs. ESG Reality
+
+One of the strongest insights from this project is the prevalence of **greenwashing dynamics**:
+
+- Firms with the **highest emissions and environmental footprints** often produced the **largest volume of ESG communication**. High ESG scores in text coexisted with poor climate performance — suggesting disclosure is used as **reputation management** rather than proof of impact.  
+- **Sustainability reports** were the most biased source: scores built **without** these documents aligned better with controversies and external checks. This points to ESG-branded reports being particularly prone to **self-promotion and narrative control**.  
+- As long as ESG assessment relies on **unstructured, voluntary, and unverified corporate communication**, the results will reflect **what companies want to say**, not what they actually do.  
+
+⚠️ Temporal scope (expanded). Most of the corpus (2021–2023, validated on 2022) predates full enforcement of Switzerland’s newer sustainability rules. The non-financial reporting provisions (CO art. 964a–964c) entered into force in 2022 (applicable from FY 2023, first reports published in 2024) [^deloitte] [^homburger]. The Ordinance on Climate Disclosures has applied since 1 Jan 2024 [^admin]. Under current Swiss law, the non-financial report is not subject to mandatory external assurance (though some issuers voluntarily obtain limited assurance on selected indicators) [^deloitte]. These timing and assurance features likely contributed to the more marketing-driven narratives observed in this study.  
+
+👉 Future research should revisit these methods once **mandatory, standardized, and externally assured reports** become available, to compare whether the prevalence of greenwashing and narrative-driven disclosure decreases under stricter legal frameworks.  
+
+[^deloitte]: Deloitte (2024), *Swiss ESG reporting obligations: Implementation of art. 964a–964c CO*, [link](https://www2.deloitte.com/ch/en/pages/audit/articles/swiss-esg-reporting-obligations.html).  
+[^homburger]: Homburger (2022), *New ESG reporting obligations under Swiss law*, [link](https://www.homburger.ch/en/insights/new-esg-reporting-obligations-under-swiss-law).  
+[^admin]: Swiss Federal Council (2022), *Ordinance on Climate Disclosures based on the TCFD Recommendations*, [news.admin.ch](https://www.admin.ch/gov/en/start/documentation/media-releases.msg-id-86906.html).  
 
 
