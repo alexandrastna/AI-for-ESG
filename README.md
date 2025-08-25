@@ -519,7 +519,7 @@ In this step, we test **GPT-3.5** as an alternative to the **FinBERT classifier*
 
 We chose **GPT-3.5** because:
 
-- It offers a **significantly lower cost** than GPT-4:
+- It offers a **significantly lower cost** than GPT-4 (*prices as of August 2025, see vendor pricing page for current rates*):
   - GPT-3.5-turbo-0125: ~$0.50 per 1,000 requests (1-token outputs)
   - GPT-4-turbo: ~$10–15 per 1,000 requests (depending on context size)
 - For a **simple classification task** like ours—predicting `positive`, `neutral`, or `negative`—GPT-4 would be overkill.
@@ -533,7 +533,7 @@ Rather than sending thousands of API calls one-by-one from Google Colab (which w
 - OpenAI processes them asynchronously in the cloud.
 - You receive a single `.jsonl` file with all the results.
 
-This approach is up to **100× faster** than looping inside Colab—but it has limitations:
+In my benchmarks, batch processing proved to be dramatically faster (close to two orders of magnitude) compared to client-side loops, while also being more stable for large workloads. However, it also has limitations :
 
 - **Only one batch job can run at a time**.
 - Each batch can take **up to 24 hours** to complete.
@@ -597,7 +597,12 @@ This format is **lightweight**, line-by-line **parseable**, and highly efficient
 
 ## Phase 8 : Model Benchmarking on ESG and Sentiment Classification
 
-This section evaluates the **performance of multiple classification models** on a carefully curated, human-annotated dataset of 188 ESG-related sentences. The goal is to compare both **ESG pillar classification** and **sentiment analysis** across three major approaches:
+This section evaluates the **performance of multiple classification models** on a carefully curated, human-annotated dataset of 188 ESG-related sentences.
+> ***Annotation protocol:***
+>
+> All labels in the gold-standard set were annotated by me using the same operational definitions as the GPT-3.5 prompt presented below. While I would ideally rely on multiple annotators and report inter-annotator agreement (e.g., Cohen’s κ), this was not feasible within the scope of this project due to time and resource constraints. I acknowledge that some judgements are inherently subjective and that even my own second-pass readings occasionally differed; the dataset should therefore be viewed as a careful but single-annotator benchmark.
+
+The goal is to compare both **ESG pillar classification** and **sentiment analysis** across three major approaches:
 
 - A fine-tuned **ESG-BERT model** (`label_dominant`)
 - A finance-specific **FinBERT sentiment model** (`sentiment_finbert`)
@@ -668,10 +673,12 @@ All confusion matrix plots are available in the `Images` folder:
 - [Confusion – Sentiment GPT vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
 
 
+
 **Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  :**
 ![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
 
-**Comparision of the evaluations :**
+
+**Comparison of the evaluations :**
 
 ![Comparison - Accuracy](Images/Comparison_Accuracy.png)
 
