@@ -608,6 +608,17 @@ The goal is to compare both **ESG pillar classification** and **sentiment analys
 - A finance-specific **FinBERT sentiment model** (`sentiment_finbert`)
 - A prompt-based **GPT-3.5 sentiment and ESG classifier** (`sentiment_gpt_batch`, `esg_gpt3`)
 
+**ESG Classifier prompt :**
+
+```text
+Classify the following sentence into one ESG category: environmental, social, governance, or none.
+Respond with only one word: "environmental", "social", "governance", or "none".
+```
+
+In classification tasks, a more explicit prompt usually improves consistency (fewer ambiguous outputs). However, the API is billed per token, so longer prompts cost more—especially at large scale. To keep costs under control, I use a compact, strict-output prompt and fix temperature=0 for stability (deterministic labels).
+
+When budget allows, an extended prompt  can be used for a small accuracy boost at the expense of a higher input-token footprint.
+
 ---
 
 ## Phase 8.1 – Creating the Gold Standard Dataset
