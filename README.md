@@ -1173,10 +1173,10 @@ This section runs sanity checks on my **E** pillar variants (**E<sub>1..10</sub>
 | Zurich Insurance Group AG | 115.790 | 5.0 | 0.427 | 2.0 | 5.0 | 4.0 | 10.0 |
 
 **Example scatter plots (value correlation, log carbon on X)**  
-- ![E1 vs Carbon (NoScope3)](Images/E1%20vs%20Carbon%20%28NoScope3%29.png)  
-- ![E1 vs Carbon (Total)](Images/E1%20vs%20Carbon%20%28Total%29.png)  
-- ![E2 vs Carbon (Total)](Images/E2%20vs%20Carbon%20%28Total%29.png)  
-- ![E3 vs Carbon (Total)](Images/E3%20vs%20Carbon%20%28Total%29.png)  
+[E1 vs Carbon (NoScope3)](Images/E1%20vs%20Carbon%20%28NoScope3%29.png)  
+[E1 vs Carbon (Total)](Images/E1%20vs%20Carbon%20%28Total%29.png)  
+[E2 vs Carbon (Total)](Images/E2%20vs%20Carbon%20%28Total%29.png)  
+[E3 vs Carbon (Total)](Images/E3%20vs%20Carbon%20%28Total%29.png)  
 
 **All remaining figures** for this section are available in the **`Images/`** folder with consistent filenames.
 
@@ -1293,10 +1293,10 @@ For each variant I report:
 - Differences highlight **methodological choices** (documents covered, sentiment treatment, SASB weighting, etc.).
 
 ### Example scatter plots
-- ![ESG1 vs Ref_ESG](Images/ESG1%20vs%20Ref_ESG.png)
-- ![ESG1 vs Ref_ESGC](Images/ESG1%20vs%20Ref_ESGC.png)
-- ![ESG2 vs Ref_ESG](Images/ESG2%20vs%20Ref_ESG.png)
-- ![ESG2 vs Ref_ESGC](Images/ESG2%20vs%20Ref_ESGC.png)
+![ESG1 vs Ref_ESG](Images/ESG1%20vs%20Ref_ESG.png)
+![ESG1 vs Ref_ESGC](Images/ESG1%20vs%20Ref_ESGC.png)
+![ESG2 vs Ref_ESG](Images/ESG2%20vs%20Ref_ESG.png)
+![ESG2 vs Ref_ESGC](Images/ESG2%20vs%20Ref_ESGC.png)
 
 ### A — My ESG vs **Ref_ESG** (no controversies) — best by rank agreement
 | ESG_variant | n | spearman | spearman_p | kendall | kendall_p | MAR_ranks | Jaccard@3 | pearson_r | pearson_p |
@@ -1411,10 +1411,10 @@ If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negati
 - Rank agreement with low-carbon ordering is **weak to negative**; **MAR ≈ 3.5–3.7**; **Jaccard@3 = 0.0–0.2**.
 
 **Figures**
-- ![Ref_E vs Carbon (Total)](Images/Ref_E%20vs%20Carbon%20%28Total%29.png)
-- ![Ref_E vs Carbon (NoScope3)](Images/Ref_E%20vs%20Carbon%20%28No%20Scope%203%29.png)
-- ![Ref_ESG vs Carbon (Total)](Images/Ref_ESG%20vs%20Carbon%20%28Total%29.png)
-- ![Ref_ESG vs Carbon (NoScope3)](Images/Ref_ESG%20vs%20Carbon%20%28No%20Scope%203%29.png)
+![Ref_E vs Carbon (Total)](Images/Ref_E%20vs%20Carbon%20%28Total%29.png)
+![Ref_E vs Carbon (NoScope3)](Images/Ref_E%20vs%20Carbon%20%28No%20Scope%203%29.png)
+![Ref_ESG vs Carbon (Total)](Images/Ref_ESG%20vs%20Carbon%20%28Total%29.png)
+![Ref_ESG vs Carbon (NoScope3)](Images/Ref_ESG%20vs%20Carbon%20%28No%20Scope%203%29.png)
 
 **Takeaways**
 Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon (Total slightly **positive**, Scope 1–2 slightly **negative**, all **ns**), with **poor rank agreement** and **low top-3 overlap**.
