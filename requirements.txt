@@ -22,7 +22,7 @@ en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_
 # Transformers & deep learning
 transformers>=4.40.0
 torch>=2.1.0
-sentencepiece>=0.1.99   # required for some Hugging Face models
+sentencepiece>=0.1.99 
 
 # Model evaluation & benchmarking
 scikit-learn>=1.2.0
