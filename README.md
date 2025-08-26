@@ -18,7 +18,6 @@ Through a series of notebooks, we:
 - Classify sentences using ESGBERT (ESG pillars), FinBERT (sentiment), and GPT-3.5 (alternative classifier).
 - Benchmark results against human annotations to evaluate model performance.
 - Design and compare 10 ESG scoring methods, with and without SASB materiality weights.
-- Visualize and interpret inter-company differences in ESG communication.
 - Compare SASB-derived pillar weights with Refinitiv ESG weights to test alignment with market standards.
 - Validate and stress-test the scores against external benchmarks (carbon intensity, Refinitiv ESG/ESGC, and Refinitiv controversies), including predictive checks (2021 → 2022).
 
@@ -691,8 +690,10 @@ All confusion matrix plots are available in the `Images` folder:
 
 
 
+
 **Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  :**
 ![Confusion Matrix – Sentiment GPT-3.5 vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
+
 
 
 **Comparison of the evaluations :**
