@@ -4,6 +4,11 @@
 
 This project explores how **natural language processing (NLP)** and **transformer-based AI models** can be used to extract and analyze **Environmental, Social, and Governance (ESG)** signals from the official documents of Switzerland’s largest companies.
 
+The motivation is threefold:  
+1. **Scientific** — to test the validity and limitations of applying **natural language processing (NLP)** and **transformer-based AI models** to extract Environmental, Social, and Governance (ESG) signals from corporate texts.  
+2. **Practical** — to explore whether open, replicable methods can provide a transparent alternative to proprietary ESG ratings, which are often opaque, inconsistent, and weakly correlated with real sustainability outcomes.  
+3. **Critical** — to assess whether company self-disclosures can be trusted as evidence of sustainability performance, or whether they mostly reproduce **greenwashing dynamics** until stricter, audited reporting frameworks are in place.  
+
 We focus on the **top 10 companies in the Swiss Market Index (SMI)**, over the **2021–2023** period, using a manually curated corpus of public disclosures: annual reports, ESG/sustainability reports, earnings calls, and more.
 
 Through a series of notebooks, we:
@@ -81,7 +86,6 @@ The sample also covers a **diverse set of industries**, included sectors are:
 - Insurance  
 - Asset Management & Custody Activities  
 - Construction Materials  
-
 
 ### 🔍 Selected Sources of Information 
 
@@ -267,7 +271,7 @@ Each document is parsed **page by page**, applying a series of custom cleaning o
 
 The resulting sentences were then saved to CSV for further processing.
 
-Due to the complexity of the documents and the amount of layout noise, **this step took significant runtime (≈30 min on Colab with GPU)** and had to be repeated **entirely from scratch**. Initially, I proceeded with the pipeline, assuming the extraction quality was sufficient. However, at the NLP classification stage, I noticed that the results were poor — many "sentences" were in fact titles, footers, page numbers, or table of contents entries that had been incorrectly parsed as meaningful content.
+Due to the complexity of the documents and the amount of layout noise, **this step took significant runtime** and had to be repeated **entirely from scratch**. Initially, I proceeded with the pipeline, assuming the extraction quality was sufficient. However, at the NLP classification stage, I noticed that the results were poor — many "sentences" were in fact titles, footers, page numbers, or table of contents entries that had been incorrectly parsed as meaningful content.
 
 This significantly degraded model performance and introduced semantic noise. As a result, I had to go back to this sentence extraction phase, rebuild the cleaning logic, and reprocess **all documents again**, which took time but drastically improved the output quality. This experience highlighted how **crucial and foundational** this stage is for the success of the entire NLP pipeline: if sentence quality is poor, no downstream analysis can be trusted.
 
@@ -496,12 +500,15 @@ The resulting file contains the original ESG sentences along with:
 This output is ready for downstream analysis.
 
 > **Limitations & domain fit :**
-> FinBERT is purpose-built for **financial** sentiment—pretrained on financial communication (10-K/10-Q, earnings-call transcripts, analyst reports) and commonly fine-tuned on the Financial PhraseBank. ESG discourse uses policy/regulatory/sustainability language that only partly overlaps. In this project we therefore treat FinBERT as a finance-sentiment baseline, not an ESG-specialized classifier, and benchmark it against GPT-3.5 on the same sentences.[^finbert-tone][^prosusai][^araci][^phrasebank]
+> FinBERT is purpose-built for **financial** sentiment—pretrained on financial communication (10-K/10-Q, earnings-call transcripts, analyst reports) and commonly fine-tuned on the Financial PhraseBank. ESG discourse uses policy/regulatory/sustainability language that only partly overlaps. In this project we therefore treat FinBERT as a finance-sentiment baseline, not an ESG-specialized classifier, and benchmark it against GPT-3.5 on the same sentences.[^finbert-tone][^prosusai][^araci]
+
+> **Examples of domain mismatch (see Phase 8_2 for more):**  
+> - *“Compared with 2018, operational emissions have decreased by 69% in absolute terms.”* → FinBERT classified this as **negative**, likely because a decline in percentage terms is usually bad news in financial contexts (profits, revenues), whereas here it signals a positive ESG outcome (lower emissions).  
+> - *“Protecting smallholder farmers in Mexico. In Mexico, over 80% of total economic losses from weather-related disasters in the last two decades occurred in the agricultural sector.”* → FinBERT failed to capture the **positive sustainability framing** (protecting vulnerable farmers) and instead focused on the mention of “losses,” skewing the classification toward the negative.  
 
 [^finbert-tone]: Hugging Face — *yiyanghkust/finbert-tone*: https://huggingface.co/yiyanghkust/finbert-tone
 [^prosusai]: Hugging Face — *ProsusAI/finbert* (fine-tuned on Financial PhraseBank): https://huggingface.co/ProsusAI/finbert
 [^araci]: Araci, D. (2019). *FinBERT: Financial Sentiment Analysis with Pre-trained Language Models*. https://arxiv.org/abs/1908.10063
-[^phrasebank]: *Financial PhraseBank* (dataset description): https://www.tensorflow.org/datasets/community_catalog/huggingface/financial_phrasebank
 
 
 > 💡The code is available in :
@@ -551,6 +558,8 @@ Use 'neutral' if it is descriptive without clear judgment or consequence.
 This prompt is included once per request, and its **clarity directly impacts the consistency and accuracy** of the model’s response.  
 A vague or overly complex prompt can lead to irrelevant or inconsistent labels. That’s why **prompt engineering is a critical part of using LLMs for classification.**
 
+> ⚠️ **Model Variability:**
+> A strict prompt and `temperature=0` setting were used to maximize reproducibility. However, unlike static classifiers such as FinBERT or ESGBERT, GPT models remain **non-deterministic systems**: even under identical conditions, they can occasionally return slightly different outputs or formatting. This variability is infrequent but relevant, as it highlights a key academic limitation of LLM-based classification — results cannot be assumed perfectly stable or replicable without additional post-processing controls.
 
 ### 📁 What is JSONL Format?
 
@@ -679,7 +688,6 @@ All confusion matrix plots are available in the `Images` folder:
 - [Confusion – ESGBERT vs Human](Images/Confusion_ESGBERT%20vs%20Human.png)
 - [Confusion – Sentiment FinBERT vs Human](Images/Confusion_Sentiment%20-%20FinBert%20vs%20Human.png)
 - [Confusion – Sentiment GPT vs Human](Images/Confusion_Sentiment%20-%20GPT%20vs%20Human.png)
-
 
 
 **Example – Confusion Matrix: GPT-3.5 Sentiment vs Human  :**
@@ -1592,9 +1600,11 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 - **Small-n validation**: External checks rely on only 10 firms (one-year forward), so correlations/regressions are exploratory and sensitive to chance, sector mix, and document selection.  
 - **Compute & cost**: GPU type/availability (e.g., T4 in Colab) and API token budgets constrained prompt length and batch design. Longer, more explicit prompts could improve consistency but increase cost.  
 - **Design choices**: Thresholds, document filters, and SASB α-weights materially influence rankings and should be seen as modeling assumptions rather than objective truths.  
-- **Model constraints**: ESGBERT, FinBERT, and GPT capture sentence-level signals but suffer from **context loss**, potential misclassifications, and training biases.  
+- **Model constraints**: ESGBERT, FinBERT, and GPT capture sentence-level signals but suffer from **context loss**, potential misclassifications, and training biases.
+-  **LLM variability**: GPT-3.5 outputs are not fully deterministic, even with `temperature=0`. While rare, slight differences or off-format responses occurred, which introduces a reproducibility risk compared to static, fine-tuned classifiers.  
 - **Benchmarking limits**: Comparisons with Refinitiv ESG, controversies, and carbon intensity show only partial alignment. This raises questions about what “ground truth” ESG should represent.  
-- **Temporal scope (brief)**: The corpus (2021–2023) largely precedes stricter Swiss sustainability reporting laws; see reflections below for implications.  
+- **Temporal scope (brief)**: The corpus (2021–2023) largely precedes stricter Swiss sustainability reporting laws; see reflections below for implications.
+
 
 ### Project Findings
 - **They measure communication, not outcomes**: Scores track what firms talk about (and how positively), not verified ESG performance. In this sample, higher E/ESG scores often co-move with higher emissions — consistent with size/sector and disclosure intensity rather than decarbonization.  
@@ -1622,12 +1632,16 @@ One of the strongest insights from this project is the prevalence of **greenwash
 - **Sustainability reports** were the most biased source: scores built **without** these documents aligned better with controversies and external checks. This points to ESG-branded reports being particularly prone to **self-promotion and narrative control**.  
 - As long as ESG assessment relies on **unstructured, voluntary, and unverified corporate communication**, the results will reflect **what companies want to say**, not what they actually do.  
 
-⚠️ Temporal scope (expanded). Most of the corpus (2021–2023, validated on 2022) predates full enforcement of Switzerland’s newer sustainability rules. The non-financial reporting provisions (CO art. 964a–964c) entered into force in 2022 (applicable from FY 2023, first reports published in 2024) [^deloitte] [^homburger]. The Ordinance on Climate Disclosures has applied since 1 Jan 2024 [^admin]. Under current Swiss law, the non-financial report is not subject to mandatory external assurance (though some issuers voluntarily obtain limited assurance on selected indicators) [^deloitte]. These timing and assurance features likely contributed to the more marketing-driven narratives observed in this study.  
+⚠️ Temporal scope (expanded). Most of the corpus (2021–2023, validated on 2022) predates the full enforcement of Switzerland’s newer sustainability rules. Since FY 2023, large Swiss public companies, banks and insurers (≥500 employees, ≥20m CHF assets or ≥40m CHF turnover) must publish a non-financial report under CO art. 964a–964c, covering environment, social issues, human rights and anti-corruption [^pwc]. They are also subject to due diligence obligations on supply chains (e.g. child labour, conflict minerals), with compliance subject to external audit [^pwc]. From 2024, the Ordinance on Climate Disclosures further requires climate-related reporting aligned with TCFD and based on the principle of double materiality [^admin].  
+
+However, Swiss law does not currently mandate an audit of the non-financial report as a whole: assurance is only compulsory for supply chain due diligence, while some issuers voluntarily obtain limited assurance on selected ESG indicators [^six]. Compared to the EU’s CSRD/ESRS framework, Swiss rules therefore remain narrower in scope and less prescriptive.  
+
+Because the corpus predates these newer rules, the prevalence of marketing-driven narratives in the 2021–2023 reports is unsurprising. That said, even under the current Swiss regime, **greenwashing risks remain**, since disclosure requirements are lighter and external assurance is limited. It will be valuable to examine whether stricter, standardized, and externally assured reporting reduces such practices in future studies.  
 
 👉 Future research should revisit these methods once **mandatory, standardized, and externally assured reports** become available, to compare whether the prevalence of greenwashing and narrative-driven disclosure decreases under stricter legal frameworks.  
 
-[^deloitte]: Deloitte (2024), *Swiss ESG reporting obligations: Implementation of art. 964a–964c CO*, [link](https://www2.deloitte.com/ch/en/pages/audit/articles/swiss-esg-reporting-obligations.html).  
-[^homburger]: Homburger (2022), *New ESG reporting obligations under Swiss law*, [link](https://www.homburger.ch/en/insights/new-esg-reporting-obligations-under-swiss-law).  
-[^admin]: Swiss Federal Council (2022), *Ordinance on Climate Disclosures based on the TCFD Recommendations*, [news.admin.ch](https://www.admin.ch/gov/en/start/documentation/media-releases.msg-id-86906.html).  
+[^pwc]: PwC (2024), *Swiss sustainability reporting requirements*, [link](https://www.pwc.ch/en/insights/sustainability/swiss-sustainability-reporting-requirements.html).  
+[^admin]: Swiss Federal Council (2022), *Ordonnance relative au rapport sur les questions climatiques*, [admin.ch](https://www.fedlex.admin.ch/eli/cc/2022/747/fr).  
+[^six]: SIX Handbook (2025), *Transparency on Non-Financial Matters Pursuant to Art. 964a–c Code of Obligations*, [six.ch](https://handbooks.six-group.com/en/sustainability/schweizer-recht-vertiefung-der-art-964a-l-or/transparenz-ueber-nichtfinanzielle-belange-gemaess-art-964a-c-or).  
 
 
