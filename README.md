@@ -1,4 +1,4 @@
-# ESG Signal Extraction from Corporate Disclosures using AI & NLP
+# Towards Transparent ESG Scoring: NLP-Based Signal Extraction from Swiss Corporate Disclosures
 
 ## Introduction
 
