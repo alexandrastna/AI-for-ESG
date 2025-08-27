@@ -1492,8 +1492,6 @@ Sample: *n = 10 firms present in 2021 & 2022*.
 | S1–2 | ESG4      | −4.75    | 0.003   | 0.304| ✅ |
 | S1–3 | ESG3      | −10.14   | 0.485   | 0.087| ✅ (ns) |
 
-Under the inverse hypothesis (expects β > 0), none of the change-specs turn significant; the strong result remains ESG4 → lower next-year Scope 1–2.  
-
 
 ### 7bis — Inverse hypothesis sanity check (expects β > 0)
 
