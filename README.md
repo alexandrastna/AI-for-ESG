@@ -1093,7 +1093,7 @@ I run the analysis on **2022** (latest complete year in the dataset).
 
 ### 📏 Metrics
 
-Metrics — what each one measures (and how to read them)**
+Metrics — what each one measures (and how to read them)
 
 - **Directional differences (pillar-by-pillar)**  
   Raw, signed gaps used earlier for SASB vs Refinitiv weights:  
