@@ -620,7 +620,7 @@ Classify the following sentence into one ESG category: environmental, social, go
 Respond with only one word: "environmental", "social", "governance", or "none".
 ```
 
-In classification tasks, a more explicit prompt usually improves consistency (fewer ambiguous outputs). However, the API is billed per token, so longer prompts cost more—especially at large scale. To keep costs under control, I use a compact, strict-output prompt and fix temperature=0 for stability (deterministic labels).
+In classification tasks, a more explicit prompt usually improves consistency (fewer ambiguous outputs). However, the API is billed per token, so longer prompts cost more—especially at large scale. To keep costs under control, I use a compact, strict-output prompt and fix temperature=0 for stability.
 
 When budget allows, an extended prompt  can be used for a small accuracy boost at the expense of a higher input-token footprint.
 
