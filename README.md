@@ -1417,6 +1417,7 @@ If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negati
 ![Ref_ESG vs Carbon (NoScope3)](Images/Ref_ESG%20vs%20Carbon%20%28No%20Scope%203%29.png)
 
 **Takeaways**
+
 Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon (Total slightly **positive**, Scope 1–2 slightly **negative**, all **ns**), with **poor rank agreement** and **low top-3 overlap**.
 - **Conclusion.** Neither my text-based scores **nor** Refinitiv’s E/ESG scores can be treated as **decarbonization measures** in this data slice.  
   - For **decarbonization targeting**, use **carbon intensity** directly or build a **purpose-designed E pillar** (e.g., penalizing emissions mechanically, sector-adjusted).  
