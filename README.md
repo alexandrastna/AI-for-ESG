@@ -498,12 +498,12 @@ The resulting file contains the original ESG sentences along with:
 
 This output is ready for downstream analysis.
 
-> **Limitations & domain fit :**
-> FinBERT is purpose-built for **financial** sentiment—pretrained on financial communication (10-K/10-Q, earnings-call transcripts, analyst reports) and commonly fine-tuned on the Financial PhraseBank. ESG discourse uses policy/regulatory/sustainability language that only partly overlaps. In this project we therefore treat FinBERT as a finance-sentiment baseline, not an ESG-specialized classifier, and benchmark it against GPT-3.5 on the same sentences.[^finbert-tone][^prosusai][^araci]
+ **Limitations & domain fit :**
+FinBERT is purpose-built for **financial** sentiment—pretrained on financial communication (10-K/10-Q, earnings-call transcripts, analyst reports) and commonly fine-tuned on the Financial PhraseBank. ESG discourse uses policy/regulatory/sustainability language that only partly overlaps. In this project we therefore treat FinBERT as a finance-sentiment baseline, not an ESG-specialized classifier, and benchmark it against GPT-3.5 on the same sentences.[^finbert-tone][^prosusai][^araci]
 
-> **Examples of domain mismatch (see Phase 8_2 for more):**  
-> - *“Compared with 2018, operational emissions have decreased by 69% in absolute terms.”* → FinBERT classified this as **negative**, likely because a decline in percentage terms is usually bad news in financial contexts (profits, revenues), whereas here it signals a positive ESG outcome (lower emissions).  
-> - *“Protecting smallholder farmers in Mexico. In Mexico, over 80% of total economic losses from weather-related disasters in the last two decades occurred in the agricultural sector.”* → FinBERT failed to capture the **positive sustainability framing** (protecting vulnerable farmers) and instead focused on the mention of “losses,” skewing the classification toward the negative.  
+**Examples of domain mismatch (see Phase 8_2 for more):**  
+- *“Compared with 2018, operational emissions have decreased by 69% in absolute terms.”* → FinBERT classified this as **negative**, likely because a decline in percentage terms is usually bad news in financial contexts (profits, revenues), whereas here it signals a positive ESG outcome (lower emissions).  
+- *“Protecting smallholder farmers in Mexico. In Mexico, over 80% of total economic losses from weather-related disasters in the last two decades occurred in the agricultural sector.”* → FinBERT failed to capture the **positive sustainability framing** (protecting vulnerable farmers) and instead focused on the mention of “losses,” skewing the classification toward the negative.  
 
 [^finbert-tone]: Hugging Face — *yiyanghkust/finbert-tone*: https://huggingface.co/yiyanghkust/finbert-tone
 [^prosusai]: Hugging Face — *ProsusAI/finbert* (fine-tuned on Financial PhraseBank): https://huggingface.co/ProsusAI/finbert
