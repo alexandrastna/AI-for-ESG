@@ -1419,7 +1419,7 @@ If Refinitiv’s Environmental/ESG scores embed decarbonization, expect **negati
 **Takeaways**
 
 Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon (Total slightly **positive**, Scope 1–2 slightly **negative**, all **ns**), with **poor rank agreement** and **low top-3 overlap**.
-- **Conclusion.** Neither my text-based scores **nor** Refinitiv’s E/ESG scores can be treated as **decarbonization measures** in this data slice.  
+- **Conclusion:** Neither my text-based scores **nor** Refinitiv’s E/ESG scores can be treated as **decarbonization measures** in this data slice.  
   - For **decarbonization targeting**, use **carbon intensity** directly or build a **purpose-designed E pillar** (e.g., penalizing emissions mechanically, sector-adjusted).  
   - Use **Refinitiv** and my variants for **broader ESG/communication** signals, not as a carbon proxy.  
 
@@ -1427,7 +1427,7 @@ Refinitiv’s **Ref_E** and **Ref_ESG** show **weak/near-zero** links to carbon 
 
 ## Part F — Predictive decarbonization (t → t+1)
 
-**What I’m testing.** Do my 2021 scores forecast 2022 carbon intensity?  
+**What I’m testing :** Do my 2021 scores forecast 2022 carbon intensity?  
 
 For each score *S<sub>t</sub>* (ESG1…ESG10 and E1…E10) I run OLS with HC3 SEs:  
 
