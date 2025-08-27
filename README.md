@@ -302,7 +302,7 @@ Each sentence is passed through all three models, which are binary classifier fo
 
 | company                   | year | document_type       | sentence                                                                                                                                                       | label_env   | score_env | label_soc | score_soc | label_gov | score_gov |
 |---------------------------|------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
-| Compagnie Financière Richemont | 2022 | Sustainability Report | Chaired by dunhill’s CEO, the newly appointed Sustainability Committee ensures the implementation of Richemont’s strategy across the business... | environmental | 0.989977  | social    | 0.996938  | none      | 0.774423  |
+| ABB Ltd | 2023 | Integrated Report | As a  business that means reducing our own green­ house gas emissions and adopting circular  business practices. | environmental | 0.99818  | none    | 0,99985  | none      | 0,99360  |
 
 
 We treat the three pillar models independently (multi-label). For downstream aggregation, we then derive a single **dominant label** per sentence as follows:
