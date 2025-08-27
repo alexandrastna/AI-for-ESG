@@ -1595,13 +1595,13 @@ Several β’s turn negative and hover near the 10% level (suggesting no improve
 
 ### Limitations
 - **Corpus scope**: The dataset covers only the top 10 SMI companies (2021–2023). While this ensures representativeness across key Swiss industries, it excludes mid-sized firms and sectors like energy or transportation. Results may not generalize beyond large-cap, export-oriented firms.  
-- **Textual reliance**: All scores are derived from corporate disclosures (reports, earnings calls, websites). These reflect **communication strategies**, not necessarily real-world ESG performance.  
+- **Textual reliance**: All scores are derived from corporate disclosures (reports, earnings calls, websites). These reflect communication strategies, not necessarily real-world ESG performance.  
 - **Text extraction risk**: Despite improved cleaning, PDF parsing can still leak titles, boilerplate, tables of contents, or fragmented lines. Any residual noise propagates into models and scores.  
 - **Annotation constraints**: The “gold standard” annotations rely on a single annotator, following GPT-prompt guidelines. ESG and sentiment categories are subjective; inter-annotator agreement was not measured.  
 - **Small-n validation**: External checks rely on only 10 firms (one-year forward), so correlations/regressions are exploratory and sensitive to chance, sector mix, and document selection.  
 - **Compute & cost**: GPU type/availability (e.g., T4 in Colab) and API token budgets constrained prompt length and batch design. Longer, more explicit prompts could improve consistency but increase cost.  
 - **Design choices**: Thresholds, document filters, and SASB α-weights materially influence rankings and should be seen as modeling assumptions rather than objective truths.  
-- **Model constraints**: ESGBERT, FinBERT, and GPT capture sentence-level signals but suffer from **context loss**, potential misclassifications, and training biases.
+- **Model constraints**: ESGBERT, FinBERT, and GPT capture sentence-level signals but suffer from context loss, potential misclassifications, and training biases.
 -  **LLM variability**: GPT-3.5 outputs are not fully deterministic, even with `temperature=0`. While rare, slight differences or off-format responses occurred, which introduces a reproducibility risk compared to static, fine-tuned classifiers.  
 - **Benchmarking limits**: Comparisons with Refinitiv ESG, controversies, and carbon intensity show only partial alignment. This raises questions about what “ground truth” ESG should represent.  
 - **Temporal scope (brief)**: The corpus (2021–2023) largely precedes stricter Swiss sustainability reporting laws; see reflections below for implications.
