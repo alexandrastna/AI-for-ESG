@@ -329,7 +329,7 @@ Without GPU, this task would likely take several **hours or even days**, dependi
 
 **Overview - ESG classification pipeline:**  
 
-![Transformer ESG pipeline](Images/Transformer_ESG_pipeline.svg)
+![ESG_Classification_Pipeline](Images/ESG_Classification_Pipeline.svg)
 
 
 > 💡 The entire classification pipeline - loading models, batching, applying prediction, and saving results — is detailed in :
