@@ -767,7 +767,7 @@ Each score is computed per company and year. Here's an overview of the ten metho
 | **2**  | ESG Quantity weighted by SASB — E/S/G weighted using industry materiality weights. |
 | **3**  | ESG in Earnings Calls — same as (1) but only for earnings call content. |
 | **4**  | Earnings Calls + SASB — same as (2) but restricted to earnings calls. |
-| **5**  | ESG in Core Documents — filtered to reports (annual, half-year, integrated). |
+| **5**  | ESG in Core Documents — filtered to earnings and reports (annual, half-year, integrated). |
 | **6**  | Core Docs + SASB — same as (5) with materiality weighting. |
 | **7**  | Positive - Negative ESG — sentiment-adjusted ESG: (Pos − Neg) / Total ESG. |
 | **8**  | Pos − Neg + SASB — sentiment-adjusted ESG with SASB weights. |
